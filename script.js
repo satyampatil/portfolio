@@ -2,8 +2,150 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GUI } from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.module.js';
+// FIXED: Switched from Skypack to jsDelivr for stability
+import gsap from 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm';
+import Lenis from 'https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/+esm';
+import ScrollTrigger from 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger/+esm';
 
-// --- 1. SCENE SETUP ---
+// Register ScrollTrigger
+gsap.registerPlugin(ScrollTrigger);
+
+// --- 1. SMOOTH SCROLLING (LENIS) ---
+// This makes the whole page scroll feel like it has weight and momentum
+const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    direction: 'vertical',
+    gestureDirection: 'vertical',
+    smooth: true,
+    mouseMultiplier: 1,
+    smoothTouch: false,
+    touchMultiplier: 2,
+});
+
+// --- 2. GSAP SCROLL REVEALS ---
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px"
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            // Use GSAP for a springy, staggered reveal instead of plain CSS
+            gsap.to(entry.target, {
+                y: 0,
+                opacity: 1,
+                duration: 1.5,
+                ease: "power4.out",
+                overwrite: true
+            });
+            observer.unobserve(entry.target); // Run once
+        }
+    });
+}, observerOptions);
+
+// Set initial state for GSAP to animate TO
+document.querySelectorAll('.reveal-up').forEach(el => {
+    gsap.set(el, { y: 100, opacity: 0 }); // Start lower and invisible
+    observer.observe(el);
+});
+
+// --- NEW: PARALLAX IMAGE EFFECT FOR GALLERY ---
+// Finds all elements with .scroll-reactor and moves them slightly based on scroll
+const scrollReactors = document.querySelectorAll('.scroll-reactor');
+scrollReactors.forEach(el => {
+    const speed = parseFloat(el.getAttribute('data-speed')) || 0.05;
+    
+    // Create a parallax effect using GSAP ScrollTrigger
+    // We animate the image INSIDE the container to create the window effect
+    const img = el.querySelector('img');
+    if(img) {
+        gsap.to(img, {
+            yPercent: 15, // Move image down 15%
+            ease: "none",
+            scrollTrigger: {
+                trigger: el,
+                start: "top bottom", // Start when top of element hits bottom of viewport
+                end: "bottom top",   // End when bottom of element hits top of viewport
+                scrub: true
+            } 
+        });
+        
+        // Also subtle movement of the container itself in opposite direction
+        gsap.to(el, {
+            y: -50 * speed, // Move up slightly based on speed
+            ease: "none",
+            scrollTrigger: {
+                trigger: el,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+    }
+});
+
+// --- 3. MAGNETIC BUTTONS ---
+// Make buttons/links "stick" to the cursor slightly
+const magneticElements = document.querySelectorAll('.cta-btn, .nav-links li a, .social-links a');
+// Need access to cursorFollower, ensuring it's selected before use
+const cursorFollower = document.getElementById('cursor-follower');
+
+magneticElements.forEach((el) => {
+    el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        
+        // Move the element towards the mouse (strength 0.3)
+        gsap.to(el, {
+            x: x * 0.3,
+            y: y * 0.3,
+            duration: 0.3,
+            ease: "power2.out"
+        });
+        
+        if(cursorFollower) {
+            cursorFollower.classList.add('magnetic-active');
+        }
+    });
+
+    el.addEventListener('mouseleave', () => {
+        // Snap back to center
+        gsap.to(el, {
+            x: 0,
+            y: 0,
+            duration: 1,
+            ease: "elastic.out(1, 0.3)" // Elastic wobble on release
+        });
+        if(cursorFollower) {
+            cursorFollower.classList.remove('magnetic-active');
+        }
+    });
+});
+
+// --- CURSOR FOLLOWER LOGIC ---
+const moveCursor = (e) => {
+    if(!cursorFollower) return;
+    // Use GSAP for smoother cursor following
+    gsap.to(cursorFollower, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.1, // Slight lag for fluid feel
+        ease: "power2.out"
+    });
+};
+window.addEventListener('mousemove', moveCursor);
+
+// Add hover effect to interactive elements
+const interactiveElements = document.querySelectorAll('a, button, .switch, .project-card, .gallery-item');
+interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => { if(cursorFollower) cursorFollower.classList.add('hovered'); });
+    el.addEventListener('mouseleave', () => { if(cursorFollower) cursorFollower.classList.remove('hovered'); });
+});
+
+// --- SCENE SETUP ---
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x000000, 0.02); 
 
@@ -35,10 +177,15 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping; 
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.appendChild(renderer.domElement);
+renderer.domElement.style.position = 'fixed';
+renderer.domElement.style.top = '0';
+renderer.domElement.style.left = '0';
+renderer.domElement.style.zIndex = '-2'; 
 
 // --- GUI CONTROLS ---
 const gui = new GUI();
 gui.domElement.parentElement.style.zIndex = "10000";
+gui.hide(); 
 
 const debugParams = {
     useManualScroll: false, 
@@ -49,7 +196,7 @@ debugFolder.add(debugParams, 'useManualScroll').name('Enable Manual Control');
 debugFolder.add(debugParams, 'manualScroll', 0, 1).name('Scroll Position').listen();
 debugFolder.close();
 
-// --- 2. LIGHTING ---
+// --- LIGHTING ---
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); 
 scene.add(ambientLight);
 
@@ -71,7 +218,7 @@ scene.add(spotLight);
 scene.add(spotLight.target);
 spotLight.visible = false;
 
-// --- 3. LOAD DESK MODEL ---
+// --- LOAD DESK MODEL ---
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
 
@@ -136,7 +283,6 @@ function loadDeskModel(url, isHighQuality) {
         loadedModel = model;
         scene.add(loadedModel);
         
-        // --- TRIGGER LOADER EXIT SEQUENCE ---
         console.log("Desk Loaded. Dismissing loader.");
         window.dispatchEvent(new Event('desk-loaded'));
 
@@ -159,49 +305,44 @@ if(renderToggle) {
     });
 }
 
-// --- 4. START BUTTON LOGIC ---
+// --- START BUTTON LOGIC ---
 const startScrollBtn = document.getElementById('start-scroll-btn');
 if(startScrollBtn) {
-    startScrollBtn.addEventListener('click', () => {
+    startScrollBtn.addEventListener('click', (e) => {
+        e.preventDefault(); 
         document.body.classList.remove('no-scroll');
-        window.scrollTo({
-            top: window.innerHeight, 
-            behavior: 'smooth'
-        });
+        // Use Lenis to scroll smoothly
+        lenis.scrollTo('#about');
     });
 }
 
-// --- 5. SCROLL & INTERACTION LOGIC ---
+// --- INTERACTION LOGIC ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let targetIntensity = 0;
 let scrollProgress = 0;
 let targetScrollProgress = 0;
 
-const cursorFollower = document.getElementById('cursor-follower');
-
 window.addEventListener('mousemove', (event) => {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    if (cursorFollower) {
-        cursorFollower.style.left = event.clientX + 'px';
-        cursorFollower.style.top = event.clientY + 'px';
-    }
 });
 
-// --- 6. ANIMATION LOOP ---
+// --- ANIMATION LOOP ---
 const clock = new THREE.Clock();
 
-function animate() {
+function animate(time) {
+    // UPDATE LENIS (Required for smooth scroll)
+    lenis.raf(time);
+    
     requestAnimationFrame(animate);
-    const time = clock.getElapsedTime();
+    const delta = clock.getDelta(); // Use getDelta safely
 
     if (debugParams.useManualScroll) {
         scrollProgress = debugParams.manualScroll;
     } else {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollTop = window.scrollY;
+        const scrollTop = window.scrollY; // This works with Lenis too
         
         if (maxScroll > 0) {
             targetScrollProgress = scrollTop / maxScroll;
@@ -212,14 +353,16 @@ function animate() {
         debugParams.manualScroll = scrollProgress;
     }
 
-    const deskThreshold = 0.01; 
+    const deskThreshold = 0.1; 
     
     // FADE HERO CARD
     const heroCard = document.querySelector('.hero-card');
     if(heroCard) {
-        const opacity = Math.max(0, 1 - (scrollProgress * 20)); 
+        const opacity = Math.max(0, 1 - (scrollProgress * 5)); 
         heroCard.style.opacity = opacity;
-        heroCard.style.transform = `translateY(${scrollProgress * 100}px)`;
+        // Use GSAP for performant transforms if you wanted, but direct setting is fine here
+        heroCard.style.transform = `translateY(${scrollProgress * 200}px)`;
+        heroCard.style.pointerEvents = opacity < 0.1 ? 'none' : 'auto';
     }
 
     // DESK ANIMATION
@@ -271,4 +414,5 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-animate();
+// Pass 0 to start
+animate(0);

@@ -3,42 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satyam Patil | Developer Portfolio</title>
+    <title>Satyam Patil | Creative Developer</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="intro.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Awwwards Style Gallery for Featured Project */
+        .project-gallery {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(2, 200px);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Bento Grid Layout */
+        .item-1 { grid-column: span 8; grid-row: span 2; } /* Main large image */
+        .item-2 { grid-column: span 4; grid-row: span 1; }
+        .item-3 { grid-column: span 4; grid-row: span 1; }
+        /* Note: We have 4 images, so we can hide one or stack them differently. 
+           Let's try a layout for 4 images: 
+           1 Large (left), 2 stacked (right), 1 wide (bottom) or similar.
+           
+           Revised Layout for 4 items:
+           Row 1: Item 1 (Large Left), Item 2 (Top Right)
+           Row 2: Item 1 (Large Left), Item 3 (Bottom Right)
+           Wait, user wants 4 images.
+           
+           Let's do:
+           Row 1: Item 1 (Span 7), Item 2 (Span 5)
+           Row 2: Item 3 (Span 5), Item 4 (Span 7)
+        */
+        
+        .gallery-layout-4 .g-item-1 { grid-column: span 7; grid-row: span 1; }
+        .gallery-layout-4 .g-item-2 { grid-column: span 5; grid-row: span 1; }
+        .gallery-layout-4 .g-item-3 { grid-column: span 5; grid-row: span 1; }
+        .gallery-layout-4 .g-item-4 { grid-column: span 7; grid-row: span 1; }
+
+        @media (max-width: 768px) {
+            .project-gallery { display: flex; flex-direction: column; gap: 10px; }
+            .gallery-item { height: 200px; width: 100%; }
+        }
+    </style>
 </head>
 <body class="no-scroll"> 
 
-    <!-- LOADER CANVAS (Shows while desk loads) -->
+    <!-- Noise Overlay for Texture -->
+    <div class="noise-overlay"></div>
+
+    <!-- LOADER CANVAS -->
     <canvas id="loader-canvas"></canvas>
 
     <!-- STATIC NAV -->
-    <nav class="navbar">
+    <nav class="navbar reveal-up active">
         <div class="nav-left-group">
             <div class="nav-logo">Satyam.</div>
             <div class="render-toggle-wrapper">
-                <span class="toggle-label">HQ</span>
                 <label class="switch">
                     <input type="checkbox" id="render-mode">
                     <span class="slider round"></span>
                 </label>
+                <span class="toggle-label" style="font-size: 0.7rem; opacity: 0.6;">HIGH QUALITY</span>
             </div>
         </div>
         <ul class="nav-links">
-            <li><a href="#hero">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#experience">Experience</a></li>
             <li><a href="#projects">Work</a></li>
-            <li><a href="experiment.html">Experiment</a></li>
+            <li><a href="mailto:satyampatil1505@gmail.com">Contact</a></li>
         </ul>
     </nav>
 
     <!-- STATUS PILL -->
-    <div class="status-pill">
-        <div class="status-avatar"><i class="fas fa-user"></i></div>
-        <span class="status-text">Available for work</span>
+    <div class="status-pill reveal-up active">
         <span class="status-dot"></span>
+        <span class="status-text">Available for work</span>
     </div>
 
     <!-- CURSOR FOLLOWER -->
@@ -48,36 +107,30 @@
     <main>
         <!-- HERO SECTION -->
         <section class="section hero" id="hero">
-            <!-- Background Heatmap -->
+            <!-- Background Heatmap/Rings -->
             <canvas id="intro-canvas"></canvas>
 
             <div class="content-box hero-card">
-                <h1>Satyam Patil</h1>
-                <h2>Computer Engineering Student <br>& Creative Developer</h2>
-                <div class="social-links">
-                    <a href="https://www.linkedin.com/in/satyampatil/" target="_blank"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://github.com/satyampatil" target="_blank"><i class="fab fa-github"></i></a> 
-                    <a href="mailto:satyampatil1505@gmail.com"><i class="fas fa-envelope"></i></a>
+                <h1 class="reveal-up">Satyam Patil</h1>
+                <h2 class="reveal-up stagger-delay-1">Creative Developer & <br>Computer Engineering Student</h2>
+                <div class="social-links reveal-up stagger-delay-2" style="margin-top: 20px;">
+                    <a href="#" class="cta-btn" id="start-scroll-btn">Explore Portfolio</a>
                 </div>
-                <!-- This button is hidden by CSS in style.css initially, revealed by script logic if needed, 
-                     but currently the loader handles the initial wait. -->
-                <button id="start-scroll-btn" class="cta-btn">Start Scrolling</button>
             </div>
         </section>
 
         <!-- ABOUT -->
         <section class="section about" id="about">
-            <div class="content-box right-align">
+            <div class="content-box reveal-up">
                 <h3>About Me</h3>
                 <p>
-                    I am a Computer Engineering student at <strong>Thadomal Shahani Engineering College</strong> (2027) with a strong GPA of 8.76. 
-                    Beyond code, I have entrepreneurial experience in e-commerce and digital trading.
+                    I craft digital experiences at the intersection of design and engineering. Currently studying Computer Engineering at <strong>Thadomal Shahani Engineering College</strong> (2027), I blend technical precision with creative fluidity.
                 </p>
-                <div class="skills-container">
-                    <h4>Tech Stack</h4>
+                <div class="skills-container" style="margin-top: 30px;">
+                    <h4>Technical Arsenal</h4>
                     <div class="skill-chips">
-                        <span>Python</span><span>C</span><span>Streamlit</span><span>OpenCV</span>
-                        <span>Flask</span><span>Pandas</span><span>Git</span><span>HTML/CSS</span>
+                        <span>Python</span><span>Three.js</span><span>React</span><span>OpenCV</span>
+                        <span>Flask</span><span>Streamlit</span><span>Git</span>
                     </div>
                 </div>
             </div>
@@ -85,57 +138,164 @@
 
         <!-- EXPERIENCE -->
         <section class="section experience" id="experience">
-            <div class="content-box left-align">
-                <h3>Experience</h3>
+            <!-- Removed reveal-up from parent container so children can animate individually -->
+            <div class="content-box" style="max-width: 800px;"> 
+                <h3 class="reveal-up">Experience</h3>
+                
                 <div class="timeline">
-                    <div class="timeline-item">
-                        <span class="date">Apr 2024 - Present</span>
-                        <h4>Logistics Team Member</h4>
-                        <p class="company">Computer Society of India (TSEC)</p>
+                    
+                    <!-- Caffè Nero -->
+                    <div class="timeline-item reveal-up">
+                        <span class="date">Apr 2025 - Present</span>
+                        <h4 style="color: #0088ff; margin-bottom: 5px;">Caffè Nero</h4>
+                        <p class="company" style="font-size: 0.9rem; color: #aaa;">Stansted, England, United Kingdom</p>
+                        
+                        <!-- Nested Roles -->
+                        <div style="margin-top: 20px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
+                            <div style="margin-bottom: 20px;">
+                                <strong style="color: #fff; font-size: 1.1rem; display:block;">Shift Leader</strong>
+                                <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 5px;">Aug 2025 - Present</span>
+                                <div class="skill-chips" style="margin-top: 5px;">
+                                    <span>Barista</span><span>Sales Management</span><span>Team Management</span>
+                                </div>
+                            </div>
+                            <div>
+                                <strong style="color: #fff; font-size: 1.1rem; display:block;">Lead Barista</strong>
+                                <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 5px;">Apr 2025 - Jul 2025</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="timeline-item">
-                        <span class="date">Mar 2022 - Feb 2023</span>
-                        <h4>Freelance Trader</h4>
-                        <p class="company">Digital Currency / Discord</p>
+
+                    <!-- Muffin Break UK -->
+                    <div class="timeline-item reveal-up">
+                        <span class="date">Oct 2023 - Mar 2025</span>
+                        <h4 style="color: #0088ff; margin-bottom: 5px;">Muffin Break UK</h4>
+                        <p class="company" style="font-size: 0.9rem; color: #aaa;">Colchester, England, United Kingdom</p>
+                        
+                        <!-- Nested Roles -->
+                        <div style="margin-top: 20px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
+                            <div style="margin-bottom: 20px;">
+                                <strong style="color: #fff; font-size: 1.1rem; display:block;">Assistant Manager</strong>
+                                <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 5px;">Oct 2024 - Mar 2025</span>
+                                <div class="skill-chips" style="margin-top: 5px;">
+                                    <span>Management</span><span>Leadership</span>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <strong style="color: #fff; font-size: 1.1rem; display:block;">Lead Barista</strong>
+                                <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 5px;">Aug 2024 - Oct 2024</span>
+                            </div>
+                            <div>
+                                <strong style="color: #fff; font-size: 1.1rem; display:block;">Team Member</strong>
+                                <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 10px;">Oct 2023 - Jul 2024</span>
+                                <p style="font-size: 0.95rem; line-height: 1.6; color: #ccc;">
+                                    • Skilled in operating coffee machines, delivering high-quality beverages based on customer preferences.<br>
+                                    • Efficiently managed ~300 daily transactions totalling £3000.<br>
+                                    • Conducted weekly inventory checks and stock replenishment.
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="timeline-item">
-                        <span class="date">Jun 2020 - May 2021</span>
-                        <h4>E-Commerce Founder</h4>
-                        <p class="company">Dropshipping Business</p>
+
+                    <!-- Wipro -->
+                    <div class="timeline-item reveal-up">
+                        <span class="date">Mar 2021 - Sep 2023</span>
+                        <h4 style="color: #0088ff; margin-bottom: 5px;">Wipro</h4>
+                        <p class="company" style="font-size: 0.9rem; color: #aaa;">Pune, Maharashtra, India (Remote)</p>
+                        
+                        <!-- Nested Roles -->
+                        <div style="margin-top: 20px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
+                            <div style="margin-bottom: 20px;">
+                                <strong style="color: #fff; font-size: 1.1rem; display:block;">Senior Project Engineer</strong>
+                                <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 5px;">Jan 2023 - Sep 2023</span>
+                                <div class="skill-chips" style="margin-top: 5px;">
+                                    <span>Anaplan</span>
+                                </div>
+                            </div>
+                            <div>
+                                <strong style="color: #fff; font-size: 1.1rem; display:block;">Project Engineer</strong>
+                                <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 5px;">Mar 2021 - Jan 2023</span>
+                                <div class="skill-chips" style="margin-top: 5px;">
+                                    <span>Microsoft Excel</span><span>Data Analysis</span><span>Solution Architecture</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </section>
 
         <!-- PROJECTS -->
         <section class="section projects" id="projects">
-            <div class="content-box right-align wide-box">
-                <h3>Selected Projects</h3>
-                <div class="project-grid">
-                    <div class="project-card">
-                        <h4>PixelForge</h4>
-                        <p>Image processing web app using Streamlit & Hugging Face.</p>
+            <div class="content-box wide-box" style="background: transparent; border: none; padding: 0; max-width: 900px;">
+                <h3 class="reveal-up">Selected Works</h3>
+                
+                <!-- FEATURED PROJECT: ABOOKI -->
+                <div class="project-card featured-project reveal-up" style="background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.4) 100%); border: 1px solid rgba(255,255,255,0.1); padding: 40px; margin-bottom: 40px; position: relative; overflow: hidden;">
+                    <!-- Decorative subtle glow behind -->
+                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,136,255,0.2) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; pointer-events: none;"></div>
+
+                    <!-- Bento Grid Gallery for Abooki Images -->
+                    <div class="project-gallery gallery-layout-4" style="margin-bottom: 30px;">
+                        <!-- Using uploaded filenames -->
+                        <div class="gallery-item g-item-1"><img src="abooki1.png" alt="Abooki Interface 1"></div>
+                        <div class="gallery-item g-item-2"><img src="abooki2.png" alt="Abooki Interface 2"></div>
+                        <div class="gallery-item g-item-3"><img src="abooki3.png" alt="Abooki Interface 3"></div>
+                        <div class="gallery-item g-item-4"><img src="abooki4.png" alt="Abooki Interface 4"></div>
                     </div>
-                    <div class="project-card">
-                        <h4>PulseFeed</h4>
-                        <p>Flask-based personalized news aggregator.</p>
-                    </div>
-                    <div class="project-card">
-                        <h4>Face Detection</h4>
-                        <p>Real-time facial recognition system using OpenCV.</p>
+
+                    <div style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
+                        <div style="flex: 1; min-width: 300px;">
+                            <span style="font-family: 'Syne', sans-serif; font-size: 0.8rem; color: #0088ff; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 10px;">Featured Project</span>
+                            <h4 style="font-size: 2.5rem; margin-bottom: 15px;">Abooki 📚✨</h4>
+                            <p style="font-size: 1.05rem; color: #ddd; margin-bottom: 20px;">
+                                An AI-powered storytelling platform and dynamic library where technology meets creativity. 
+                                Generate 10-page mini-books with custom covers, read in a distraction-free environment, or listen via Audiobook mode.
+                            </p>
+                            
+                            <ul style="list-style: none; padding: 0; margin-bottom: 25px; color: #bbb; font-size: 0.95rem;">
+                                <li style="margin-bottom: 8px;"><i class="fas fa-robot" style="color: #0088ff; width: 20px;"></i> <strong>AI Generation:</strong> Custom stories & cover art from simple prompts.</li>
+                                <li style="margin-bottom: 8px;"><i class="fas fa-ghost" style="color: #0088ff; width: 20px;"></i> <strong>Social Library:</strong> See other readers as floating ghosts in real-time.</li>
+                                <li style="margin-bottom: 8px;"><i class="fas fa-medal" style="color: #0088ff; width: 20px;"></i> <strong>Gamification:</strong> Earn badges for streaks and reading.</li>
+                            </ul>
+
+                            <div class="skill-chips" style="margin-bottom: 25px;">
+                                <span>Vanilla JS</span><span>HTML/CSS</span><span>Google Firebase</span><span>AI Integration</span>
+                            </div>
+
+                            <a href="https://abooki.co.uk/" target="_blank" class="cta-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">
+                                Launch Abooki <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <button class="cta-btn" onclick="window.location.href='mailto:satyampatil1505@gmail.com'">Get in Touch</button>
+
+                <!-- Standard Grid -->
+                <div class="project-grid">
+                    <div class="project-card reveal-up stagger-delay-1">
+                        <h4>PixelForge</h4>
+                        <p>AI-powered image processing suite utilizing Hugging Face transformers.</p>
+                    </div>
+                    <div class="project-card reveal-up stagger-delay-2">
+                        <h4>PulseFeed</h4>
+                        <p>Personalized news aggregator built with Flask and ML algorithms.</p>
+                    </div>
+                    <div class="project-card reveal-up stagger-delay-3">
+                        <h4>Face Detection</h4>
+                        <p>Real-time computer vision system for biometric identity.</p>
+                    </div>
+                </div>
             </div>
         </section>
         
         <!-- EXPERIMENT LINK -->
-        <section class="section experiment" id="experiment">
-            <div class="content-box left-align">
-                <h3>Experiments</h3>
-                <p>Playground for visual effects.</p>
-                <div class="experiment-controls">
-                    <button class="cta-btn" onclick="window.location.href='experiment.html'">Open Experiments Lab</button>
+        <section class="section experiment" id="experiment" style="justify-content: center;">
+            <div class="content-box reveal-up" style="text-align: center;">
+                <h3>The Lab</h3>
+                <p>Experimental visual effects and code sketches.</p>
+                <div class="experiment-controls" style="margin-top: 30px;">
+                    <button class="cta-btn" onclick="window.location.href='experiment.html'">Enter Playground</button>
                 </div>
             </div>
         </section>
