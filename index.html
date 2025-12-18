@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satyam Patil | Developer Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="intro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="no-scroll"> 
+
+    <!-- LOADER CANVAS (Shows while desk loads) -->
+    <canvas id="loader-canvas"></canvas>
+
+    <!-- STATIC NAV -->
+    <nav class="navbar">
+        <div class="nav-left-group">
+            <div class="nav-logo">Satyam.</div>
+            <div class="render-toggle-wrapper">
+                <span class="toggle-label">HQ</span>
+                <label class="switch">
+                    <input type="checkbox" id="render-mode">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#projects">Work</a></li>
+            <li><a href="experiment.html">Experiment</a></li>
+        </ul>
+    </nav>
+
+    <!-- STATUS PILL -->
+    <div class="status-pill">
+        <div class="status-avatar"><i class="fas fa-user"></i></div>
+        <span class="status-text">Available for work</span>
+        <span class="status-dot"></span>
+    </div>
+
+    <!-- CURSOR FOLLOWER -->
+    <div id="cursor-follower"></div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- HERO SECTION -->
+        <section class="section hero" id="hero">
+            <!-- Background Heatmap -->
+            <canvas id="intro-canvas"></canvas>
+
+            <div class="content-box hero-card">
+                <h1>Satyam Patil</h1>
+                <h2>Computer Engineering Student <br>& Creative Developer</h2>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/satyampatil/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/satyampatil" target="_blank"><i class="fab fa-github"></i></a> 
+                    <a href="mailto:satyampatil1505@gmail.com"><i class="fas fa-envelope"></i></a>
+                </div>
+                <!-- This button is hidden by CSS in style.css initially, revealed by script logic if needed, 
+                     but currently the loader handles the initial wait. -->
+                <button id="start-scroll-btn" class="cta-btn">Start Scrolling</button>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="section about" id="about">
+            <div class="content-box right-align">
+                <h3>About Me</h3>
+                <p>
+                    I am a Computer Engineering student at <strong>Thadomal Shahani Engineering College</strong> (2027) with a strong GPA of 8.76. 
+                    Beyond code, I have entrepreneurial experience in e-commerce and digital trading.
+                </p>
+                <div class="skills-container">
+                    <h4>Tech Stack</h4>
+                    <div class="skill-chips">
+                        <span>Python</span><span>C</span><span>Streamlit</span><span>OpenCV</span>
+                        <span>Flask</span><span>Pandas</span><span>Git</span><span>HTML/CSS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section class="section experience" id="experience">
+            <div class="content-box left-align">
+                <h3>Experience</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="date">Apr 2024 - Present</span>
+                        <h4>Logistics Team Member</h4>
+                        <p class="company">Computer Society of India (TSEC)</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="date">Mar 2022 - Feb 2023</span>
+                        <h4>Freelance Trader</h4>
+                        <p class="company">Digital Currency / Discord</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="date">Jun 2020 - May 2021</span>
+                        <h4>E-Commerce Founder</h4>
+                        <p class="company">Dropshipping Business</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section class="section projects" id="projects">
+            <div class="content-box right-align wide-box">
+                <h3>Selected Projects</h3>
+                <div class="project-grid">
+                    <div class="project-card">
+                        <h4>PixelForge</h4>
+                        <p>Image processing web app using Streamlit & Hugging Face.</p>
+                    </div>
+                    <div class="project-card">
+                        <h4>PulseFeed</h4>
+                        <p>Flask-based personalized news aggregator.</p>
+                    </div>
+                    <div class="project-card">
+                        <h4>Face Detection</h4>
+                        <p>Real-time facial recognition system using OpenCV.</p>
+                    </div>
+                </div>
+                <button class="cta-btn" onclick="window.location.href='mailto:satyampatil1505@gmail.com'">Get in Touch</button>
+            </div>
+        </section>
+        
+        <!-- EXPERIMENT LINK -->
+        <section class="section experiment" id="experiment">
+            <div class="content-box left-align">
+                <h3>Experiments</h3>
+                <p>Playground for visual effects.</p>
+                <div class="experiment-controls">
+                    <button class="cta-btn" onclick="window.location.href='experiment.html'">Open Experiments Lab</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Import Map -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <!-- SCRIPTS -->
+    <script type="module" src="loader.js"></script>
+    <script type="module" src="intro.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

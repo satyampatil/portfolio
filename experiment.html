@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiments | Satyam Patil</title>
+    <!-- Link to the main style for navbar consistancy -->
+    <link rel="stylesheet" href="style.css"> 
+    <!-- Specific styles for experiments -->
+    <link rel="stylesheet" href="experiment.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- NAV BAR (Links back to Home) -->
+    <nav class="navbar">
+        <div class="nav-logo">Satyam.</div>
+        <ul class="nav-links">
+            <li><a href="index.html#hero">Home</a></li>
+            <li><a href="index.html#projects">Work</a></li>
+            <li><a href="#" class="active">Experiment</a></li>
+        </ul>
+    </nav>
+
+    <!-- Cursor Follower -->
+    <div id="cursor-follower"></div>
+
+    <!-- The 3D Canvas -->
+    <canvas id="experiment-canvas"></canvas>
+
+    <!-- Overlay Text -->
+    <div class="overlay-content">
+        <h1>Abstract Waves</h1>
+        <p>Interactive procedural generation using Perlin Noise & Three.js</p>
+        <div class="controls">
+            <p>Move mouse to disrupt flow</p>
+        </div>
+    </div>
+
+    <!-- Import Map -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <!-- Experiment Script -->
+    <script type="module" src="experiment.js"></script>
+</body>
+</html>
