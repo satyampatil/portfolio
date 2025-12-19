@@ -1,0 +1,26 @@
+{
+  "name": "satyam-patil-portfolio",
+  "version": "1.0.0",
+  "description": "Creative Developer Portfolio with Three.js",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve",
+    "build": "echo \"No build step required for static site\"",
+    "deploy": "firebase deploy"
+  },
+  "dependencies": {
+    "three": "^0.160.0",
+    "gsap": "^3.12.5",
+    "dat.gui": "^0.7.9"
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "keywords": [
+    "portfolio",
+    "threejs",
+    "creative-developer"
+  ],
+  "author": "Satyam Patil",
+  "license": "ISC"
+}
