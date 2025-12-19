@@ -32,49 +32,84 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            // Use GSAP for a springy, staggered reveal instead of plain CSS
-            gsap.to(entry.target, {
-                y: 0,
-                opacity: 1,
-                duration: 1.5,
-                ease: "power4.out",
-                overwrite: true
-            });
+            
+            // IF it's a Text Reveal (Slide Up)
+            if(entry.target.classList.contains('reveal-text')) {
+                 gsap.to(entry.target, {
+                    y: "0%", // Slide up to original position
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: "power4.out",
+                    overwrite: true
+                });
+            } 
+            // ELSE it's a standard Fade Up (Cards, etc)
+            else {
+                gsap.to(entry.target, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.5,
+                    ease: "power4.out",
+                    overwrite: true
+                });
+            }
+            
             observer.unobserve(entry.target); // Run once
         }
     });
 }, observerOptions);
 
-// Set initial state for GSAP to animate TO
-document.querySelectorAll('.reveal-up').forEach(el => {
-    gsap.set(el, { y: 100, opacity: 0 }); // Start lower and invisible
+// Set initial state for Text Reveals
+document.querySelectorAll('.reveal-text').forEach(el => {
+    gsap.set(el, { y: "110%", opacity: 1 }); // Start below the mask line
     observer.observe(el);
 });
 
+// Set initial state for Standard Fades
+document.querySelectorAll('.reveal-fade').forEach(el => {
+    gsap.set(el, { y: 50, opacity: 0 }); 
+    observer.observe(el);
+});
+
+// --- HERO TEXT ANIMATION (On Load) ---
+// Animate the hero text sliding up from mask on load
+window.addEventListener('load', () => {
+    const heroTexts = document.querySelectorAll('.hero-card .line-text');
+    gsap.to(heroTexts, {
+        y: "0%",
+        duration: 1.5,
+        stagger: 0.2,
+        ease: "power4.out",
+        delay: 0.5 // Wait for loader a bit
+    });
+
+    const navItems = document.querySelectorAll('.reveal-nav');
+    gsap.fromTo(navItems, 
+        { y: -20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power2.out", delay: 1 }
+    );
+});
+
+
 // --- NEW: PARALLAX IMAGE EFFECT FOR GALLERY ---
-// Finds all elements with .scroll-reactor and moves them slightly based on scroll
 const scrollReactors = document.querySelectorAll('.scroll-reactor');
 scrollReactors.forEach(el => {
     const speed = parseFloat(el.getAttribute('data-speed')) || 0.05;
-    
-    // Create a parallax effect using GSAP ScrollTrigger
-    // We animate the image INSIDE the container to create the window effect
     const img = el.querySelector('img');
     if(img) {
         gsap.to(img, {
-            yPercent: 15, // Move image down 15%
+            yPercent: 15, 
             ease: "none",
             scrollTrigger: {
                 trigger: el,
-                start: "top bottom", // Start when top of element hits bottom of viewport
-                end: "bottom top",   // End when bottom of element hits top of viewport
+                start: "top bottom", 
+                end: "bottom top",   
                 scrub: true
             } 
         });
         
-        // Also subtle movement of the container itself in opposite direction
         gsap.to(el, {
-            y: -50 * speed, // Move up slightly based on speed
+            y: -50 * speed, 
             ease: "none",
             scrollTrigger: {
                 trigger: el,
@@ -86,10 +121,8 @@ scrollReactors.forEach(el => {
     }
 });
 
-// --- 3. MAGNETIC BUTTONS ---
-// Make buttons/links "stick" to the cursor slightly
+// --- 3. MAGNETIC BUTTONS (Refined for "Juice") ---
 const magneticElements = document.querySelectorAll('.cta-btn, .nav-links li a, .social-links a');
-// Need access to cursorFollower, ensuring it's selected before use
 const cursorFollower = document.getElementById('cursor-follower');
 
 magneticElements.forEach((el) => {
@@ -98,29 +131,32 @@ magneticElements.forEach((el) => {
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
         
-        // Move the element towards the mouse (strength 0.3)
+        // Stronger magnet for that "Igloo" sticky feel
         gsap.to(el, {
-            x: x * 0.3,
-            y: y * 0.3,
-            duration: 0.3,
+            x: x * 0.5,
+            y: y * 0.5,
+            duration: 0.4,
             ease: "power2.out"
         });
         
         if(cursorFollower) {
             cursorFollower.classList.add('magnetic-active');
+            // Make cursor grow slightly more
+            gsap.to(cursorFollower, { scale: 1.5, duration: 0.3 });
         }
     });
 
     el.addEventListener('mouseleave', () => {
-        // Snap back to center
+        // Snap back with elastic wobble
         gsap.to(el, {
             x: 0,
             y: 0,
-            duration: 1,
-            ease: "elastic.out(1, 0.3)" // Elastic wobble on release
+            duration: 0.8,
+            ease: "elastic.out(1, 0.4)" 
         });
         if(cursorFollower) {
             cursorFollower.classList.remove('magnetic-active');
+            gsap.to(cursorFollower, { scale: 1, duration: 0.3 });
         }
     });
 });
@@ -128,17 +164,15 @@ magneticElements.forEach((el) => {
 // --- CURSOR FOLLOWER LOGIC ---
 const moveCursor = (e) => {
     if(!cursorFollower) return;
-    // Use GSAP for smoother cursor following
     gsap.to(cursorFollower, {
         x: e.clientX,
         y: e.clientY,
-        duration: 0.1, // Slight lag for fluid feel
+        duration: 0.15, // Slightly looser for a "floaty" feel
         ease: "power2.out"
     });
 };
 window.addEventListener('mousemove', moveCursor);
 
-// Add hover effect to interactive elements
 const interactiveElements = document.querySelectorAll('a, button, .switch, .project-card, .gallery-item');
 interactiveElements.forEach(el => {
     el.addEventListener('mouseenter', () => { if(cursorFollower) cursorFollower.classList.add('hovered'); });
@@ -192,17 +226,37 @@ sunLight.castShadow = true;
 scene.add(sunLight);
 sunLight.visible = false; 
 
-const spotLight = new THREE.SpotLight(0x0088ff, 0); 
-spotLight.position.set(2, 4, 0); 
-spotLight.angle = Math.PI / 6;
-spotLight.penumbra = 0.4;
+// --- BLUE SPOTLIGHT (Interactive) ---
+// Locked values provided by user
+const spotLight = new THREE.SpotLight(0x0088ff, 92); // Intensity 92
+spotLight.position.set(0.9, 3.1, -1); 
+spotLight.angle = 1.33;
+spotLight.penumbra = 1;
 spotLight.decay = 2;
 spotLight.distance = 25;
 spotLight.castShadow = true;
 spotLight.shadow.bias = -0.0001;
+spotLight.target.position.set(0, 1, -1); // Locked target
+
 scene.add(spotLight);
 scene.add(spotLight.target);
 spotLight.visible = false;
+
+// --- WARM SPOTLIGHT (Locked Values) ---
+const warmLight = new THREE.SpotLight(0xffaa33, 128); 
+warmLight.position.set(0.1, 2.1, -2.6); 
+warmLight.angle = 0.96;
+warmLight.penumbra = 1;
+warmLight.decay = 2;
+warmLight.distance = 25;
+warmLight.castShadow = true;
+warmLight.shadow.bias = -0.0001;
+warmLight.target.position.set(3, -4, 5); // Locked target
+
+scene.add(warmLight);
+scene.add(warmLight.target);
+warmLight.visible = false; // Starts hidden, reveals with desk
+
 
 // --- LOAD DESK MODEL ---
 const dracoLoader = new DRACOLoader();
@@ -212,6 +266,7 @@ const loader = new GLTFLoader();
 loader.setDRACOLoader(dracoLoader);
 
 let loadedModel;
+let mixer; // Animation Mixer global variable
 
 function loadDeskModel(url, isHighQuality) {
     if (loadedModel) {
@@ -231,6 +286,13 @@ function loadDeskModel(url, isHighQuality) {
         model.position.set(0, 0, 0); 
         model.scale.set(2, 2, 2);
         model.visible = false; 
+
+        // Play Animation if it exists
+        if (gltf.animations && gltf.animations.length > 0) {
+            mixer = new THREE.AnimationMixer(model);
+            const action = mixer.clipAction(gltf.animations[0]);
+            action.play();
+        }
 
         model.traverse((child) => {
             if (child.isMesh) {
@@ -388,6 +450,11 @@ function animate(time) {
          el.style.pointerEvents = sceneState.heroOpacity < 0.1 ? 'none' : 'auto';
     });
 
+    // UPDATE MIXER (For Animation/Sitting Pose)
+    if (mixer) {
+        mixer.update(clock.getDelta());
+    }
+
     // USE GSAP PROGRESS FOR DESK ANIMATION
     const progress = sceneState.deskProgress;
 
@@ -398,6 +465,7 @@ function animate(time) {
          if (progress > 0) {
              sunLight.visible = true;
              spotLight.visible = true;
+             warmLight.visible = true; // Warm light visible
          }
 
         camera.position.lerpVectors(deskStartPos, deskEndPos, progress);
@@ -415,6 +483,7 @@ function animate(time) {
             }
         }
 
+        // Blue light pulsing logic
         spotLight.intensity += (targetIntensity - spotLight.intensity) * 0.1;
 
         if (window.bulbMesh) {
@@ -431,6 +500,7 @@ function animate(time) {
         if(progress < 0.01) {
              sunLight.visible = false;
              spotLight.visible = false;
+             warmLight.visible = false;
         }
     }
 
