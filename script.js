@@ -180,21 +180,7 @@ document.body.appendChild(renderer.domElement);
 renderer.domElement.style.position = 'fixed';
 renderer.domElement.style.top = '0';
 renderer.domElement.style.left = '0';
-renderer.domElement.style.zIndex = '-2'; 
-
-// --- GUI CONTROLS ---
-const gui = new GUI();
-gui.domElement.parentElement.style.zIndex = "10000";
-gui.hide(); 
-
-const debugParams = {
-    useManualScroll: false, 
-    manualScroll: 0
-};
-const debugFolder = gui.addFolder('1. Debug / Manual Scroll');
-debugFolder.add(debugParams, 'useManualScroll').name('Enable Manual Control');
-debugFolder.add(debugParams, 'manualScroll', 0, 1).name('Scroll Position').listen();
-debugFolder.close();
+renderer.domElement.style.zIndex = '-1'; 
 
 // --- LIGHTING ---
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); 
@@ -312,16 +298,72 @@ if(startScrollBtn) {
         e.preventDefault(); 
         document.body.classList.remove('no-scroll');
         // Use Lenis to scroll smoothly
-        lenis.scrollTo('#about');
+        lenis.scrollTo('.desk-animation-spacer');
+    });
+
+    // NEW: CHANGE BUTTON TEXT ON SCROLL
+    // As soon as user scrolls (body triggers), swap text to "Available for work"
+    ScrollTrigger.create({
+        trigger: "body",
+        start: "10px top", // Trigger after just 10px of scrolling
+        onEnter: () => {
+            // Change text and add the green dot
+            startScrollBtn.innerHTML = '<span class="status-dot" style="display:inline-block; width:8px; height:8px; background:#25D366; border-radius:50%; margin-right:10px; box-shadow:0 0 8px #25D366;"></span>Available for work';
+            // Slight style adjustment (pill shape refined)
+            gsap.to(startScrollBtn, { padding: "12px 24px", duration: 0.3 });
+        },
+        onLeaveBack: () => {
+            // Revert when at the very top
+            startScrollBtn.innerText = 'Explore Portfolio';
+            gsap.to(startScrollBtn, { padding: "16px 32px", duration: 0.3 });
+        }
     });
 }
 
-// --- INTERACTION LOGIC ---
+// --- INTERACTION LOGIC & SCROLL TRIGGER ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let targetIntensity = 0;
-let scrollProgress = 0;
-let targetScrollProgress = 0;
+
+// NEW: Track desk progress via GSAP
+const sceneState = { deskProgress: 0, heroOpacity: 1 };
+
+// Trigger for the Desk Animation linked to the SPACER
+ScrollTrigger.create({
+    trigger: ".desk-animation-spacer",
+    start: "top bottom", // Starts as soon as the spacer enters the viewport (when leaving hero)
+    end: "bottom bottom", 
+    scrub: 1, 
+    onUpdate: (self) => {
+        sceneState.deskProgress = self.progress;
+    }
+});
+
+// Trigger to fade out the Hero Text as we scroll away
+ScrollTrigger.create({
+    trigger: ".desk-animation-spacer", // Changed from .hero to spacer for better sync
+    start: "top bottom",
+    end: "20% top",
+    scrub: true,
+    onUpdate: (self) => {
+        sceneState.heroOpacity = 1 - self.progress;
+    }
+});
+
+// --- NEW: FACE ANIMATION ("Sticky" Logic) ---
+// Since it's position: fixed in CSS, we only need to fade it out.
+// We trigger this based on the spacer entering the view.
+gsap.to("#hero-face", {
+    opacity: 0,
+    ease: "power1.inOut",
+    scrollTrigger: {
+        trigger: ".desk-animation-spacer",
+        start: "top bottom", // Start fading when the spacer enters from bottom (scrolling down from hero)
+        end: "top top",      // Completely invisible when spacer hits the top (where desk animation starts)
+        scrub: true
+    }
+});
+
 
 window.addEventListener('mousemove', (event) => {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -336,46 +378,30 @@ function animate(time) {
     lenis.raf(time);
     
     requestAnimationFrame(animate);
-    const delta = clock.getDelta(); // Use getDelta safely
 
-    if (debugParams.useManualScroll) {
-        scrollProgress = debugParams.manualScroll;
-    } else {
-        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollTop = window.scrollY; // This works with Lenis too
-        
-        if (maxScroll > 0) {
-            targetScrollProgress = scrollTop / maxScroll;
-        } else {
-            targetScrollProgress = 0;
-        }
-        scrollProgress += (targetScrollProgress - scrollProgress) * 0.05;
-        debugParams.manualScroll = scrollProgress;
-    }
+    // Apply Fade to Hero Text (Excluding the fixed button)
+    // We target the specific text containers instead of the whole card
+    const heroTextElements = document.querySelectorAll('.hero-pos-top, .hero-pos-left, .hero-pos-right');
+    heroTextElements.forEach(el => {
+         el.style.opacity = sceneState.heroOpacity;
+         // Disable pointer events when invisible
+         el.style.pointerEvents = sceneState.heroOpacity < 0.1 ? 'none' : 'auto';
+    });
 
-    const deskThreshold = 0.1; 
-    
-    // FADE HERO CARD
-    const heroCard = document.querySelector('.hero-card');
-    if(heroCard) {
-        const opacity = Math.max(0, 1 - (scrollProgress * 5)); 
-        heroCard.style.opacity = opacity;
-        // Use GSAP for performant transforms if you wanted, but direct setting is fine here
-        heroCard.style.transform = `translateY(${scrollProgress * 200}px)`;
-        heroCard.style.pointerEvents = opacity < 0.1 ? 'none' : 'auto';
-    }
+    // USE GSAP PROGRESS FOR DESK ANIMATION
+    const progress = sceneState.deskProgress;
 
-    // DESK ANIMATION
-    if (scrollProgress > deskThreshold) {
-        if(loadedModel) loadedModel.visible = true;
-        sunLight.visible = true;
-        spotLight.visible = true;
+    // Show model if progress is starting or greater
+    if (progress >= 0 && loadedModel) {
+         if (progress > 0.001) loadedModel.visible = true;
+         
+         if (progress > 0) {
+             sunLight.visible = true;
+             spotLight.visible = true;
+         }
 
-        let deskProgress = (scrollProgress - deskThreshold) / (1 - deskThreshold);
-        deskProgress = Math.max(0, Math.min(1, deskProgress));
-
-        camera.position.lerpVectors(deskStartPos, deskEndPos, deskProgress);
-        currentLookAt.lerpVectors(deskLookAt, deskEndLookAt, deskProgress);
+        camera.position.lerpVectors(deskStartPos, deskEndPos, progress);
+        currentLookAt.lerpVectors(deskLookAt, deskEndLookAt, progress);
         camera.lookAt(currentLookAt);
 
         raycaster.setFromCamera(mouse, camera);
@@ -400,9 +426,12 @@ function animate(time) {
         camera.position.copy(deskStartPos);
         camera.lookAt(deskLookAt);
         
-        if(loadedModel) loadedModel.visible = false;
-        sunLight.visible = false;
-        spotLight.visible = false;
+        // Ensure model is hidden at strict 0 to allow face to shine
+        if(loadedModel && progress === 0) loadedModel.visible = false;
+        if(progress < 0.01) {
+             sunLight.visible = false;
+             spotLight.visible = false;
+        }
     }
 
     renderer.render(scene, camera);

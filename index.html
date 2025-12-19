@@ -38,23 +38,6 @@
         }
 
         /* Bento Grid Layout */
-        .item-1 { grid-column: span 8; grid-row: span 2; } /* Main large image */
-        .item-2 { grid-column: span 4; grid-row: span 1; }
-        .item-3 { grid-column: span 4; grid-row: span 1; }
-        /* Note: We have 4 images, so we can hide one or stack them differently. 
-           Let's try a layout for 4 images: 
-           1 Large (left), 2 stacked (right), 1 wide (bottom) or similar.
-           
-           Revised Layout for 4 items:
-           Row 1: Item 1 (Large Left), Item 2 (Top Right)
-           Row 2: Item 1 (Large Left), Item 3 (Bottom Right)
-           Wait, user wants 4 images.
-           
-           Let's do:
-           Row 1: Item 1 (Span 7), Item 2 (Span 5)
-           Row 2: Item 3 (Span 5), Item 4 (Span 7)
-        */
-        
         .gallery-layout-4 .g-item-1 { grid-column: span 7; grid-row: span 1; }
         .gallery-layout-4 .g-item-2 { grid-column: span 5; grid-row: span 1; }
         .gallery-layout-4 .g-item-3 { grid-column: span 5; grid-row: span 1; }
@@ -110,14 +93,38 @@
             <!-- Background Heatmap/Rings -->
             <canvas id="intro-canvas"></canvas>
 
-            <div class="content-box hero-card">
-                <h1 class="reveal-up">Satyam Patil</h1>
-                <h2 class="reveal-up stagger-delay-1">Creative Developer & <br>Computer Engineering Student</h2>
-                <div class="social-links reveal-up stagger-delay-2" style="margin-top: 20px;">
+            <!-- YOUR FACE IMAGE -->
+            <img src="my_photo.webp" id="hero-face" alt="Satyam Patil">
+
+            <!-- HERO UI LAYER (Scattered Text) -->
+            <!-- We keep the class 'hero-card' so the JS animation still works automatically -->
+            <div class="hero-card">
+                
+                <!-- Top Mid: Title -->
+                <div class="hero-pos-top reveal-up">
+                    <h2>Creative Developer & <br>Computer Engineering Student</h2>
+                </div>
+
+                <!-- Bottom Left: Name -->
+                <div class="hero-pos-left reveal-up stagger-delay-1">
+                    <h1 class="giant-first-name">Satyam</h1>
+                </div>
+
+                <!-- Bottom right: Name -->
+                <div class="hero-pos-right reveal-up stagger-delay-1">
+                    <h1 class="giant-last-name">Patil</h1>
+                </div>
+
+                <!-- Bottom Mid: CTA Button -->
+                <div class="hero-pos-bottom reveal-up stagger-delay-2">
                     <a href="#" class="cta-btn" id="start-scroll-btn">Explore Portfolio</a>
                 </div>
+
             </div>
         </section>
+
+        <!-- ANIMATION SPACER -->
+        <div class="desk-animation-spacer"></div>
 
         <!-- ABOUT -->
         <section class="section about" id="about">
@@ -138,19 +145,15 @@
 
         <!-- EXPERIENCE -->
         <section class="section experience" id="experience">
-            <!-- Removed reveal-up from parent container so children can animate individually -->
             <div class="content-box" style="max-width: 800px;"> 
                 <h3 class="reveal-up">Experience</h3>
                 
                 <div class="timeline">
-                    
                     <!-- Caffè Nero -->
                     <div class="timeline-item reveal-up">
                         <span class="date">Apr 2025 - Present</span>
                         <h4 style="color: #0088ff; margin-bottom: 5px;">Caffè Nero</h4>
                         <p class="company" style="font-size: 0.9rem; color: #aaa;">Stansted, England, United Kingdom</p>
-                        
-                        <!-- Nested Roles -->
                         <div style="margin-top: 20px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
                             <div style="margin-bottom: 20px;">
                                 <strong style="color: #fff; font-size: 1.1rem; display:block;">Shift Leader</strong>
@@ -171,8 +174,6 @@
                         <span class="date">Oct 2023 - Mar 2025</span>
                         <h4 style="color: #0088ff; margin-bottom: 5px;">Muffin Break UK</h4>
                         <p class="company" style="font-size: 0.9rem; color: #aaa;">Colchester, England, United Kingdom</p>
-                        
-                        <!-- Nested Roles -->
                         <div style="margin-top: 20px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
                             <div style="margin-bottom: 20px;">
                                 <strong style="color: #fff; font-size: 1.1rem; display:block;">Assistant Manager</strong>
@@ -202,8 +203,6 @@
                         <span class="date">Mar 2021 - Sep 2023</span>
                         <h4 style="color: #0088ff; margin-bottom: 5px;">Wipro</h4>
                         <p class="company" style="font-size: 0.9rem; color: #aaa;">Pune, Maharashtra, India (Remote)</p>
-                        
-                        <!-- Nested Roles -->
                         <div style="margin-top: 20px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
                             <div style="margin-bottom: 20px;">
                                 <strong style="color: #fff; font-size: 1.1rem; display:block;">Senior Project Engineer</strong>
@@ -233,12 +232,9 @@
                 
                 <!-- FEATURED PROJECT: ABOOKI -->
                 <div class="project-card featured-project reveal-up" style="background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.4) 100%); border: 1px solid rgba(255,255,255,0.1); padding: 40px; margin-bottom: 40px; position: relative; overflow: hidden;">
-                    <!-- Decorative subtle glow behind -->
                     <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,136,255,0.2) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; pointer-events: none;"></div>
 
-                    <!-- Bento Grid Gallery for Abooki Images -->
                     <div class="project-gallery gallery-layout-4" style="margin-bottom: 30px;">
-                        <!-- Using uploaded filenames -->
                         <div class="gallery-item g-item-1"><img src="abooki1.png" alt="Abooki Interface 1"></div>
                         <div class="gallery-item g-item-2"><img src="abooki2.png" alt="Abooki Interface 2"></div>
                         <div class="gallery-item g-item-3"><img src="abooki3.png" alt="Abooki Interface 3"></div>

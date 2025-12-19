@@ -71,6 +71,41 @@ body.no-scroll {
     pointer-events: none;
 }
 
+/* --- NEW: HERO FACE STYLE --- */
+#hero-face {
+    position: fixed; /* CHANGED: Fixed to keep it stuck to the screen */
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 85vh; /* Large height for impact */
+    width: auto;
+    max-width: 90vw; /* Prevent overflow on small screens */
+    z-index: 1; /* Lower z-index so text (z-index 10) scrolls OVER it */
+    pointer-events: none;
+    filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+    object-fit: contain;
+    /* Opacity handled by GSAP, but start visible */
+    opacity: 1; 
+    will-change: opacity, transform;
+}
+
+/* Mobile adjustment for face */
+@media (max-width: 768px) {
+    #hero-face {
+        height: 60vh;
+    }
+}
+
+/* --- NEW: ANIMATION SPACER --- */
+/* Defines how long the scroll distance is for the desk animation */
+.desk-animation-spacer {
+    height: 350vh; /* Adjust this to make the animation faster/slower */
+    width: 100%;
+    pointer-events: none;
+    position: relative;
+    z-index: 1;
+}
+
 /* --- NAVIGATION --- */
 .navbar {
     position: fixed;
@@ -176,11 +211,12 @@ body:hover #cursor-follower.hovered {
 main { position: relative; z-index: 10; }
 
 .section {
+    position: relative; /* Anchors absolute children */
     min-height: 100vh; 
     width: 100%;
     display: flex;
     align-items: center;
-    padding: 100px 12%; /* Increased padding */
+    padding: 100px 12%; 
     box-sizing: border-box;
     pointer-events: none; 
 }
@@ -188,7 +224,7 @@ main { position: relative; z-index: 10; }
 /* --- TYPOGRAPHY --- */
 h1 { 
     font-family: 'Syne', sans-serif;
-    font-size: 7rem; /* Huge impact */
+    font-size: 7rem; 
     line-height: 0.9; 
     margin: 0 0 20px 0; 
     letter-spacing: -3px; 
@@ -242,16 +278,109 @@ p {
     transition: transform 0.3s ease;
 }
 
-/* Hero Specific */
+/* --- UPDATED HERO LAYOUT --- */
 .section.hero { justify-content: center !important; }
+
+/* The container for all hero text elements - fills the screen */
 .hero-card {
-    background: transparent !important; /* Minimal hero */
-    border: none !important;
-    text-align: center;
-    backdrop-filter: none;
-    padding: 0;
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none; /* Allows clicks to pass through empty space */
+    background: transparent;
+    border: none;
 }
-.hero-card h1 { mix-blend-mode: overlay; opacity: 0.9; }
+
+/* Child elements must re-enable pointer events */
+.hero-card > * {
+    pointer-events: auto; 
+    position: absolute;
+}
+
+/* 1. Title Top Middle */
+.hero-pos-top {
+    top: 15%; 
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+}
+.hero-pos-top h2 {
+    margin: 0 auto;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.7);
+    mix-blend-mode: overlay;
+}
+
+/* 2. Name Bottom Left */
+.hero-pos-left {
+    bottom: 100px;
+    left: 60px; /* Aligns with Nav padding */
+    text-align: left;
+}
+
+/* 3. Name Bottom Right */
+.hero-pos-right {
+    bottom: 100px;
+    right: 60px; /* Aligns with Nav padding */
+    text-align: right;
+}
+
+/* New: Separated Classes for Split Name */
+.giant-first-name, .giant-last-name {
+    font-size: 5vw; /* 50% smaller than previous giant-name (was 10vw) */
+    line-height: 0.85;
+    margin: 0;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+/* 4. CTA Button - FIXED TO NAVBAR */
+.hero-pos-bottom {
+    position: fixed; /* Fixed to viewport */
+    top: 40px;      /* Align with Navbar padding */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 10005; /* High z-index to stay above other fixed elements */
+    width: auto;
+    pointer-events: auto;
+}
+
+/* Mobile Adjustments for Hero */
+@media (max-width: 768px) {
+    .hero-pos-left {
+        left: 20px;
+        bottom: 120px; 
+    }
+    .hero-pos-right {
+        right: 20px;
+        bottom: 120px;
+    }
+    .giant-first-name, .giant-last-name {
+        font-size: 8vw; /* Adjusted for mobile */
+    }
+    .hero-pos-top {
+        top: 20%;
+    }
+    .hero-pos-bottom {
+        top: 25px; /* Adjust for mobile navbar spacing */
+        width: 100%; /* Ensure clicks work */
+        pointer-events: none; /* Wrapper shouldn't block, button will have events */
+    }
+    .hero-pos-bottom .cta-btn {
+        pointer-events: auto; /* Re-enable button clicks */
+        font-size: 0.8rem;
+        padding: 10px 20px;
+    }
+}
+
 
 /* --- ANIMATION CLASSES (Now handled by GSAP mostly, but keeping base) --- */
 .reveal-up {
@@ -269,7 +398,9 @@ p {
     font-size: 1rem;
     cursor: none;
     border-radius: 40px;
-    display: inline-block;
+    display: inline-flex; /* Changed to inline-flex for alignment with dot */
+    align-items: center;
+    justify-content: center;
     /* Transition handled by GSAP Magnetic effect */
 }
 
@@ -315,19 +446,10 @@ p {
 }
 
 /* Status Pill */
+/* Hidden because the main button now serves this purpose */
 .status-pill {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    z-index: 10002;
-    background: rgba(10, 10, 10, 0.8);
-    backdrop-filter: blur(10px);
-    padding: 10px 20px;
-    border-radius: 30px;
-    border: 1px solid rgba(255,255,255,0.1);
-    display: flex; gap: 10px; align-items: center;
+    display: none !important;
 }
-.status-dot { background-color: #25D366; box-shadow: 0 0 10px #25D366; }
 
 /* Responsive */
 @media (max-width: 768px) {
