@@ -4,58 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Satyam Patil | Creative Developer</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- CSS IMPORTS -->
+    <link rel="stylesheet" href="css/core.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    
+    <!-- External Libs / Legacy -->
     <link rel="stylesheet" href="intro.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Awwwards Style Gallery for Featured Project */
-        .project-gallery {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-template-rows: repeat(2, 200px);
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            cursor: pointer;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        /* Bento Grid Layout */
-        .gallery-layout-4 .g-item-1 { grid-column: span 7; grid-row: span 1; }
-        .gallery-layout-4 .g-item-2 { grid-column: span 5; grid-row: span 1; }
-        .gallery-layout-4 .g-item-3 { grid-column: span 5; grid-row: span 1; }
-        .gallery-layout-4 .g-item-4 { grid-column: span 7; grid-row: span 1; }
-
-        @media (max-width: 768px) {
-            .project-gallery { display: flex; flex-direction: column; gap: 10px; }
-            .gallery-item { height: 200px; width: 100%; }
-        }
-    </style>
 </head>
-<body class="no-scroll"> 
+<body> 
+
+    <!-- CINEMATIC PRELOADER (Replaces old canvas) -->
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="loader-percent">0%</div>
+            <div class="loader-bar-wrapper">
+                <div class="loader-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AMBIENT BACKGROUND (Art Yakushev Style) -->
+    <div class="ambient-background">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
 
     <!-- Noise Overlay for Texture -->
     <div class="noise-overlay"></div>
 
     <!-- LOADER CANVAS -->
     <canvas id="loader-canvas"></canvas>
+
+    <!-- FLOATING REVEAL IMAGE (Hidden by default) -->
+    <div class="hover-reveal-image">
+        <div class="reveal-inner" style="background-image: url('abooki1.png');"></div>
+    </div>
 
     <!-- STATIC NAV -->
     <nav class="navbar reveal-up active">
@@ -77,12 +64,6 @@
         </ul>
     </nav>
 
-    <!-- STATUS PILL -->
-    <div class="status-pill reveal-up active">
-        <span class="status-dot"></span>
-        <span class="status-text">Available for work</span>
-    </div>
-
     <!-- CURSOR FOLLOWER -->
     <div id="cursor-follower"></div>
 
@@ -96,8 +77,7 @@
             <!-- YOUR FACE IMAGE -->
             <img src="my_photo.webp" id="hero-face" alt="Satyam Patil">
 
-            <!-- HERO UI LAYER (Scattered Text) -->
-            <!-- We keep the class 'hero-card' so the JS animation still works automatically -->
+            <!-- HERO UI LAYER -->
             <div class="hero-card">
                 
                 <!-- Top Mid: Title -->
@@ -225,13 +205,34 @@
             </div>
         </section>
 
-        <!-- PROJECTS -->
+        <!-- JOB APPLICATION TRACKER -->
+        <section class="section job-tracker" id="job-tracker">
+            <div class="content-box wide-box" style="background: transparent; border: none; padding: 0; max-width: 900px; width: 100%;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 40px;">
+                    <div>
+                        <h3 class="reveal-up" style="margin-bottom: 10px;">Application Status</h3>
+                        <p class="reveal-up" style="margin:0;">Live tracking via Google Sheets</p>
+                    </div>
+                    <div class="reveal-up">
+                        <span style="font-family:'Syne'; font-size:3rem; color:#fff;" class="application-count">0</span>
+                        <span style="display:block; text-align:right; font-size:0.8rem; color:#888;">APPLIED</span>
+                    </div>
+                </div>
+
+                <div class="tracker-container reveal-up">
+                    <!-- Javascript will inject job cards here -->
+                    <div class="tracker-loading">Loading Data...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS (Updated to List Style) -->
         <section class="section projects" id="projects">
-            <div class="content-box wide-box" style="background: transparent; border: none; padding: 0; max-width: 900px;">
+            <div class="content-box wide-box" style="background: transparent; border: none; padding: 0; max-width: 900px; width: 100%;">
                 <h3 class="reveal-up">Selected Works</h3>
                 
                 <!-- FEATURED PROJECT: ABOOKI -->
-                <div class="project-card featured-project reveal-up" style="background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.4) 100%); border: 1px solid rgba(255,255,255,0.1); padding: 40px; margin-bottom: 40px; position: relative; overflow: hidden;">
+                <div class="project-card featured-project reveal-up" style="background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.4) 100%); border: 1px solid rgba(255,255,255,0.1); padding: 40px; margin-bottom: 60px; position: relative; overflow: hidden;">
                     <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,136,255,0.2) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; pointer-events: none;"></div>
 
                     <div class="project-gallery gallery-layout-4" style="margin-bottom: 30px;">
@@ -267,20 +268,53 @@
                     </div>
                 </div>
 
-                <!-- Standard Grid -->
-                <div class="project-grid">
-                    <div class="project-card reveal-up stagger-delay-1">
-                        <h4>PixelForge</h4>
-                        <p>AI-powered image processing suite utilizing Hugging Face transformers.</p>
+                <!-- PROJECT INDEX (Hover Reveal List) -->
+                <div class="project-list-wrapper reveal-up">
+                    <div class="project-list-header" style="display:flex; justify-content:space-between; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:10px; opacity:0.5; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px;">
+                        <span>Project</span>
+                        <span>Tech & Type</span>
                     </div>
-                    <div class="project-card reveal-up stagger-delay-2">
-                        <h4>PulseFeed</h4>
-                        <p>Personalized news aggregator built with Flask and ML algorithms.</p>
+
+                    <!-- Project Row 1 -->
+                    <div class="project-row" data-img="abooki1.png">
+                        <div class="p-row-left">
+                            <h4 class="p-name">PixelForge</h4>
+                        </div>
+                        <div class="p-row-right">
+                            <span class="p-tags">AI / Image Processing</span>
+                        </div>
                     </div>
-                    <div class="project-card reveal-up stagger-delay-3">
-                        <h4>Face Detection</h4>
-                        <p>Real-time computer vision system for biometric identity.</p>
+
+                    <!-- Project Row 2 -->
+                    <div class="project-row" data-img="abooki2.png">
+                        <div class="p-row-left">
+                            <h4 class="p-name">PulseFeed</h4>
+                        </div>
+                        <div class="p-row-right">
+                            <span class="p-tags">Flask / ML Aggregator</span>
+                        </div>
                     </div>
+
+                    <!-- Project Row 3 -->
+                    <div class="project-row" data-img="abooki3.png">
+                        <div class="p-row-left">
+                            <h4 class="p-name">Face Detection</h4>
+                        </div>
+                        <div class="p-row-right">
+                            <span class="p-tags">OpenCV / Biometrics</span>
+                        </div>
+                    </div>
+
+                     <!-- Project Row 4 -->
+                     <div class="project-row" data-img="abooki4.png">
+                        <div class="p-row-left">
+                            <h4 class="p-name">Neon Genesis</h4>
+                        </div>
+                        <div class="p-row-right">
+                            <span class="p-tags">Three.js / WebGL</span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -295,14 +329,40 @@
                 </div>
             </div>
         </section>
+
+        <!-- FOOTER MARQUEE -->
+        <section class="footer-marquee">
+            <a href="mailto:satyampatil1505@gmail.com" class="marquee-link">
+                <!-- Inner track duplicated for infinite loop -->
+                <div class="marquee-track">
+                    <div class="marquee-content">
+                        <span>OPEN TO WORK &nbsp; — &nbsp; GET IN TOUCH &nbsp; — &nbsp;</span>
+                        <span>OPEN TO WORK &nbsp; — &nbsp; GET IN TOUCH &nbsp; — &nbsp;</span>
+                        <span>OPEN TO WORK &nbsp; — &nbsp; GET IN TOUCH &nbsp; — &nbsp;</span>
+                        <span>OPEN TO WORK &nbsp; — &nbsp; GET IN TOUCH &nbsp; — &nbsp;</span>
+                    </div>
+                    <!-- Duplicate for loop -->
+                    <div class="marquee-content" aria-hidden="true">
+                        <span>OPEN TO WORK &nbsp; — &nbsp; GET IN TOUCH &nbsp; — &nbsp;</span>
+                        <span>OPEN TO WORK &nbsp; — &nbsp; GET IN TOUCH &nbsp; — &nbsp;</span>
+                        <span>OPEN TO WORK &nbsp; — &nbsp; GET IN TOUCH &nbsp; — &nbsp;</span>
+                        <span>OPEN TO WORK &nbsp; — &nbsp; GET IN TOUCH &nbsp; — &nbsp;</span>
+                    </div>
+                </div>
+            </a>
+        </section>
+
     </main>
 
-    <!-- Import Map -->
+    <!-- Import Map (Updated to use unpkg for better availability) -->
     <script type="importmap">
         {
             "imports": {
                 "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+                "gsap": "https://unpkg.com/gsap@3.12.5/index.js",
+                "gsap/ScrollTrigger": "https://unpkg.com/gsap@3.12.5/ScrollTrigger.js",
+                "lenis": "https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.mjs"
             }
         }
     </script>
@@ -310,6 +370,6 @@
     <!-- SCRIPTS -->
     <script type="module" src="loader.js"></script>
     <script type="module" src="intro.js"></script>
-    <script type="module" src="script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

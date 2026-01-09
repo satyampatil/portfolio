@@ -1,0 +1,532 @@
+/* --- PRELOADER --- */
+#preloader {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 30000; background: #000; 
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: all;
+}
+
+.loader-content {
+    text-align: center;
+    width: 300px;
+}
+
+.loader-percent {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.loader-bar-wrapper {
+    width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.loader-bar-fill {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    width: 0%;
+    background: #7c59f0;
+    transition: width 0.1s linear;
+}
+
+/* --- LOADER (OLD/FALLBACK REMOVED) --- */
+/* #loader-canvas { ... } replaced by #preloader */
+
+/* --- NAVBAR --- */
+.navbar {
+    position: fixed; top: 0; left: 0; width: 100%; padding: 40px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 10000; box-sizing: border-box; mix-blend-mode: difference;
+    pointer-events: none; 
+}
+.navbar > * { pointer-events: auto; }
+
+.nav-logo {
+    font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800;
+    letter-spacing: -0.5px; color: #fff; text-transform: uppercase;
+}
+.nav-links { list-style: none; display: flex; gap: 50px; margin: 0; padding: 0; }
+.nav-links li a {
+    text-decoration: none; color: #fff; font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 0.9rem; text-transform: uppercase;
+    letter-spacing: 1px; position: relative; cursor: none; opacity: 0.7;
+    transition: opacity 0.3s; display: inline-block; 
+}
+.nav-links li a::after {
+    content: ''; position: absolute; bottom: -5px; left: 0;
+    width: 0%; height: 1px; background: #fff; transition: width 0.3s ease;
+}
+.nav-links li a:hover { opacity: 1; }
+.nav-links li a:hover::after { width: 100%; }
+
+@media (max-width: 768px) {
+    .navbar { padding: 20px; }
+}
+
+/* --- TOGGLE SWITCH --- */
+.render-toggle-wrapper { display: flex; align-items: center; gap: 12px; margin-left: 30px; }
+.switch { position: relative; display: inline-block; width: 40px; height: 22px; cursor: none; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 34px; border: 1px solid rgba(255,255,255,0.2); }
+.slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: #fff; }
+input:checked + .slider:before { transform: translateX(18px); background-color: #000; }
+
+/* --- CURSOR FOLLOWER --- */
+#cursor-follower {
+    position: fixed; top: 0; left: 0; width: 15px; height: 15px;
+    background-color: #fff; border-radius: 50%;
+    transform: translate(-50%, -50%); 
+    pointer-events: none; z-index: 10001; mix-blend-mode: exclusion;
+}
+body:hover #cursor-follower.hovered {
+    width: 50px; height: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+}
+
+/* --- GLASS CARDS --- */
+.content-box {
+    pointer-events: auto; position: relative; 
+    background: rgba(10, 10, 10, 0.6);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    padding: 60px; border: 1px solid rgba(255,255,255,0.08);
+    max-width: 700px; opacity: 1; cursor: auto; transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .content-box { padding: 30px; width: 100%; }
+}
+
+/* --- BUTTONS & CHIPS --- */
+.cta-btn {
+    padding: 16px 32px; background: #fff; color: #000; border: none;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+    cursor: none; border-radius: 40px; display: inline-flex;
+    align-items: center; justify-content: center;
+}
+.skill-chips span {
+    display: inline-block; background: rgba(255,255,255,0.03);
+    padding: 8px 16px; border-radius: 20px; font-size: 0.85rem;
+    color: #ccc; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px; margin-right: 5px;
+}
+
+/* --- PROJECT GRID & LIST --- */
+.project-card {
+    background: rgba(255,255,255,0.03); padding: 30px;
+    border: 1px solid rgba(255,255,255,0.05); transition: all 0.4s ease; cursor: none;
+}
+.project-card:hover {
+    background: rgba(255,255,255,0.06); transform: translateY(-10px);
+}
+
+/* PROJECT LIST STYLE (The Vert Menthe) */
+.project-list-wrapper {
+    margin-top: 50px;
+    position: relative;
+    z-index: 20;
+}
+
+.project-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: none;
+    transition: padding 0.3s ease;
+    position: relative;
+}
+
+.project-row:hover {
+    padding: 40px 20px; /* Slight indent on hover */
+    background: rgba(255,255,255,0.02);
+}
+
+.project-row .p-name {
+    font-size: 3rem;
+    font-weight: 400;
+    margin: 0;
+    color: #fff;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.project-row:hover .p-name {
+    transform: translateX(10px);
+    color: #7c59f0; /* Purple accent */
+}
+
+.project-row .p-tags {
+    font-size: 1rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* FLOATING REVEAL IMAGE */
+.hover-reveal-image {
+    position: fixed;
+    top: 0; left: 0;
+    width: 300px;
+    height: 400px;
+    pointer-events: none;
+    z-index: 50; /* Above list */
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    overflow: hidden;
+    border-radius: 8px;
+    /* Blend mode for cool effect (optional) */
+    /* mix-blend-mode: difference; */ 
+}
+
+.reveal-inner {
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: scale(1.2); /* For inner parallax */
+}
+
+/* MOBILE FIX FOR PROJECT LIST */
+@media (max-width: 768px) {
+    .project-row {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px 0;
+        cursor: auto; /* Restore pointer for tapping */
+    }
+    
+    .project-row:hover {
+        padding: 20px 0;
+        background: transparent;
+    }
+
+    .project-row .p-name {
+        font-size: 1.5rem;
+        transform: none !important;
+        margin-bottom: 5px;
+    }
+
+    .project-row .p-tags {
+        font-size: 0.8rem;
+        color: #aaa;
+    }
+
+    /* Hide hover reveal image on touch devices */
+    .hover-reveal-image {
+        display: none !important; 
+    }
+    
+    /* Instead, we can show a small thumbnail or rely on simple list click */
+    /* Or just keep it as a clean list for now as per "The Vert Menthe" mobile view */
+}
+
+/* Awwwards Gallery */
+.project-gallery {
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(2, 200px); gap: 15px; margin-bottom: 30px;
+}
+.gallery-item {
+    position: relative; overflow: hidden; border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); cursor: pointer;
+}
+.gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.gallery-item:hover img { transform: scale(1.1); }
+.gallery-layout-4 .g-item-1 { grid-column: span 7; grid-row: span 1; }
+.gallery-layout-4 .g-item-2 { grid-column: span 5; grid-row: span 1; }
+.gallery-layout-4 .g-item-3 { grid-column: span 5; grid-row: span 1; }
+.gallery-layout-4 .g-item-4 { grid-column: span 7; grid-row: span 1; }
+
+@media (max-width: 768px) {
+    .project-gallery { display: flex; flex-direction: column; gap: 10px; }
+    .gallery-item { height: 200px; width: 100%; }
+}
+
+/* --- FOOTER MARQUEE --- */
+.footer-marquee {
+    margin-top: 100px;
+    width: 100%;
+    overflow: hidden;
+    background: #000;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.marquee-link {
+    text-decoration: none;
+    display: block;
+    cursor: none; /* Let JS custom cursor handle it */
+    /* Mask Image applied here so text fades but background remains opaque black */
+    -webkit-mask-image: linear-gradient(to right, transparent 15%, black 25%, black 75%, transparent 85%);
+    mask-image: linear-gradient(to right, transparent 15%, black 25%, black 75%, transparent 85%);
+}
+
+.marquee-track {
+    display: flex;
+    width: fit-content;
+    white-space: nowrap;
+    will-change: transform;
+    animation: marqueeScroll 80s linear infinite;
+    /* Hardware acceleration fixes for smoothness */
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+.marquee-content {
+    display: flex;
+    align-items: center;
+}
+
+.marquee-content span {
+    font-family: 'Syne', sans-serif;
+    font-size: 8vw; /* Giant Responsive Text */
+    font-weight: 700;
+    line-height: 1;
+    color: transparent; /* Outline effect base */
+    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: all 0.4s ease;
+}
+
+/* Hover Effect: Fill Solid White */
+.marquee-link:hover .marquee-content span {
+    color: #7c59f0;
+    -webkit-text-stroke: 1px #7c59f0;
+}
+
+@keyframes marqueeScroll {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); } /* Scrolls exactly half (one full set) */
+}
+
+@media (max-width: 768px) {
+    .marquee-content span {
+        font-size: 15vw; /* Even bigger on mobile */
+        -webkit-text-stroke: 1px rgba(255,255,255,0.5);
+    }
+}
+
+/* --- AMBIENT BACKGROUND (Art Yakushev Style) --- */
+.ambient-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -10; /* Far back */
+    background: #050505; /* Base color */
+    overflow: hidden;
+}
+
+.ambient-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.6;
+    animation: floatOrb 15s infinite ease-in-out alternate;
+}
+
+.orb-1 {
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(124, 89, 240, 0.15) 0%, transparent 70%);
+    top: -20%;
+    left: -10%;
+    animation-delay: 0s;
+}
+
+.orb-2 {
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, rgba(0, 136, 255, 0.1) 0%, transparent 70%);
+    bottom: -10%;
+    right: -10%;
+    animation-delay: -5s;
+}
+
+.orb-3 {
+    width: 40vw;
+    height: 40vw;
+    background: radial-gradient(circle, rgba(100, 50, 200, 0.1) 0%, transparent 70%);
+    top: 40%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    animation-delay: -10s;
+}
+
+@keyframes floatOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, 50px) scale(1.1); }
+}
+
+/* --- JOB TRACKER STYLES --- */
+.job-tracker {
+    margin-bottom: 50px;
+}
+
+.tracker-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.job-tracker-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 25px;
+    transition: transform 0.3s ease, background 0.3s ease;
+    cursor: default;
+}
+
+.job-tracker-card:hover {
+    background: rgba(255,255,255,0.05);
+    transform: translateY(-5px);
+    border-color: rgba(124, 89, 240, 0.3);
+}
+
+.tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.t-company {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    margin: 0;
+    color: #fff;
+}
+
+.t-role {
+    font-size: 0.85rem;
+    color: #888;
+    background: rgba(255,255,255,0.05);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.tracker-progress-wrapper {
+    position: relative;
+    height: 30px; /* Space for dots */
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.tracker-bar-bg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.tracker-bar-fill {
+    height: 100%;
+    background: #7c59f0;
+    border-radius: 4px;
+    transition: width 1s ease-out;
+    box-shadow: 0 0 10px #7c59f0;
+}
+
+.tracker-dots-container {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+    padding: 0 2px; /* Slight alignment offset */
+}
+
+.tracker-dot {
+    width: 10px;
+    height: 10px;
+    background: #1a1a1a;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+/* Base Active Style (Default Purple) */
+.tracker-dot.active {
+    background: #000;
+    border-color: #7c59f0;
+    box-shadow: 0 0 8px rgba(124, 89, 240, 0.6);
+}
+
+.tracker-dot.current {
+    transform: scale(1.4);
+    background: #7c59f0;
+    border-color: #fff;
+}
+
+/* --- DYNAMIC STAGE COLORS --- */
+
+/* 1. Application Submitted (Purple) - Default */
+
+/* 2. Telephone Interview (yellow) */
+.job-tracker-card:has(.tracker-dot:nth-child(2).current) .tracker-bar-fill { background: #e0e963; box-shadow: 0 0 10px #e0e963; }
+.job-tracker-card:has(.tracker-dot:nth-child(2).current) .tracker-dot.active { border-color: #e0e963; box-shadow: 0 0 8px #e0e963; }
+.job-tracker-card:has(.tracker-dot:nth-child(2).current) .tracker-dot.current { background: #e0e963; }
+.job-tracker-card:has(.tracker-dot:nth-child(2).current) .t-status { color: #e0e963 !important; }
+
+/* 3. Technical Interview (Blue) */
+.job-tracker-card:has(.tracker-dot:nth-child(3).current) .tracker-bar-fill { background: #3b82f6; box-shadow: 0 0 10px #3b82f6; }
+.job-tracker-card:has(.tracker-dot:nth-child(3).current) .tracker-dot.active { border-color: #3b82f6; box-shadow: 0 0 8px rgba(59, 130, 246, 0.6); }
+.job-tracker-card:has(.tracker-dot:nth-child(3).current) .tracker-dot.current { background: #3b82f6; }
+.job-tracker-card:has(.tracker-dot:nth-child(3).current) .t-status { color: #3b82f6 !important; }
+
+/* 4. HR Round (Teal) */
+.job-tracker-card:has(.tracker-dot:nth-child(4).current) .tracker-bar-fill { background: #14b8a6; box-shadow: 0 0 10px #14b8a6; }
+.job-tracker-card:has(.tracker-dot:nth-child(4).current) .tracker-dot.active { border-color: #14b8a6; box-shadow: 0 0 8px rgba(20, 184, 166, 0.6); }
+.job-tracker-card:has(.tracker-dot:nth-child(4).current) .tracker-dot.current { background: #14b8a6; }
+.job-tracker-card:has(.tracker-dot:nth-child(4).current) .t-status { color: #14b8a6 !important; }
+
+/* 5. Hired (Green) - Override */
+.job-tracker-card.is-hired .tracker-bar-fill { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
+.job-tracker-card.is-hired .tracker-dot.active { border-color: #00ff88; box-shadow: 0 0 8px rgba(0, 255, 136, 0.6); }
+.job-tracker-card.is-hired .tracker-dot.current { background: #00ff88; }
+
+/* --- STATE: REJECTED (RED & CROSSED) --- */
+.job-tracker-card.is-rejected .tracker-bar-fill { background: #ff4444; box-shadow: 0 0 10px #ff4444; }
+.job-tracker-card.is-rejected .tracker-dot.active { border-color: #ff4444; box-shadow: 0 0 8px rgba(255, 68, 68, 0.6); }
+.job-tracker-card.is-rejected .tracker-dot.current { background: #ff4444; }
+.job-tracker-card.is-rejected .t-status { text-decoration: line-through; opacity: 0.8; color: #ff4444 !important; }
+
+.tracker-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.t-status {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+}
+
+.t-date {
+    color: #666;
+    font-weight: 400;
+}

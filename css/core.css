@@ -1,0 +1,43 @@
+/* --- FONTS & IMPORTS --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syne:wght@400;700;800&display=swap');
+
+/* --- CORE LAYOUT --- */
+html, body {
+    height: 100%;
+    margin: 0; 
+    padding: 0;
+    background-color: #050505; 
+    cursor: none; 
+    font-family: 'Inter', sans-serif;
+    color: #e0e0e0; 
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden; 
+}
+
+/* LENIS RECOMMENDED CSS */
+html.lenis { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
+
+body.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* --- GRAIN OVERLAY (Cinematic Feel) --- */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* --- ANIMATION CLASSES (Handled by GSAP mostly) --- */
+.reveal-up { /* Placeholder for JS hooks */ }
