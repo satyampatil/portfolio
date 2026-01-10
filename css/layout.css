@@ -1,5 +1,9 @@
 /* --- SECTIONS & LAYOUT --- */
-main { position: relative; z-index: 10; }
+main { 
+    position: relative; 
+    z-index: 10; 
+    /* The skew transform happens here in JS, which is why we moved fixed elements OUT of main */
+}
 
 .section {
     position: relative; /* Anchors absolute children */
@@ -16,7 +20,7 @@ main { position: relative; z-index: 10; }
 .section.hero { 
     justify-content: center !important; 
     height: 100vh; /* Force full viewport height */
-    overflow: hidden; /* contain overflows */
+    /* REMOVED: overflow: hidden; -> We don't want to clip the hero-face if it was inside */
 }
 
 #hero-face {
@@ -27,12 +31,14 @@ main { position: relative; z-index: 10; }
     height: 85vh; 
     width: auto;
     max-width: 90vw; 
-    z-index: 1; 
+    z-index: 1; /* Sits behind main (z-10) */
     pointer-events: none;
     filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
     object-fit: contain;
     opacity: 1; 
-    will-change: opacity, transform;
+    /* REMOVED: will-change: opacity; -> Can cause sticky opacity bugs in Chrome/Lenis */
+    /* will-change: transform; -> Kept for performance */
+    will-change: transform;
 }
 
 .desk-animation-spacer {
@@ -72,17 +78,15 @@ main { position: relative; z-index: 10; }
 }
 
 .hero-pos-left { 
-    /* Changed from bottom: 100px to top: 45% to move it up significantly */
     top: 65%; 
-    bottom: auto; /* Reset bottom to prevent conflicts */
+    bottom: auto; 
     left: 60px; 
     text-align: left; 
     z-index: 12;
-    transform: translateY(-50%); /* Centers the text vertically on the 45% line */
+    transform: translateY(-50%); 
 }
 
 .hero-pos-right { 
-    /* Changed from bottom: 100px to top: 45% */
     top: 65%; 
     bottom: auto;
     right: 60px; 
@@ -98,7 +102,7 @@ main { position: relative; z-index: 10; }
     color: #fff;
     text-transform: uppercase;
     font-weight: 800;
-    white-space: nowrap; /* Prevent wrapping */
+    white-space: nowrap; 
 }
 
 .hero-pos-bottom {
@@ -132,9 +136,9 @@ p { font-size: 1.1rem; line-height: 1.7; color: #bbb; margin-bottom: 20px; }
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
     .section { padding: 80px 5%; }
-    .hero-pos-left { left: 20px; bottom: 120px; }
-    .hero-pos-right { right: 20px; bottom: 120px; }
-    .giant-first-name, .giant-last-name { font-size: 12vw; } /* Bigger on mobile */
+    .hero-pos-left { left: 20px; bottom: 120px; top: auto; transform: none; }
+    .hero-pos-right { right: 20px; bottom: 120px; top: auto; transform: none; }
+    .giant-first-name, .giant-last-name { font-size: 12vw; } 
     .hero-pos-top { top: 20%; }
     .hero-pos-bottom {
         top: 25px; width: 100%; pointer-events: none; 

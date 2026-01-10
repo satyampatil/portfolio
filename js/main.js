@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-// Use the same CDN provider as the importmap to avoid version conflicts/duplication
 import ScrollTrigger from 'gsap/ScrollTrigger'; 
+// GUI import removed as per request to disable debug
+// import { GUI } from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.module.js'; 
 
-// --- CRITICAL FIX: REGISTER PLUGIN IMMEDIATELY ---
 gsap.registerPlugin(ScrollTrigger);
 
 // --- MODULE IMPORTS ---
@@ -11,32 +11,36 @@ import { lenis, initScrollAnimations } from './utils/scroll.js';
 import { initUI } from './utils/ui.js';
 import { initTracker } from './utils/tracker.js'; 
 import { initLoader } from './utils/loader.js';
+import { initInkBackground } from './utils/ink.js'; 
 import { scene, camera, renderer, sunLight, spotLight, warmLight } from './scene/setup.js';
 import { loadDeskModel, deskState } from './scene/desk.js';
 
 // --- CONFIG ---
-const DEBUG_MODE = false; // Turned off debug mode
+const DEBUG_MODE = false; 
+const LIGHT_DEBUG_MODE = false;
 
 // --- INITIALIZATION ---
+let inkEffect = null; 
+
 document.addEventListener('DOMContentLoaded', () => {
     initLoader(); 
     initUI();
     initScrollAnimations();
     initTracker();
     
-    // FIX 1: Force unlock scroll immediately to fix the bug where you have to click to scroll
+    inkEffect = initInkBackground(scene);
+
     document.body.classList.remove('no-scroll');
 
-    // FIX 2: Bring renderer forward (from -1 to 0)
     if(renderer.domElement) {
         renderer.domElement.style.zIndex = '0'; 
     }
 
-    // Initial Load
     loadDeskModel('my_desk.glb', false); 
+    
+    if(LIGHT_DEBUG_MODE) initLightDebugPanel();
 });
 
-// Render Toggle Logic
 const renderToggle = document.getElementById('render-mode');
 if(renderToggle) {
     renderToggle.addEventListener('change', (e) => {
@@ -61,11 +65,57 @@ const deskEndPos = new THREE.Vector3(2, 2.5, 4);
 const deskEndLookAt = new THREE.Vector3(-6, 1, -2);
 const currentLookAt = new THREE.Vector3().copy(deskLookAt);
 
-// Scene Progress State (Updated by ScrollTrigger)
+// Scene Progress State
 const sceneState = { deskProgress: 0, heroOpacity: 1 };
 
+// --- BEAM LIGHT SETUP ---
+const debugConfig = { maxIntensity: 2000 }; 
+const beamLight = new THREE.SpotLight(0x7c59f0, 0); 
+beamLight.position.set(6, 3, 39.2); 
+beamLight.angle = 0.1;                 
+beamLight.penumbra = 0;                
+beamLight.distance = 100;              
+beamLight.castShadow = true;
+scene.add(beamLight);
+scene.add(beamLight.target);
+beamLight.target.position.set(0, 0, 0); 
+
+// --- LIGHT BEAM & INK LOGIC ---
+const activeBeams = new Set(); 
+
+window.addEventListener('beam-interaction', (e) => {
+    const { isActive, color, id } = e.detail;
+    
+    if(isActive) {
+        activeBeams.add(id);
+        
+        if(color) beamLight.color.set(color);
+
+        if(inkEffect && color) {
+            const targetColor = new THREE.Color(color);
+            gsap.to(inkEffect.uniforms.uInkColor.value, {
+                r: targetColor.r,
+                g: targetColor.g,
+                b: targetColor.b,
+                duration: 1.5,
+                ease: "power2.out"
+            });
+        }
+    } else {
+        activeBeams.delete(id);
+    }
+
+    const shouldBeOn = activeBeams.size > 0;
+
+    gsap.to(beamLight, {
+        intensity: shouldBeOn ? debugConfig.maxIntensity : 0, 
+        duration: 1.5,
+        ease: "power2.inOut"
+    });
+});
+
+
 // --- SCENE SCROLL TRIGGERS ---
-// 1. Update Desk Progress
 ScrollTrigger.create({
     trigger: ".desk-animation-spacer",
     start: "top bottom", 
@@ -76,7 +126,6 @@ ScrollTrigger.create({
     }
 });
 
-// 2. Fade Out Hero Text
 ScrollTrigger.create({
     trigger: ".desk-animation-spacer",
     start: "top bottom",
@@ -87,47 +136,23 @@ ScrollTrigger.create({
     }
 });
 
-// 3. Fade Out Hero Face
+gsap.set("#hero-face", { opacity: 1 }); 
+
 gsap.to("#hero-face", {
     opacity: 0,
-    ease: "power1.inOut",
+    ease: "power1.inOut", 
     scrollTrigger: {
         trigger: ".desk-animation-spacer",
-        start: "top bottom",
-        end: "top 80%", // Ends faster (at 20% scroll) so face disappears quickly
-        scrub: true
+        start: "top bottom", 
+        end: "+=50", 
+        scrub: true 
     }
 });
 
-// --- 3D INTERACTIVE LABELS (GAMIFIED UI) ---
-const labels = [];
+// --- 3D INTERACTIVE LABELS ---
 const labelContainer = document.createElement('div');
-labelContainer.style.position = 'fixed';
-labelContainer.style.top = '0';
-labelContainer.style.left = '0';
-labelContainer.style.width = '100%';
-labelContainer.style.height = '100%';
-labelContainer.style.pointerEvents = 'none';
-labelContainer.style.zIndex = '500'; // Above 3D canvas, below some UI
+labelContainer.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:500;';
 document.body.appendChild(labelContainer);
-
-// Debug markers container (Only created if DEBUG_MODE is true)
-let debugContainer = null;
-if(DEBUG_MODE) {
-    debugContainer = document.createElement('div');
-    debugContainer.style.position = 'fixed';
-    debugContainer.style.top = '0';
-    debugContainer.style.left = '0';
-    debugContainer.style.width = '100%';
-    debugContainer.style.height = '100%';
-    debugContainer.style.pointerEvents = 'none'; // Only dots are interactive
-    debugContainer.style.zIndex = '501'; 
-    document.body.appendChild(debugContainer);
-}
-
-// DRAG STATE for Debugging
-let isDragging = false;
-let draggedItem = null;
 
 function createLabel(text, interactableItem) {
     const el = document.createElement('div');
@@ -138,101 +163,28 @@ function createLabel(text, interactableItem) {
             <span class="label-text">${text}</span>
         </div>
     `;
-    el.style.position = 'absolute';
-    el.style.opacity = '0'; 
-    el.style.transition = 'opacity 0.3s'; 
-    el.style.pointerEvents = 'auto'; 
-    el.style.cursor = 'pointer';
+    el.style.cssText = 'position:absolute; opacity:0; transition:opacity 0.3s; pointer-events:auto; cursor:pointer;';
     
     const box = el.querySelector('.label-box');
-    box.style.background = 'rgba(0, 0, 0, 0.7)';
-    box.style.border = '1px solid rgba(255, 255, 255, 0.3)';
-    box.style.padding = '8px 16px';
-    box.style.borderRadius = '4px';
-    box.style.backdropFilter = 'blur(4px)';
+    box.style.cssText = 'background:rgba(0,0,0,0.7); border:1px solid rgba(255,255,255,0.3); padding:8px 16px; border-radius:4px; backdrop-filter:blur(4px);';
     
     const line = el.querySelector('.label-line');
-    line.style.position = 'absolute';
-    line.style.height = '1px';
-    line.style.background = '#fff';
-    line.style.top = '0';
-    line.style.left = '0';
-    line.style.transformOrigin = '0 0';
+    line.style.cssText = 'position:absolute; height:1px; background:#fff; top:0; left:0; transform-origin:0 0;';
     
     labelContainer.appendChild(el);
     
-    // Create debug marker (Draggable Anchor)
-    let debugDot = null;
-    if (DEBUG_MODE && debugContainer) {
-        debugDot = document.createElement('div');
-        debugDot.style.width = '12px';
-        debugDot.style.height = '12px';
-        debugDot.style.background = 'red';
-        debugDot.style.border = '2px solid white';
-        debugDot.style.borderRadius = '50%';
-        debugDot.style.position = 'absolute';
-        debugDot.style.transform = 'translate(-50%, -50%)';
-        debugDot.style.cursor = 'grab';
-        debugDot.style.pointerEvents = 'auto'; // FIX: Explicitly enable events on dot
-        debugContainer.appendChild(debugDot);
-
-        // DRAG LOGIC (Debug) - Updates Anchor Adjustment
-        debugDot.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            draggedItem = interactableItem; 
-            debugDot.style.cursor = 'grabbing';
-            e.preventDefault(); 
-            e.stopPropagation(); 
-        });
-    }
-    
-    // Add click handler to label itself to trigger action
     el.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent scene click
+        e.stopPropagation();
         triggerAction(interactableItem.id);
     });
     
-    return {
-        element: el,
-        box: box,
-        line: line,
-        debugDot: debugDot,
-        visible: false
-    };
+    return { element: el, box: box, line: line, visible: false };
 }
 
-// Global Drag Listeners
-if (DEBUG_MODE) {
-    window.addEventListener('mousemove', (e) => {
-        if (isDragging && draggedItem && draggedItem.label && draggedItem.baseScreenPos) {
-            // Calculate new anchor adjustment: Mouse - Projected 3D Pos
-            const newAdjX = e.clientX - draggedItem.baseScreenPos.x;
-            const newAdjY = e.clientY - draggedItem.baseScreenPos.y;
-            
-            draggedItem.anchorAdj.x = newAdjX;
-            draggedItem.anchorAdj.y = newAdjY;
-            
-            // Visual update handled in animate loop for consistency
-        }
-    });
-
-    window.addEventListener('mouseup', () => {
-        if (isDragging && draggedItem) {
-            console.log(`Updated Anchor for [${draggedItem.id}]: { x: ${Math.round(draggedItem.anchorAdj.x)}, y: ${Math.round(draggedItem.anchorAdj.y)} }`);
-            if (draggedItem.label.debugDot) draggedItem.label.debugDot.style.cursor = 'grab';
-            isDragging = false;
-            draggedItem = null;
-        }
-    });
-}
-
-// Helper function to trigger actions based on ID
 function triggerAction(id) {
-    if (id === 'phone') {
-        window.open('https://www.linkedin.com/in/satyampatil/', '_blank');
-    } else if (id === 'monitor') {
-        window.open('https://github.com/satyampatil', '_blank');
-    } else if (id === 'lamp') {
+    if (id === 'phone') window.open('https://www.linkedin.com/in/satyampatil/', '_blank');
+    else if (id === 'monitor') window.open('https://github.com/satyampatil', '_blank');
+    else if (id === 'lamp') {
         const lightsOn = spotLight.visible;
         if (lightsOn) {
             gsap.to(spotLight, { intensity: 0, duration: 0.5, onComplete: () => { spotLight.visible = false; } });
@@ -250,68 +202,101 @@ function triggerAction(id) {
     }
 }
 
-// Define Interactive Points 
-// UPDATED COORDINATES from user request
 const interactables = [
-    { 
-        id: 'phone', 
-        name: 'LinkedIn Profile', 
-        pos: new THREE.Vector3(0, 0, 0), 
-        label: null, 
-        anchorAdj: { x: -9, y: 45 },      // Red Dot Adjustment
-        labelOffset: { x: -128, y: 80 }   // Label Box relative to Red Dot
-    },  
-    { 
-        id: 'monitor', 
-        name: 'GitHub Profile', 
-        pos: new THREE.Vector3(0, 0, 0), 
-        label: null, 
-        anchorAdj: { x: -314, y: -104 }, 
-        labelOffset: { x: 1, y: -170 } 
-    },   
-    { 
-        id: 'lamp', 
-        name: 'Toggle Lights', 
-        pos: new THREE.Vector3(0, 0, 0), 
-        label: null, 
-        anchorAdj: { x: -8, y: -6 }, 
-        labelOffset: { x: 1, y: -170 } 
-    }         
+    { id: 'phone', name: 'LinkedIn', pos: new THREE.Vector3(), anchorAdj: { x: -9, y: 45 }, labelOffset: { x: -128, y: 80 } },  
+    { id: 'monitor', name: 'GitHub', pos: new THREE.Vector3(), anchorAdj: { x: -314, y: -104 }, labelOffset: { x: 1, y: -170 } },   
+    { id: 'lamp', name: 'Lights', pos: new THREE.Vector3(), anchorAdj: { x: -8, y: -6 }, labelOffset: { x: 1, y: -170 } }         
 ];
 
-// --- INTERACTIVE RAYCASTER LOGIC ---
 let hoveredObject = null;
 
-// Track Mouse
 window.addEventListener('mousemove', (event) => {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 });
 
-// Handle Clicks
 window.addEventListener('click', () => {
     if (hoveredObject) {
         const name = hoveredObject.name.toLowerCase();
-        
-        // --- INTERACTION MAPPING ---
-        if (name === 'jzzwgjgqqvfdjsg' || name.includes('iphone') || name.includes('phone') || name.includes('mobile')) {
-            triggerAction('phone');
-        } 
-        else if (name === 'object_24_custom_0' || (name.includes('monitor') && !name.includes('ipad') && !name.includes('tablet'))) {
-            triggerAction('monitor');
-        } 
-        else if (name.includes('lamp') || name.includes('bulb') || name.includes('light')) {
-            triggerAction('lamp');
-        }
+        if (name === 'jzzwgjgqqvfdjsg' || name.includes('iphone') || name.includes('phone')) triggerAction('phone');
+        else if (name === 'object_24_custom_0' || (name.includes('monitor') && !name.includes('ipad'))) triggerAction('monitor');
+        else if (name.includes('lamp') || name.includes('bulb')) triggerAction('lamp');
     }
 });
 
-// --- MAIN ANIMATION LOOP ---
+window.addEventListener('resize', () => {
+    if(inkEffect) inkEffect.resize(window.innerWidth, window.innerHeight);
+});
+
+// --- TRACK VISIBLE CARDS FOR INK MASK ---
+const contentCards = document.getElementsByClassName('content-box'); 
+
+// SMOOTH MASK STATE
+const maskTarget = { x: 0, y: 0, w: 0, h: 0 };
+const maskCurrent = { x: 0, y: 0, w: 0, h: 0 };
+const LERP_FACTOR = 0.1; // Smoothness factor
+
+function updateInkMaskLogic() {
+    let bestCandidate = null;
+    let maxOverlap = 0;
+    const vH = window.innerHeight;
+
+    // 1. Calculate TARGET mask based on DOM
+    for (let i = 0; i < contentCards.length; i++) {
+        const rect = contentCards[i].getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < vH) {
+            const visibleH = Math.min(rect.bottom, vH) - Math.max(rect.top, 0);
+            if (visibleH > maxOverlap) {
+                maxOverlap = visibleH;
+                bestCandidate = rect;
+            }
+        }
+    }
+
+    if (bestCandidate) {
+        maskTarget.x = bestCandidate.x;
+        maskTarget.y = bestCandidate.y;
+        maskTarget.w = bestCandidate.width;
+        maskTarget.h = bestCandidate.height;
+    } else {
+        // If no card is visible, shrink mask to center or 0
+        maskTarget.x = window.innerWidth / 2;
+        maskTarget.y = window.innerHeight / 2;
+        maskTarget.w = 0;
+        maskTarget.h = 0;
+    }
+
+    // 2. Interpolate CURRENT mask towards TARGET
+    // This removes the "Snap" effect
+    maskCurrent.x += (maskTarget.x - maskCurrent.x) * LERP_FACTOR;
+    maskCurrent.y += (maskTarget.y - maskCurrent.y) * LERP_FACTOR;
+    maskCurrent.w += (maskTarget.w - maskCurrent.w) * LERP_FACTOR;
+    maskCurrent.h += (maskTarget.h - maskCurrent.h) * LERP_FACTOR;
+
+    // 3. Send to Shader
+    if (inkEffect) {
+        inkEffect.updateMaskDirect(maskCurrent.x, maskCurrent.y, maskCurrent.w, maskCurrent.h, vH);
+    }
+}
+
 const clock = new THREE.Clock();
 
 function animate(time) {
     lenis.raf(time);
     requestAnimationFrame(animate);
+
+    const currentTime = clock.getElapsedTime(); 
+    
+    if(inkEffect) {
+        inkEffect.update(currentTime);
+        
+        // FIX: Use lenis.scroll (precise float) instead of window.scrollY (integer)
+        // Fallback to window.scrollY if lenis isn't ready
+        const scrollPos = lenis.scroll || window.scrollY;
+        inkEffect.updateScroll(scrollPos);
+        
+        updateInkMaskLogic(); 
+    }
 
     const heroTextElements = document.querySelectorAll('.hero-pos-top, .hero-pos-left, .hero-pos-right');
     if(heroTextElements.length > 0) {
@@ -321,14 +306,11 @@ function animate(time) {
         });
     }
 
-    if (deskState.mixer) {
-        deskState.mixer.update(clock.getDelta());
-    }
+    if (deskState.mixer) deskState.mixer.update(clock.getDelta());
 
     const progress = sceneState.deskProgress;
 
     if (deskState.model) {
-        // VISIBILITY LOGIC
         if (progress > 0.02) {
              deskState.model.visible = true; 
              if (!spotLight.visible && !hoveredObject && sunLight.intensity > 0.5) { 
@@ -336,6 +318,73 @@ function animate(time) {
                  spotLight.visible = true;
                  warmLight.visible = true;
              }
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children, true);
+
+            if (!interactables[0].mesh) {
+                scene.children.forEach(child => child.traverse(c => {
+                    if (c.isMesh) {
+                        const n = c.name.toLowerCase();
+                        if (n === 'jzzwgjgqqvfdjsg' || n.includes('iphone') || n.includes('phone')) interactables[0].mesh = c;
+                        if (n === 'object_24_custom_0' || ((n.includes('monitor')) && !n.includes('stand'))) interactables[1].mesh = c;
+                        if (n.includes('lamp') || n.includes('bulb')) interactables[2].mesh = c;
+                    }
+                }));
+                
+                interactables.forEach(item => {
+                    if (item.mesh && !item.label) item.label = createLabel(item.name, item);
+                });
+            }
+
+            interactables.forEach(item => {
+                if (item.mesh && item.label && deskState.model.visible) {
+                    const pos = item.mesh.getWorldPosition(new THREE.Vector3());
+                    pos.y += 0.2; 
+                    pos.project(camera);
+
+                    const baseX = (pos.x * .5 + .5) * window.innerWidth;
+                    const baseY = (-(pos.y * .5) + .5) * window.innerHeight;
+                    
+                    const anchorX = baseX + item.anchorAdj.x;
+                    const anchorY = baseY + item.anchorAdj.y;
+
+                    item.label.element.style.transform = `translate(${anchorX}px, ${anchorY}px)`;
+                    item.label.box.style.transform = `translate(${item.labelOffset.x}px, ${item.labelOffset.y}px)`;
+
+                    const dist = Math.sqrt(item.labelOffset.x**2 + item.labelOffset.y**2);
+                    const angle = Math.atan2(item.labelOffset.y, item.labelOffset.x) * (180 / Math.PI);
+                    item.label.line.style.width = `${dist}px`;
+                    item.label.line.style.transform = `rotate(${angle}deg)`;
+                    
+                    item.label.element.style.opacity = (progress > 0.1 && progress < 0.9) ? '1' : '0';
+                }
+            });
+
+            if (intersects.length > 0) {
+                const hit = intersects.find(i => {
+                    const n = i.object.name.toLowerCase();
+                    return (n === 'jzzwgjgqqvfdjsg' || n.includes('iphone') || n.includes('phone')) ||
+                           ((n === 'object_24_custom_0' || n.includes('monitor')) && !n.includes('ipad')) ||
+                           (n.includes('lamp') || n.includes('bulb'));
+                });
+
+                if (hit) {
+                    hoveredObject = hit.object;
+                    document.body.style.cursor = 'pointer'; 
+                    if(spotLight.visible && (hit.object.name.toLowerCase().includes('lamp') || hit.object.name.toLowerCase().includes('bulb'))) {
+                        targetIntensity = 50;
+                    }
+                } else {
+                    hoveredObject = null;
+                    document.body.style.cursor = 'none'; 
+                    targetIntensity = 0;
+                }
+            } else {
+                hoveredObject = null;
+                document.body.style.cursor = 'none';
+                targetIntensity = 0; 
+            }
         } else {
              deskState.model.visible = false;
              sunLight.visible = false;
@@ -346,103 +395,7 @@ function animate(time) {
         camera.position.lerpVectors(deskStartPos, deskEndPos, progress);
         currentLookAt.lerpVectors(deskLookAt, deskEndLookAt, progress);
         camera.lookAt(currentLookAt);
-
-        // --- UPDATE LABELS & RAYCASTER ---
-        raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(scene.children, true);
         
-        // Find meshes if not cached
-        if (!interactables[0].mesh) {
-            scene.children.forEach(child => child.traverse(c => {
-                if (c.isMesh) {
-                    const n = c.name.toLowerCase();
-                    if (n === 'jzzwgjgqqvfdjsg' || n.includes('iphone') || n.includes('phone') || n.includes('mobile')) interactables[0].mesh = c;
-                    if (n === 'object_24_custom_0' || ((n.includes('monitor') || n.includes('screen')) && !n.includes('stand'))) interactables[1].mesh = c;
-                    if (n.includes('lamp') || n.includes('bulb')) interactables[2].mesh = c;
-                }
-            }));
-            
-            interactables.forEach(item => {
-                if (item.mesh && !item.label) {
-                    item.label = createLabel(item.name, item);
-                }
-            });
-        }
-
-        // Update Label Positions
-        interactables.forEach(item => {
-            if (item.mesh && item.label && deskState.model.visible) {
-                const pos = item.mesh.getWorldPosition(new THREE.Vector3());
-                pos.y += 0.2; 
-                pos.project(camera);
-
-                // Base projected position
-                const baseX = (pos.x * .5 + .5) * window.innerWidth;
-                const baseY = (-(pos.y * .5) + .5) * window.innerHeight;
-                item.baseScreenPos = { x: baseX, y: baseY };
-
-                // Apply Anchor Adjustment (Red Dot Position)
-                const anchorX = baseX + item.anchorAdj.x;
-                const anchorY = baseY + item.anchorAdj.y;
-
-                // Apply Label Offset (Box Position relative to Red Dot)
-                const labelX = item.labelOffset.x;
-                const labelY = item.labelOffset.y;
-
-                // Update element position (Anchor Point for CSS)
-                item.label.element.style.transform = `translate(${anchorX}px, ${anchorY}px)`;
-                
-                // Update Label Box (Relative to Anchor)
-                item.label.box.style.transform = `translate(${labelX}px, ${labelY}px)`;
-
-                // Update Line Geometry (From 0,0 to Label Box)
-                const dist = Math.sqrt(labelX*labelX + labelY*labelY);
-                const angle = Math.atan2(labelY, labelX) * (180 / Math.PI);
-                item.label.line.style.width = `${dist}px`;
-                item.label.line.style.transform = `rotate(${angle}deg)`;
-
-                // Update debug dot position
-                if (item.label.debugDot) {
-                    item.label.debugDot.style.left = `${anchorX}px`;
-                    item.label.debugDot.style.top = `${anchorY}px`;
-                }
-                
-                // Show label logic
-                if (progress > 0.1 && progress < 0.9) {
-                    item.label.element.style.opacity = '1';
-                } else {
-                    item.label.element.style.opacity = '0';
-                }
-            }
-        });
-
-        // Raycasting
-        if (intersects.length > 0) {
-            const hit = intersects.find(i => {
-                const n = i.object.name.toLowerCase();
-                const isPhone = n === 'jzzwgjgqqvfdjsg' || n.includes('iphone') || n.includes('phone');
-                const isMonitor = (n === 'object_24_custom_0' || n.includes('monitor')) && !n.includes('ipad');
-                const isLamp = n.includes('lamp') || n.includes('bulb');
-                return isPhone || isMonitor || isLamp;
-            });
-
-            if (hit) {
-                hoveredObject = hit.object;
-                document.body.style.cursor = 'pointer'; 
-                if(spotLight.visible && (hit.object.name.toLowerCase().includes('lamp') || hit.object.name.toLowerCase().includes('bulb'))) {
-                    targetIntensity = 50;
-                }
-            } else {
-                hoveredObject = null;
-                document.body.style.cursor = 'none'; 
-                targetIntensity = 0;
-            }
-        } else {
-            hoveredObject = null;
-            document.body.style.cursor = 'none';
-            targetIntensity = 0; 
-        }
-
         if (spotLight.visible) {
             spotLight.intensity += (targetIntensity - spotLight.intensity) * 0.1;
             if (deskState.bulbMesh) {
@@ -454,7 +407,6 @@ function animate(time) {
     } else {
         camera.position.copy(deskStartPos);
         camera.lookAt(deskLookAt);
-        interactables.forEach(i => { if(i.label) i.label.element.style.opacity = '0'; });
     }
 
     renderer.render(scene, camera);

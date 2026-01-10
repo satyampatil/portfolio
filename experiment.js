@@ -3,7 +3,7 @@ import { GUI } from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.mo
 
 // --- GLOBAL STATE ---
 const state = {
-    activeExperimentId: 'Exp5', // Default to the new Circles experiment
+    activeExperimentId: 'Exp7', // Default to Ink experiment
 };
 
 const experiments = {}; 
@@ -28,7 +28,7 @@ const gui = new GUI();
 gui.domElement.parentElement.style.zIndex = "10000";
 
 const masterFolder = gui.addFolder('Select Experiment');
-masterFolder.add(state, 'activeExperimentId', ['Exp1', 'Exp2', 'Exp3', 'Exp4', 'Exp5', 'Exp6'])
+masterFolder.add(state, 'activeExperimentId', ['Exp1', 'Exp2', 'Exp3', 'Exp4', 'Exp5', 'Exp6', 'Exp7'])
     .name('Experiment')
     .onChange(switchExperiment);
 masterFolder.open();
@@ -418,9 +418,6 @@ function initExp6() {
     const paperData = [];
     
     // Generate static positions
-    // ... (Code abbreviated for brevity, same logic as before) ...
-    // Re-implementing simplified generation for clarity in this file:
-    
     let idx = 0;
     // Tube
     for(let y=0; y<50; y++) {
@@ -508,13 +505,170 @@ function initExp6() {
 }
 
 
+// ==========================================
+// EXPERIMENT 7: INK & WATER (DOMAIN WARPING)
+// ==========================================
+function initExp7() {
+    // Default to the "Purple" beam color (#7c59f0)
+    const config = {
+        speed: 0.5,
+        inkColor: '#7c59f0', 
+        bgColor: '#000000',
+        flowStrength: 1.0,
+        preset: 'Purple'
+    };
+
+    const group = new THREE.Group();
+    group.visible = false;
+    scene.add(group);
+
+    const geometry = new THREE.PlaneGeometry(2, 2, 1, 1);
+
+    const vertexShader = `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = vec4(position, 1.0); // Fullscreen quad
+        }
+    `;
+
+    const fragmentShader = `
+        uniform float uTime;
+        uniform vec2 uResolution;
+        uniform vec3 uInkColor;
+        uniform vec3 uBgColor;
+        uniform float uFlow;
+
+        varying vec2 vUv;
+
+        // FBM & NOISE FUNCTIONS
+        float random (in vec2 st) {
+            return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+        }
+
+        // Value Noise by Inigo Quilez
+        float noise (in vec2 st) {
+            vec2 i = floor(st);
+            vec2 f = fract(st);
+
+            // Four corners in 2D of a tile
+            float a = random(i);
+            float b = random(i + vec2(1.0, 0.0));
+            float c = random(i + vec2(0.0, 1.0));
+            float d = random(i + vec2(1.0, 1.0));
+
+            vec2 u = f * f * (3.0 - 2.0 * f);
+
+            return mix(a, b, u.x) +
+                    (c - a)* u.y * (1.0 - u.x) +
+                    (d - b) * u.x * u.y;
+        }
+
+        #define OCTAVES 6
+        float fbm (in vec2 st) {
+            float value = 0.0;
+            float amplitude = .5;
+            float frequency = 0.;
+            for (int i = 0; i < OCTAVES; i++) {
+                value += amplitude * noise(st);
+                st *= 2.;
+                amplitude *= .5;
+            }
+            return value;
+        }
+
+        void main() {
+            vec2 st = gl_FragCoord.xy / uResolution.xy;
+            st.x *= uResolution.x / uResolution.y;
+
+            // DOMAIN WARPING
+            // q = fbm(p)
+            vec2 q = vec2(0.);
+            q.x = fbm( st + 0.00 * uTime);
+            q.y = fbm( st + vec2(1.0));
+
+            // r = fbm(p + s*q)
+            vec2 r = vec2(0.);
+            r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 0.15*uTime );
+            r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*uTime);
+
+            // f = fbm(p + s*r)
+            float f = fbm(st + r * uFlow);
+
+            // Mixing Colors
+            // Create a gradient based on the noise value 'f'
+            // Mix between background, a variation, and the ink color.
+            
+            vec3 color = mix(uBgColor, uInkColor * 0.5, clamp((f*f)*4.0, 0.0, 1.0));
+            color = mix(color, uInkColor, clamp(length(q), 0.0, 1.0));
+            color = mix(color, vec3(1.0), clamp(length(r.x), 0.0, 1.0) * 0.1); // Highlights
+
+            // Vignette for depth
+            float vig = 1.0 - length(vUv - 0.5);
+            color *= vig;
+
+            gl_FragColor = vec4((f*f*f + 0.6 * f*f + 0.5*f) * color, 1.);
+        }
+    `;
+
+    const uniforms = {
+        uTime: { value: 0 },
+        uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        uInkColor: { value: new THREE.Color(config.inkColor) },
+        uBgColor: { value: new THREE.Color(config.bgColor) },
+        uFlow: { value: config.flowStrength }
+    };
+
+    const material = new THREE.ShaderMaterial({
+        vertexShader, fragmentShader, uniforms,
+        depthWrite: false
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    group.add(mesh);
+
+    const folder = gui.addFolder('Controls: Ink & Water');
+    folder.add(config, 'speed', 0, 2);
+    folder.add(config, 'flowStrength', 0.1, 5).name('Flow Scale');
+    folder.addColor(config, 'inkColor').name('Ink Color').onChange(v => uniforms.uInkColor.value.set(v));
+    folder.addColor(config, 'bgColor').name('Background').onChange(v => uniforms.uBgColor.value.set(v));
+    
+    // Quick Presets for the Beam Colors
+    const beamColors = {
+        'Purple': '#7c59f0',
+        'Blue': '#0088ff',
+        'Green': '#00ff88',
+        'Magenta': '#ff0088'
+    };
+    
+    folder.add(config, 'preset', Object.keys(beamColors)).name('Beam Presets').onChange(key => {
+        config.inkColor = beamColors[key];
+        uniforms.uInkColor.value.set(beamColors[key]);
+    });
+    
+    folder.hide();
+
+    return {
+        id: 'Exp7', group, folder,
+        animate: (t) => {
+            uniforms.uTime.value = t * config.speed;
+            uniforms.uFlow.value = config.flowStrength;
+            uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+            // 2D Mode
+            camera.position.set(0, 0, 1);
+        }
+    };
+}
+
+
 // --- INITIALIZATION ---
 experiments['Exp1'] = initExp1();
 experiments['Exp2'] = initExp2();
 experiments['Exp3'] = initExp3();
 experiments['Exp4'] = initExp4();
-experiments['Exp5'] = initExp5(); // Circles
+experiments['Exp5'] = initExp5(); 
 experiments['Exp6'] = initExp6();
+experiments['Exp7'] = initExp7(); // Ink
 
 function switchExperiment(id) {
     Object.values(experiments).forEach(e => { e.group.visible=false; e.folder.hide(); if(e.reset)e.reset(); });
@@ -528,11 +682,12 @@ function switchExperiment(id) {
         else if(id==='Exp4') { camera.position.set(0,10,60); camera.lookAt(0,5,0); }
         else if(id==='Exp5') { camera.position.set(0,0,100); camera.lookAt(0,0,0); }
         else if(id==='Exp6') { camera.position.set(0,0,60); camera.lookAt(0,0,0); }
+        else if(id==='Exp7') { camera.position.set(0,0,1); camera.lookAt(0,0,0); }
     }
 }
 
-// Start with Experiment 5
-switchExperiment('Exp5');
+// Start with Experiment 7 (Ink)
+switchExperiment('Exp7');
 
 // --- ANIMATION LOOP ---
 const clock = new THREE.Clock();

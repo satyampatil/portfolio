@@ -16,7 +16,7 @@
 </head>
 <body> 
 
-    <!-- CINEMATIC PRELOADER (Replaces old canvas) -->
+    <!-- CINEMATIC PRELOADER -->
     <div id="preloader">
         <div class="loader-content">
             <div class="loader-percent">0%</div>
@@ -26,23 +26,32 @@
         </div>
     </div>
 
-    <!-- AMBIENT BACKGROUND (Art Yakushev Style) -->
+    <!-- AMBIENT BACKGROUND -->
     <div class="ambient-background">
         <div class="ambient-orb orb-1"></div>
         <div class="ambient-orb orb-2"></div>
         <div class="ambient-orb orb-3"></div>
     </div>
 
-    <!-- Noise Overlay for Texture -->
+    <!-- Noise Overlay -->
     <div class="noise-overlay"></div>
 
     <!-- LOADER CANVAS -->
     <canvas id="loader-canvas"></canvas>
 
-    <!-- FLOATING REVEAL IMAGE (Hidden by default) -->
+    <!-- FLOATING REVEAL IMAGE -->
     <div class="hover-reveal-image">
         <div class="reveal-inner" style="background-image: url('abooki1.png');"></div>
     </div>
+
+    <!-- === FIXED BACKGROUND LAYER (MOVED OUTSIDE MAIN) === -->
+    <!-- These must be outside <main> to avoid being affected by the Scroll Skew transform -->
+    
+    <!-- 1. Background Heatmap -->
+    <canvas id="intro-canvas" style="position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none;"></canvas>
+
+    <!-- 2. Hero Face -->
+    <img src="my_photo.webp" id="hero-face" alt="Satyam Patil">
 
     <!-- STATIC NAV -->
     <nav class="navbar reveal-up active">
@@ -67,16 +76,11 @@
     <!-- CURSOR FOLLOWER -->
     <div id="cursor-follower"></div>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN CONTENT (Contains only scrolling content) -->
     <main>
-        <!-- HERO SECTION -->
+        <!-- HERO SECTION (Now just a layout container for text) -->
         <section class="section hero" id="hero">
-            <!-- Background Heatmap/Rings -->
-            <canvas id="intro-canvas"></canvas>
-
-            <!-- YOUR FACE IMAGE -->
-            <img src="my_photo.webp" id="hero-face" alt="Satyam Patil">
-
+            
             <!-- HERO UI LAYER -->
             <div class="hero-card">
                 
@@ -106,8 +110,10 @@
         <!-- ANIMATION SPACER -->
         <div class="desk-animation-spacer"></div>
 
-        <!-- ABOUT -->
+        <!-- ABOUT (Purple Beam) -->
         <section class="section about" id="about">
+            <div class="light-beam" data-color="#7c59f0"></div>
+
             <div class="content-box reveal-up">
                 <h3>About Me</h3>
                 <p>
@@ -123,8 +129,10 @@
             </div>
         </section>
 
-        <!-- EXPERIENCE -->
+        <!-- EXPERIENCE (Blue Beam) -->
         <section class="section experience" id="experience">
+            <div class="light-beam" data-color="#0088ff"></div>
+
             <div class="content-box" style="max-width: 800px;"> 
                 <h3 class="reveal-up">Experience</h3>
                 
@@ -205,9 +213,11 @@
             </div>
         </section>
 
-        <!-- JOB APPLICATION TRACKER -->
+        <!-- JOB APPLICATION TRACKER (Green Beam) -->
         <section class="section job-tracker" id="job-tracker">
-            <div class="content-box wide-box" style="background: transparent; border: none; padding: 0; max-width: 900px; width: 100%;">
+            <div class="light-beam" data-color="#00ff88"></div>
+
+            <div class="content-box wide-box" style="max-width: 900px; width: 100%;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 40px;">
                     <div>
                         <h3 class="reveal-up" style="margin-bottom: 10px;">Application Status</h3>
@@ -226,9 +236,11 @@
             </div>
         </section>
 
-        <!-- PROJECTS (Updated to List Style) -->
+        <!-- PROJECTS (Magenta Beam) -->
         <section class="section projects" id="projects">
-            <div class="content-box wide-box" style="background: transparent; border: none; padding: 0; max-width: 900px; width: 100%;">
+            <div class="light-beam" data-color="#ff0088"></div>
+            
+            <div class="content-box wide-box" style="max-width: 900px; width: 100%;">
                 <h3 class="reveal-up">Selected Works</h3>
                 
                 <!-- FEATURED PROJECT: ABOOKI -->
