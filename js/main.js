@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger'; 
-// GUI import removed as per request to disable debug
-// import { GUI } from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.module.js'; 
+// Re-enabled GUI for manual positioning
+import { GUI } from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.module.js'; 
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,7 +16,7 @@ import { scene, camera, renderer, sunLight, spotLight, warmLight } from './scene
 import { loadDeskModel, deskState } from './scene/desk.js';
 
 // --- CONFIG ---
-const DEBUG_MODE = false; 
+const DEBUG_MODE = false; // Enabled for manual tuning
 const LIGHT_DEBUG_MODE = false;
 
 // --- INITIALIZATION ---
@@ -29,6 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initTracker();
     
     inkEffect = initInkBackground(scene);
+
+    if (DEBUG_MODE) {
+        initDebugGUI();
+    }
 
     document.body.classList.remove('no-scroll');
 
@@ -204,9 +208,28 @@ function triggerAction(id) {
 
 const interactables = [
     { id: 'phone', name: 'LinkedIn', pos: new THREE.Vector3(), anchorAdj: { x: -9, y: 45 }, labelOffset: { x: -128, y: 80 } },  
-    { id: 'monitor', name: 'GitHub', pos: new THREE.Vector3(), anchorAdj: { x: -314, y: -104 }, labelOffset: { x: 1, y: -170 } },   
+    { id: 'monitor', name: 'GitHub', pos: new THREE.Vector3(), anchorAdj: { x: -291, y: 203 }, labelOffset: { x: -181, y: -17 } },   
     { id: 'lamp', name: 'Lights', pos: new THREE.Vector3(), anchorAdj: { x: -8, y: -6 }, labelOffset: { x: 1, y: -170 } }         
 ];
+
+// --- DEBUG GUI FUNCTION ---
+function initDebugGUI() {
+    const gui = new GUI();
+    const folder = gui.addFolder('Interactive Labels');
+    
+    // FORCE Z-INDEX TO BRING TO FRONT
+    gui.domElement.parentElement.style.zIndex = "100000"; 
+    
+    interactables.forEach(item => {
+        const sub = folder.addFolder(item.name);
+        sub.add(item.anchorAdj, 'x', -500, 500).name('Anchor X (Screen)');
+        sub.add(item.anchorAdj, 'y', -500, 500).name('Anchor Y (Screen)');
+        sub.add(item.labelOffset, 'x', -300, 300).name('Label Off X');
+        sub.add(item.labelOffset, 'y', -300, 300).name('Label Off Y');
+        sub.open();
+    });
+    folder.open();
+}
 
 let hoveredObject = null;
 

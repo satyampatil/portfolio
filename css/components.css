@@ -1,10 +1,16 @@
-/* --- PRELOADER --- */
+/* --- PRELOADER (System Boot Style) --- */
 #preloader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 30000; background: #000; 
+    z-index: 30000; background: #050505; 
     display: flex; align-items: center; justify-content: center;
     transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1);
     pointer-events: all;
+    
+    /* Technical Grid Background */
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
 }
 
 .loader-content {
@@ -18,6 +24,7 @@
     font-weight: 800;
     color: #fff;
     margin-bottom: 20px;
+    letter-spacing: -2px;
 }
 
 .loader-bar-wrapper {
@@ -35,9 +42,18 @@
     width: 0%;
     background: #7c59f0;
     transition: width 0.1s linear;
+    box-shadow: 0 0 10px #7c59f0; /* Neon Glow */
 }
 
-/* --- NAVBAR --- */
+/* --- NOISE OVERLAY (Cinematic Texture) --- */
+.noise-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9000;
+    opacity: 0.06; /* Subtle grain */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* --- NAVBAR (Targeting Brackets) --- */
 .navbar {
     position: fixed; top: 0; left: 0; width: 100%; padding: 40px 60px;
     display: flex; justify-content: space-between; align-items: center;
@@ -50,19 +66,34 @@
     font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800;
     letter-spacing: -0.5px; color: #fff; text-transform: uppercase;
 }
+
 .nav-links { list-style: none; display: flex; gap: 50px; margin: 0; padding: 0; }
 .nav-links li a {
     text-decoration: none; color: #fff; font-family: 'Syne', sans-serif;
     font-weight: 700; font-size: 0.9rem; text-transform: uppercase;
     letter-spacing: 1px; position: relative; cursor: none; opacity: 0.7;
     transition: opacity 0.3s; display: inline-block; 
+    padding: 0 5px; /* Space for brackets */
+}
+
+/* Replaced Underline with Brackets */
+.nav-links li a::before {
+    content: '[';
+    position: absolute; left: -8px; top: 50%; transform: translateY(-54%);
+    opacity: 0; transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+    color: #7c59f0; font-weight: 400; font-family: 'Inter', sans-serif;
 }
 .nav-links li a::after {
-    content: ''; position: absolute; bottom: -5px; left: 0;
-    width: 0%; height: 1px; background: #fff; transition: width 0.3s ease;
+    content: ']';
+    position: absolute; right: -8px; top: 50%; transform: translateY(-54%);
+    opacity: 0; transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+    color: #7c59f0; font-weight: 400; font-family: 'Inter', sans-serif;
+    width: auto; height: auto; background: none; /* Reset old line props */
 }
-.nav-links li a:hover { opacity: 1; }
-.nav-links li a:hover::after { width: 100%; }
+
+.nav-links li a:hover { opacity: 1; color: #fff; }
+.nav-links li a:hover::before { left: -14px; opacity: 1; }
+.nav-links li a:hover::after { right: -14px; opacity: 1; }
 
 @media (max-width: 768px) {
     .navbar { padding: 20px; }
@@ -77,18 +108,26 @@
 input:checked + .slider { background-color: #fff; }
 input:checked + .slider:before { transform: translateX(18px); background-color: #000; }
 
-/* --- CURSOR FOLLOWER --- */
+/* --- CURSOR FOLLOWER (Distortion) --- */
 #cursor-follower {
     position: fixed; top: 0; left: 0; width: 15px; height: 15px;
     background-color: #fff; border-radius: 50%;
     transform: translate(-50%, -50%); 
     pointer-events: none; z-index: 10001; mix-blend-mode: exclusion;
+    transition: width 0.3s, height 0.3s, background-color 0.3s;
 }
 body:hover #cursor-follower.hovered {
-    width: 50px; height: 50px;
+    width: 60px; height: 60px;
     background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(2px);
+    backdrop-filter: invert(1) blur(2px); /* Distortion Effect */
+    border: 1px solid rgba(255,255,255,0.2);
 }
+
+/* --- CUSTOM SCROLLBAR --- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #7c59f0; }
 
 /* --- GLASS CARDS (RESTORED) --- */
 .content-box {
@@ -99,6 +138,7 @@ body:hover #cursor-follower.hovered {
     max-width: 700px; opacity: 1; cursor: auto; transition: transform 0.3s ease;
     z-index: 5;
 }
+.content-box.wide-box { max-width: 900px; width: 100%; }
 
 /* --- VOLUMETRIC LIGHT BEAM --- */
 .light-beam {
@@ -144,7 +184,13 @@ body:hover #cursor-follower.hovered {
     font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
     cursor: none; border-radius: 40px; display: inline-flex;
     align-items: center; justify-content: center;
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s;
 }
+.cta-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255,255,255,0.4);
+}
+
 .skill-chips span {
     display: inline-block; background: rgba(255,255,255,0.03);
     padding: 8px 16px; border-radius: 20px; font-size: 0.85rem;
@@ -254,29 +300,82 @@ body:hover #cursor-follower.hovered {
     }
 }
 
-/* Awwwards Gallery */
+/* --- BRUTAL SURVEILLANCE GALLERY --- */
 .project-gallery {
-    display: grid; grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: repeat(2, 200px); gap: 15px; margin-bottom: 30px;
+    display: grid; 
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(2, 280px); /* Taller rows for impact */
+    gap: 0px; /* ZERO GAP for video-wall feel */
+    margin-bottom: 40px;
+    border: 1px solid #222; /* Technical outer border */
+    background: #000;
+    counter-reset: gallery-counter; /* Initialize CSS Counter */
 }
+
 .gallery-item {
-    position: relative; overflow: hidden; border-radius: 8px;
+    position: relative; 
+    overflow: hidden; 
+    border-radius: 0px; /* HARD CORNERS ONLY */
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); cursor: pointer;
+    margin: -1px; /* Collapse borders into each other */
+    transition: all 0.3s ease; 
+    cursor: crosshair; /* Precision cursor */
+    z-index: 1;
 }
+
 .gallery-item img {
     width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+    filter: grayscale(100%) contrast(1.2); /* Surveillance footage look */
+    transition: filter 0.4s ease, transform 0.4s ease;
+    opacity: 0.6;
 }
-.gallery-item:hover img { transform: scale(1.1); }
-.gallery-layout-4 .g-item-1 { grid-column: span 7; grid-row: span 1; }
-.gallery-layout-4 .g-item-2 { grid-column: span 5; grid-row: span 1; }
-.gallery-layout-4 .g-item-3 { grid-column: span 5; grid-row: span 1; }
-.gallery-layout-4 .g-item-4 { grid-column: span 7; grid-row: span 1; }
+
+/* TECHNICAL LABEL (Auto-generated) */
+.gallery-item::after {
+    counter-increment: gallery-counter;
+    content: "IMG_0" counter(gallery-counter) " // RAW";
+    position: absolute;
+    bottom: 0; left: 0;
+    background: #000;
+    color: #444;
+    font-family: 'Courier New', monospace;
+    font-size: 0.6rem;
+    padding: 6px 12px;
+    border-top: 1px solid #333;
+    border-right: 1px solid #333;
+    pointer-events: none;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+/* HOVER STATE */
+.gallery-item:hover {
+    z-index: 10; /* Pop to front */
+    border-color: #7c59f0; /* Neon border activation */
+    box-shadow: 0 0 0 1px #7c59f0; /* Sharper glow */
+}
+
+.gallery-item:hover img { 
+    filter: grayscale(0%) contrast(1.1); /* Full color restore */
+    transform: scale(1.05); 
+    opacity: 1;
+}
+
+.gallery-item:hover::after {
+    background: #7c59f0;
+    color: #fff;
+    content: "IMG_0" counter(gallery-counter) " // ACTIVE";
+}
+
+/* Grid Spans - Asymmetric */
+.gallery-layout-4 .g-item-1 { grid-column: span 8; grid-row: span 1; }
+.gallery-layout-4 .g-item-2 { grid-column: span 4; grid-row: span 1; }
+.gallery-layout-4 .g-item-3 { grid-column: span 4; grid-row: span 1; }
+.gallery-layout-4 .g-item-4 { grid-column: span 8; grid-row: span 1; }
 
 @media (max-width: 768px) {
-    .project-gallery { display: flex; flex-direction: column; gap: 10px; }
-    .gallery-item { height: 200px; width: 100%; }
+    .project-gallery { display: flex; flex-direction: column; gap: 10px; border: none; background: transparent; }
+    .gallery-item { height: 250px; width: 100%; margin: 0; border: 1px solid rgba(255,255,255,0.2); }
 }
 
 /* --- FOOTER MARQUEE --- */
