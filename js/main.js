@@ -59,6 +59,9 @@ if(renderToggle) {
 // --- ANIMATION STATE & CONFIG ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+// NEW: Track raw mouse pixel coordinates for ink origin
+const mouseRaw = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
 let targetIntensity = 0;
 
 // --- CAMERA CONFIGURATION ---
@@ -234,8 +237,13 @@ function initDebugGUI() {
 let hoveredObject = null;
 
 window.addEventListener('mousemove', (event) => {
+    // Standard Normalized Device Coordinates for Raycasting
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    // NEW: Capture Raw Coordinates for Ink Origin
+    mouseRaw.x = event.clientX;
+    mouseRaw.y = event.clientY;
 });
 
 window.addEventListener('click', () => {
@@ -259,7 +267,7 @@ const maskTarget = { x: 0, y: 0, w: 0, h: 0 };
 const maskCurrent = { x: 0, y: 0, w: 0, h: 0 };
 const LERP_FACTOR = 0.1; // Smoothness factor
 
-function updateInkMaskLogic() {
+function updateInkMaskLogic(scrollPos) {
     let bestCandidate = null;
     let maxOverlap = 0;
     const vH = window.innerHeight;
@@ -282,9 +290,9 @@ function updateInkMaskLogic() {
         maskTarget.w = bestCandidate.width;
         maskTarget.h = bestCandidate.height;
     } else {
-        // If no card is visible, shrink mask to center or 0
-        maskTarget.x = window.innerWidth / 2;
-        maskTarget.y = window.innerHeight / 2;
+        // CHANGED: If no card is visible, shrink mask to CURRENT MOUSE POSITION
+        maskTarget.x = mouseRaw.x;
+        maskTarget.y = mouseRaw.y;
         maskTarget.w = 0;
         maskTarget.h = 0;
     }
@@ -300,6 +308,34 @@ function updateInkMaskLogic() {
     if (inkEffect) {
         inkEffect.updateMaskDirect(maskCurrent.x, maskCurrent.y, maskCurrent.w, maskCurrent.h, vH);
     }
+    
+    // 4. CURSOR GROWTH LOGIC
+    // Grow cursor to 60px when scrolling from top until ink expands (hits first content)
+    const cursorFollower = document.getElementById('cursor-follower');
+    if (cursorFollower) {
+       // Check if we are in the intro transition phase (scrolled > 10px but not yet finished desk animation)
+       // And ensuring ink hasn't found a content card yet.
+       // FIXED: Increased threshold to 1.01 so it doesn't shrink before the ink finds the first section
+       const isIntroPhase = scrollPos > 10 && sceneState.deskProgress < 1.01; 
+       
+       if (isIntroPhase && !bestCandidate) {
+           cursorFollower.style.width = '60px';
+           cursorFollower.style.height = '60px';
+           // CHANGED: Set color to ink purple (#7c59f0) to simulate holding ink
+           cursorFollower.style.backgroundColor = 'rgba(124, 89, 240, 0.8)';
+           cursorFollower.style.backdropFilter = 'blur(4px)'; // Removed invert, kept blur for liquid feel
+           cursorFollower.style.border = '1px solid rgba(124, 89, 240, 0.4)';
+           cursorFollower.style.mixBlendMode = 'normal'; // Ensure color shows clearly
+       } else {
+           // Reset inline styles so CSS/Hover classes can take over
+           cursorFollower.style.width = '';
+           cursorFollower.style.height = '';
+           cursorFollower.style.backgroundColor = '';
+           cursorFollower.style.backdropFilter = '';
+           cursorFollower.style.border = '';
+           cursorFollower.style.mixBlendMode = ''; 
+       }
+   }
 }
 
 const clock = new THREE.Clock();
@@ -318,7 +354,7 @@ function animate(time) {
         const scrollPos = lenis.scroll || window.scrollY;
         inkEffect.updateScroll(scrollPos);
         
-        updateInkMaskLogic(); 
+        updateInkMaskLogic(scrollPos); 
     }
 
     const heroTextElements = document.querySelectorAll('.hero-pos-top, .hero-pos-left, .hero-pos-right');
