@@ -170,4 +170,26 @@ export function initUI() {
                 .from('.giant-last-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1.3")
                 .from('.hero-pos-bottom', { y: 30, opacity: 0, duration: 1, ease: "power4.out" }, "-=1");
     });
+
+    // --- EXPERIENCE TOGGLE ---
+    const expBtn = document.getElementById('toggle-experience-btn');
+    const expSection = document.getElementById('additional-experience');
+    
+    if(expBtn && expSection) {
+        expBtn.addEventListener('click', () => {
+            const isHidden = expSection.style.display === 'none';
+            if(isHidden) {
+                expSection.style.display = 'block';
+                expBtn.innerText = 'Show Less';
+                // GSAP Reveal for the newly shown items
+                gsap.fromTo(expSection.querySelectorAll('.timeline-item'), 
+                    { y: 20, opacity: 0 },
+                    { y: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: "power2.out" }
+                );
+            } else {
+                expSection.style.display = 'none';
+                expBtn.innerText = 'Show Additional Experience';
+            }
+        });
+    }
 }
