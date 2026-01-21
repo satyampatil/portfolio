@@ -3,39 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiments | Satyam Patil</title>
-    <!-- Link to the main style for navbar consistancy -->
-    <link rel="stylesheet" href="style.css"> 
-    <!-- Specific styles for experiments -->
+    <title>The Lab | Satyam Patil</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="experiment.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- NAV BAR (Links back to Home) -->
-    <nav class="navbar">
-        <div class="nav-logo">Satyam.</div>
-        <ul class="nav-links">
-            <li><a href="index.html#hero">Home</a></li>
-            <li><a href="index.html#projects">Work</a></li>
-            <li><a href="#" class="active">Experiment</a></li>
-        </ul>
-    </nav>
+    <!-- UI LAYER (Fixed on top of Canvas) -->
+    <div class="ui-layer">
+        
+        <!-- Header: Logo & Exit -->
+        <header class="lab-header">
+            <div class="lab-logo">
+                <span class="logo-text">SATYAM.</span>
+                <span class="logo-badge">LAB v1.0</span>
+            </div>
+            
+            <a href="index.html" class="exit-btn">
+                <span class="btn-text">EXIT LAB</span>
+                <div class="btn-icon">
+                    <i class="fas fa-times"></i>
+                </div>
+            </a>
+        </header>
+
+        <!-- Current Experiment Info -->
+        <div class="lab-info">
+            <h1 id="exp-title">INK FLUID</h1>
+            <p id="exp-desc">Real-time domain warping using GLSL shaders.</p>
+            <div class="interaction-hint">
+                <i class="fas fa-mouse-pointer"></i> <span>INTERACT WITH MOUSE</span>
+            </div>
+        </div>
+
+        <!-- NEW: Dynamic Control Panel -->
+        <div class="control-panel-wrapper">
+            <div class="cp-header">
+                <span class="cp-title">PARAMETERS</span>
+                <div class="cp-indicator"></div>
+            </div>
+            <div id="control-panel-content" class="cp-content">
+                <!-- Controls injected via JS -->
+            </div>
+        </div>
+
+        <!-- Navigation Dock -->
+        <nav class="lab-dock">
+            <div class="dock-scroll">
+                <button class="dock-item active" data-id="Exp7">
+                    <span class="dock-num">01</span>
+                    <span class="dock-label">Liquid Ink</span>
+                </button>
+                <button class="dock-item" data-id="Exp1">
+                    <span class="dock-num">02</span>
+                    <span class="dock-label">Wire Waves</span>
+                </button>
+                <button class="dock-item" data-id="Exp2">
+                    <span class="dock-num">03</span>
+                    <span class="dock-label">Smoke 3D</span>
+                </button>
+                <button class="dock-item" data-id="Exp3">
+                    <span class="dock-num">04</span>
+                    <span class="dock-label">Data Map</span>
+                </button>
+                <button class="dock-item" data-id="Exp4">
+                    <span class="dock-num">05</span>
+                    <span class="dock-label">Hero Scan</span>
+                </button>
+                <button class="dock-item" data-id="Exp5">
+                    <span class="dock-num">06</span>
+                    <span class="dock-label">Hypnosis</span>
+                </button>
+                <button class="dock-item" data-id="Exp6">
+                    <span class="dock-num">07</span>
+                    <span class="dock-label">The Tube</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Technical Corner Data -->
+        <div class="tech-corner">
+            <div class="tech-item">
+                <span class="label">FPS</span>
+                <span class="value" id="fps-counter">60</span>
+            </div>
+            <div class="tech-item">
+                <span class="label">RENDER</span>
+                <span class="value">THREE.JS</span>
+            </div>
+        </div>
+    </div>
 
     <!-- Cursor Follower -->
     <div id="cursor-follower"></div>
 
     <!-- The 3D Canvas -->
     <canvas id="experiment-canvas"></canvas>
-
-    <!-- Overlay Text -->
-    <div class="overlay-content">
-        <h1>Abstract Waves</h1>
-        <p>Interactive procedural generation using Perlin Noise & Three.js</p>
-        <div class="controls">
-            <p>Move mouse to disrupt flow</p>
-        </div>
-    </div>
 
     <!-- Import Map -->
     <script type="importmap">

@@ -1,11 +1,30 @@
-/* Reset body to ensure canvas fits */
+/* --- RESET & CORE --- */
+:root {
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+    --color-bg: #050505;
+    --color-text: #ffffff;
+    --color-accent: #7c59f0;
+    --color-border: rgba(255, 255, 255, 0.15);
+    --glass-bg: rgba(10, 10, 10, 0.6);
+    --glass-blur: 15px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
-    overflow: hidden; /* No scroll for this immersive view */
-    background-color: #000;
+    overflow: hidden;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
 }
 
+/* --- CANVAS & CURSOR --- */
 #experiment-canvas {
     position: fixed;
     top: 0;
@@ -13,37 +32,405 @@ body {
     width: 100%;
     height: 100%;
     z-index: 1;
+    outline: none;
 }
 
-/* Overlay Content sitting on top of 3D */
-.overlay-content {
-    position: absolute;
-    bottom: 50px;
-    left: 50px;
+#cursor-follower {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: width 0.3s, height 0.3s, background-color 0.3s;
+}
+
+/* --- UI LAYER --- */
+.ui-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 10;
-    color: white;
-    pointer-events: none; /* Let clicks pass through to canvas */
+    pointer-events: none; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem;
 }
 
-.overlay-content h1 {
+/* --- HEADER --- */
+.lab-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: auto;
+}
+
+.lab-logo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.logo-text {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.logo-badge {
+    font-size: 0.7rem;
+    opacity: 0.5;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+/* Exit Button - Brutalist Style */
+.exit-btn {
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 20px;
+    border: 1px solid var(--color-border);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.exit-btn:hover {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+.btn-text {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.btn-icon {
+    font-size: 0.9rem;
+}
+
+/* --- INFO OVERLAY --- */
+.lab-info {
+    position: absolute;
+    top: 50%;
+    left: 4rem;
+    transform: translateY(-50%);
+    max-width: 400px;
+    pointer-events: none;
+}
+
+.lab-info h1 {
+    font-family: var(--font-display);
     font-size: 4rem;
-    margin: 0;
+    font-weight: 800;
+    line-height: 0.9;
+    margin: 0 0 1rem 0;
     letter-spacing: -2px;
-    text-shadow: 0 0 20px rgba(0,0,0,0.5);
+    text-transform: uppercase;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0;
+    animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.overlay-content p {
-    font-size: 1.2rem;
-    opacity: 0.7;
-    margin-top: 10px;
+.lab-info p {
+    font-size: 1rem;
+    opacity: 0;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.7);
+    animation: slideIn 0.8s 0.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.active {
-    color: #fff !important;
-    border-bottom: 2px solid #0088ff;
+.interaction-hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0;
+    color: var(--color-accent);
+    animation: slideIn 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Navbar adjustments for this page */
-.navbar {
-    background: transparent !important;
+@keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* --- CONTROL PANEL (NEW) --- */
+.control-panel-wrapper {
+    position: absolute;
+    top: 50%;
+    right: 3rem;
+    transform: translateY(-50%);
+    width: 280px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--color-border);
+    padding: 0;
+    pointer-events: auto;
+    opacity: 0;
+    animation: fadeIn 0.5s 0.5s forwards;
+    display: flex;
+    flex-direction: column;
+}
+
+.cp-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.cp-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: #fff;
+}
+
+.cp-indicator {
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-accent);
+}
+
+.cp-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Control Group */
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.control-value {
+    color: var(--color-accent);
+    font-family: monospace;
+}
+
+/* Custom Range Input */
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+/* Track */
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 0px;
+}
+
+/* Thumb */
+input[type=range]::-webkit-slider-thumb {
+    height: 12px;
+    width: 12px;
+    border-radius: 0;
+    background: #fff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -5px; /* Centers thumb on track */
+    border: 1px solid #000;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    transition: transform 0.1s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: var(--color-accent);
+}
+
+/* Color Input */
+input[type=color] {
+    -webkit-appearance: none;
+    border: none;
+    width: 100%;
+    height: 30px;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+input[type=color]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+input[type=color]::-webkit-color-swatch {
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+}
+
+/* --- DOCK NAVIGATION --- */
+.lab-dock {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    pointer-events: auto;
+    padding-bottom: 2rem;
+}
+
+.dock-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE */
+    background: var(--glass-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 100px;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.dock-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.dock-item {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.dock-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.dock-item.active {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.dock-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.dock-item.active .dock-num {
+    opacity: 1;
+}
+
+.dock-label {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* --- TECH CORNER --- */
+.tech-corner {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    opacity: 0.5;
+}
+
+.tech-item {
+    font-size: 0.7rem;
+    font-family: monospace;
+    letter-spacing: 1px;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+    .control-panel-wrapper {
+        position: fixed;
+        top: auto;
+        bottom: 7rem; /* Above dock */
+        right: 2rem;
+        width: 240px;
+        transform: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .lab-info h1 {
+        font-size: 2.5rem;
+    }
+    .lab-dock {
+        justify-content: flex-start;
+        overflow-x: auto;
+    }
+    .dock-scroll {
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        border-top: 1px solid var(--color-border);
+        background: #000;
+    }
+    .exit-btn span {
+        display: none;
+    }
+    .exit-btn {
+        padding: 10px;
+        border-radius: 50%;
+    }
+    .control-panel-wrapper {
+        display: none; /* Hide controls on mobile for simplicity, or make modal */
+    }
 }
