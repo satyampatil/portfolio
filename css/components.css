@@ -896,3 +896,25 @@ body:hover #cursor-follower.hovered {
 .experiment-btn-wrapper {
     margin-top: 30px;
 }
+
+/* --- MOBILE WARNING POPUP --- */
+.mobile-warning-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95); z-index: 50000;
+    display: none; justify-content: center; align-items: center;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+
+.mobile-warning-box {
+    background: #0a0a0a; 
+    border: 1px solid rgba(255,255,255,0.15); 
+    padding: 40px 30px;
+    text-align: center; 
+    max-width: 80%;
+    border-radius: 12px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+}
+
+@media (max-width: 768px) {
+    .mobile-warning-overlay { display: flex; }
+}
