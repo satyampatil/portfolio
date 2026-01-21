@@ -48,7 +48,7 @@
     <!-- These must be outside <main> to avoid being affected by the Scroll Skew transform -->
     
     <!-- 1. Background Heatmap -->
-    <canvas id="intro-canvas" style="position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none;"></canvas>
+    <canvas id="intro-canvas" class="intro-canvas-fixed"></canvas>
 
     <!-- 2. Hero Face -->
     <img src="my_photo.webp" id="hero-face" alt="Satyam Patil">
@@ -62,7 +62,7 @@
                     <input type="checkbox" id="render-mode">
                     <span class="slider round"></span>
                 </label>
-                <span class="toggle-label" style="font-size: 0.7rem; opacity: 0.6;">HIGH QUALITY</span>
+                <span class="toggle-label toggle-label-text">HIGH QUALITY</span>
             </div>
         </div>
         <ul class="nav-links">
@@ -111,7 +111,7 @@
             <div class="content-box reveal-up">
                 <h3>About</h3>
                 
-                <h4 style="color: #0088ff; font-size: 1.1rem; margin-bottom: 20px; line-height: 1.4;">
+                <h4 class="about-subtitle">
                     Data Analyst & Anaplan Solution Architect | M.Sc. in Computing
                 </h4>
 
@@ -127,9 +127,9 @@
                     Currently, I am sharpening my operational leadership skills as a Store Assistant Manager at Caffè Nero. Thriving in a high-volume, dynamic environment has refined my ability to manage operations under pressure and deliver exceptional customer experiences—skills that translate directly to fast-paced tech environments.
                 </p>
 
-                <div style="margin: 30px 0; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 20px;">
-                    <h4 style="font-size: 1rem; margin-bottom: 10px; color: #fff;">Core Competencies:</h4>
-                    <ul style="list-style: none; padding: 0; margin: 0; color: #aaa; font-size: 0.95rem; line-height: 1.8;">
+                <div class="about-competencies">
+                    <h4 class="about-competencies-title">Core Competencies:</h4>
+                    <ul class="about-competencies-list">
                         <li>❖ Anaplan Model Building & Data Analytics</li>
                         <li>❖ AI & Advanced Solution Design</li>
                         <li>❖ Project Management & Stakeholder Collaboration</li>
@@ -137,12 +137,12 @@
                     </ul>
                 </div>
 
-                <p style="margin-bottom: 30px;">
+                <p class="about-footer-text">
                     I am passionate about leveraging technology to solve complex problems. Feel free to connect if you’d like to discuss opportunities in Data Analytics or Anaplan—or simply to share your thoughts over a well-brewed cup of coffee!
                 </p>
 
                 <div class="skills-container">
-                    <h4 style="font-size: 1rem; margin-bottom: 15px;">Top Skills</h4>
+                    <h4 class="about-skills-title">Top Skills</h4>
                     <div class="skill-chips">
                         <span>Anaplan</span>
                         <span>Web Development</span>
@@ -158,7 +158,7 @@
         <section class="section experience" id="experience">
             <div class="light-beam" data-color="#0088ff"></div>
 
-            <div class="content-box" style="max-width: 800px;"> 
+            <div class="content-box medium-box"> 
                 <h3 class="reveal-up">Experience</h3>
                 
                 <!-- PRIMARY RELEVANT EXPERIENCE (Wipro) -->
@@ -166,36 +166,36 @@
                     <!-- Wipro -->
                     <div class="timeline-item reveal-up">
                         <span class="date">Mar 2021 - Sep 2023</span>
-                        <h4 style="color: #0088ff; margin-bottom: 5px;">Wipro</h4>
-                        <p class="company" style="font-size: 0.9rem; color: #aaa;">Pune, Maharashtra, India (Remote)</p>
-                        <div style="margin-top: 20px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
+                        <h4 class="exp-role-title">Wipro</h4>
+                        <p class="company">Pune, Maharashtra, India (Remote)</p>
+                        <div class="exp-details-wrapper">
                             
                             <!-- Senior Project Engineer -->
-                            <div style="margin-bottom: 30px;">
-                                <strong style="color: #fff; font-size: 1.1rem; display:block;">Senior Project Engineer</strong>
-                                <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 10px;">Jan 2023 - Sep 2023</span>
-                                <ul style="list-style: none; padding: 0; margin-bottom: 10px; color: #ccc; font-size: 0.95rem; line-height: 1.6;">
-                                    <li style="margin-bottom: 5px;">• Built 3+ scalable Anaplan models for sales/demand forecasting (20% accuracy increase).</li>
-                                    <li style="margin-bottom: 5px;">• Automated data integrations, reducing manual effort by 40%.</li>
-                                    <li style="margin-bottom: 5px;">• Partnered with stakeholders to define KPIs and dashboards.</li>
+                            <div class="exp-role-block">
+                                <strong class="exp-job-title">Senior Project Engineer</strong>
+                                <span class="exp-date-range">Jan 2023 - Sep 2023</span>
+                                <ul class="exp-duties-list">
+                                    <li class="exp-duty-item">• Built 3+ scalable Anaplan models for sales/demand forecasting (20% accuracy increase).</li>
+                                    <li class="exp-duty-item">• Automated data integrations, reducing manual effort by 40%.</li>
+                                    <li class="exp-duty-item">• Partnered with stakeholders to define KPIs and dashboards.</li>
                                     <li>• Trained 25+ users, reducing support queries by 30%.</li>
                                 </ul>
-                                <div class="skill-chips" style="margin-top: 5px;">
+                                <div class="skill-chips exp-chips-wrapper">
                                     <span>Anaplan</span>
                                 </div>
                             </div>
 
                             <!-- Project Engineer -->
                             <div>
-                                <strong style="color: #fff; font-size: 1.1rem; display:block;">Project Engineer</strong>
-                                <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 10px;">Mar 2021 - Jan 2023</span>
-                                <ul style="list-style: none; padding: 0; margin-bottom: 10px; color: #ccc; font-size: 0.95rem; line-height: 1.6;">
-                                    <li style="margin-bottom: 5px;">• Designed 10+ Anaplan models for workforce and incentive planning.</li>
-                                    <li style="margin-bottom: 5px;">• Improved performance by 35% through optimization.</li>
-                                    <li style="margin-bottom: 5px;">• Mentored 15+ analysts and documented data workflows.</li>
+                                <strong class="exp-job-title">Project Engineer</strong>
+                                <span class="exp-date-range">Mar 2021 - Jan 2023</span>
+                                <ul class="exp-duties-list">
+                                    <li class="exp-duty-item">• Designed 10+ Anaplan models for workforce and incentive planning.</li>
+                                    <li class="exp-duty-item">• Improved performance by 35% through optimization.</li>
+                                    <li class="exp-duty-item">• Mentored 15+ analysts and documented data workflows.</li>
                                     <li>• Managed data transformation using Excel, MySQL, and scripts.</li>
                                 </ul>
-                                <div class="skill-chips" style="margin-top: 5px;">
+                                <div class="skill-chips exp-chips-wrapper">
                                     <span>Microsoft Excel</span><span>Anaplan</span><span>Data Analysis</span>
                                 </div>
                             </div>
@@ -204,53 +204,53 @@
                 </div>
 
                 <!-- TOGGLE BUTTON FOR ADDITIONAL EXPERIENCE -->
-                <div class="reveal-up" style="margin-top: 40px; text-align: center;">
-                    <button id="toggle-experience-btn" class="cta-btn" style="font-size: 0.85rem; padding: 12px 25px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #aaa;">
+                <div class="reveal-up exp-toggle-wrapper">
+                    <button id="toggle-experience-btn" class="cta-btn secondary">
                         Show Additional Experience
                     </button>
                 </div>
 
                 <!-- HIDDEN ADDITIONAL EXPERIENCE -->
-                <div id="additional-experience" style="display: none; margin-top: 40px; padding-top: 40px; border-top: 1px dashed rgba(255,255,255,0.1);">
-                    <h4 style="font-size: 0.9rem; text-transform: uppercase; color: #666; margin-bottom: 30px; letter-spacing: 1px;">Hospitality & Operations</h4>
+                <div id="additional-experience" class="exp-additional-wrapper">
+                    <h4 class="exp-section-label">Hospitality & Operations</h4>
                     
                     <div class="timeline">
                         <!-- Caffè Nero -->
                         <div class="timeline-item reveal-up">
                             <span class="date">Apr 2025 - Present</span>
-                            <h4 style="color: #0088ff; margin-bottom: 5px;">Caffè Nero</h4>
-                            <p class="company" style="font-size: 0.9rem; color: #aaa;">Stansted, England, United Kingdom</p>
-                            <div style="margin-top: 20px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
+                            <h4 class="exp-role-title">Caffè Nero</h4>
+                            <p class="company">Stansted, England, United Kingdom</p>
+                            <div class="exp-details-wrapper">
                                 
                                 <!-- Assistant Store Manager -->
-                                <div style="margin-bottom: 30px;">
-                                    <strong style="color: #fff; font-size: 1.1rem; display:block;">Assistant Store Manager</strong>
-                                    <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 10px;">Dec 2025 - Present</span>
-                                    <ul style="list-style: none; padding: 0; margin-bottom: 10px; color: #ccc; font-size: 0.95rem; line-height: 1.6;">
-                                        <li style="margin-bottom: 5px;">• <strong>Operational Leadership:</strong> Lead and coordinate shift operations for a team of baristas, ensuring adherence to brand standards.</li>
-                                        <li style="margin-bottom: 5px;">• <strong>High-Volume Financial Management:</strong> Oversee daily financial reconciliation and cash handling (100% accuracy).</li>
-                                        <li style="margin-bottom: 5px;">• <strong>Inventory & Stock Control:</strong> Manage daily ordering and waste analysis to forecast demand and minimize shrinkage.</li>
+                                <div class="exp-role-block">
+                                    <strong class="exp-job-title">Assistant Store Manager</strong>
+                                    <span class="exp-date-range">Dec 2025 - Present</span>
+                                    <ul class="exp-duties-list">
+                                        <li class="exp-duty-item">• <strong>Operational Leadership:</strong> Lead and coordinate shift operations for a team of baristas, ensuring adherence to brand standards.</li>
+                                        <li class="exp-duty-item">• <strong>High-Volume Financial Management:</strong> Oversee daily financial reconciliation and cash handling (100% accuracy).</li>
+                                        <li class="exp-duty-item">• <strong>Inventory & Stock Control:</strong> Manage daily ordering and waste analysis to forecast demand and minimize shrinkage.</li>
                                         <li>• <strong>Team Development:</strong> Mentoring new staff on technical coffee preparation and customer service standards.</li>
                                     </ul>
-                                    <div class="skill-chips" style="margin-top: 5px;">
+                                    <div class="skill-chips exp-chips-wrapper">
                                         <span>Management</span><span>Maestro</span><span>Barista</span>
                                     </div>
                                 </div>
 
                                 <!-- Shift Leader -->
-                                <div style="margin-bottom: 30px;">
-                                    <strong style="color: #fff; font-size: 1.1rem; display:block;">Shift Leader</strong>
-                                    <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 5px;">Aug 2025 - Nov 2025</span>
-                                    <div class="skill-chips" style="margin-top: 5px;">
+                                <div class="exp-role-block">
+                                    <strong class="exp-job-title">Shift Leader</strong>
+                                    <span class="exp-date-range">Aug 2025 - Nov 2025</span>
+                                    <div class="skill-chips exp-chips-wrapper">
                                         <span>Barista</span><span>Sales Management</span><span>Team Management</span>
                                     </div>
                                 </div>
 
                                 <!-- Lead Barista -->
                                 <div>
-                                    <strong style="color: #fff; font-size: 1.1rem; display:block;">Lead Barista</strong>
-                                    <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 5px;">Apr 2025 - Jul 2025</span>
-                                    <div class="skill-chips" style="margin-top: 5px;">
+                                    <strong class="exp-job-title">Lead Barista</strong>
+                                    <span class="exp-date-range">Apr 2025 - Jul 2025</span>
+                                    <div class="skill-chips exp-chips-wrapper">
                                         <span>Barista</span>
                                     </div>
                                 </div>
@@ -260,38 +260,38 @@
                         <!-- Muffin Break UK -->
                         <div class="timeline-item reveal-up">
                             <span class="date">Oct 2023 - Mar 2025</span>
-                            <h4 style="color: #0088ff; margin-bottom: 5px;">Muffin Break UK</h4>
-                            <p class="company" style="font-size: 0.9rem; color: #aaa;">Colchester, England, United Kingdom</p>
-                            <div style="margin-top: 20px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
+                            <h4 class="exp-role-title">Muffin Break UK</h4>
+                            <p class="company">Colchester, England, United Kingdom</p>
+                            <div class="exp-details-wrapper">
                                 
                                 <!-- Assistant Manager -->
-                                <div style="margin-bottom: 30px;">
-                                    <strong style="color: #fff; font-size: 1.1rem; display:block;">Assistant Manager</strong>
-                                    <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 10px;">Oct 2024 - Mar 2025</span>
-                                    <ul style="list-style: none; padding: 0; margin-bottom: 10px; color: #ccc; font-size: 0.95rem; line-height: 1.6;">
-                                        <li style="margin-bottom: 5px;">• Skilled in operating coffee machines, delivering high-quality beverages.</li>
-                                        <li style="margin-bottom: 5px;">• Managed billing for ~300 customers daily (approx. £3000 total).</li>
+                                <div class="exp-role-block">
+                                    <strong class="exp-job-title">Assistant Manager</strong>
+                                    <span class="exp-date-range">Oct 2024 - Mar 2025</span>
+                                    <ul class="exp-duties-list">
+                                        <li class="exp-duty-item">• Skilled in operating coffee machines, delivering high-quality beverages.</li>
+                                        <li class="exp-duty-item">• Managed billing for ~300 customers daily (approx. £3000 total).</li>
                                         <li>• Conducted weekly inventory checks and stock replenishment orders.</li>
                                     </ul>
-                                    <div class="skill-chips" style="margin-top: 5px;">
+                                    <div class="skill-chips exp-chips-wrapper">
                                         <span>Barista</span><span>Management</span>
                                     </div>
                                 </div>
 
                                 <!-- Lead Barista -->
-                                <div style="margin-bottom: 30px;">
-                                    <strong style="color: #fff; font-size: 1.1rem; display:block;">Lead Barista</strong>
-                                    <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 5px;">Aug 2024 - Oct 2024</span>
-                                    <div class="skill-chips" style="margin-top: 5px;">
+                                <div class="exp-role-block">
+                                    <strong class="exp-job-title">Lead Barista</strong>
+                                    <span class="exp-date-range">Aug 2024 - Oct 2024</span>
+                                    <div class="skill-chips exp-chips-wrapper">
                                         <span>Supervisor</span><span>Barista</span>
                                     </div>
                                 </div>
 
                                 <!-- Team Member -->
                                 <div>
-                                    <strong style="color: #fff; font-size: 1.1rem; display:block;">Team Member</strong>
-                                    <span style="font-size: 0.8rem; color: #666; display:block; margin-bottom: 5px;">Oct 2023 - Jul 2024</span>
-                                    <div class="skill-chips" style="margin-top: 5px;">
+                                    <strong class="exp-job-title">Team Member</strong>
+                                    <span class="exp-date-range">Oct 2023 - Jul 2024</span>
+                                    <div class="skill-chips exp-chips-wrapper">
                                         <span>Collaborative Leadership</span><span>Time Management</span><span>Customer Service</span>
                                     </div>
                                 </div>
@@ -307,153 +307,153 @@
         <section class="section certificates" id="certificates">
             <div class="light-beam" data-color="#00ffff"></div>
             
-            <div class="content-box wide-box" style="max-width: 900px; width: 100%;">
+            <div class="content-box wide-box">
                 <h3 class="reveal-up">Licenses & Certifications</h3>
                 
-                <div class="reveal-up" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                <div class="reveal-up cert-grid">
                     
                     <!-- 1. Anaplan Solution Architect -->
-                    <a href="https://drive.google.com/file/d/1MifTjckoIJKEHzqQKa5uXktTqkvM1nl-/view?usp=sharing" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Anaplan Certified Solution Architect</h4>
-                            <i class="fas fa-award" style="color: #00ffff; font-size: 1.1rem; opacity: 0.8;"></i>
+                    <a href="https://drive.google.com/file/d/1MifTjckoIJKEHzqQKa5uXktTqkvM1nl-/view?usp=sharing" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Anaplan Certified Solution Architect</h4>
+                            <i class="fas fa-award cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">Anaplan</p>
-                        <p style="font-size: 0.75rem; color: #666; margin: 0;">Issued Jul 2023</p>
+                        <p class="cert-issuer">Anaplan</p>
+                        <p class="cert-date">Issued Jul 2023</p>
                     </a>
 
                     <!-- 2. Anaplan Model Builder -->
-                    <a href="https://drive.google.com/file/d/1Qsnw4IvRb0mg_qY0HPU_Hi71O8y-b6_E/view?usp=sharing" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Anaplan Certified Model Builder</h4>
-                            <i class="fas fa-award" style="color: #00ffff; font-size: 1.1rem; opacity: 0.8;"></i>
+                    <a href="https://drive.google.com/file/d/1Qsnw4IvRb0mg_qY0HPU_Hi71O8y-b6_E/view?usp=sharing" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Anaplan Certified Model Builder</h4>
+                            <i class="fas fa-award cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">Anaplan</p>
-                        <p style="font-size: 0.75rem; color: #666; margin: 0;">Issued Jan 2022</p>
+                        <p class="cert-issuer">Anaplan</p>
+                        <p class="cert-date">Issued Jan 2022</p>
                     </a>
 
                     <!-- 3. Anaplan Level 3 -->
-                    <a href="https://drive.google.com/file/d/1g5CM8Mdy8SRJKwrrAVz9ZFpCFzH_UvIW/view?usp=sharing" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Anaplan Level 3</h4>
-                            <i class="fas fa-certificate" style="color: #00ffff; font-size: 1.1rem; opacity: 0.6;"></i>
+                    <a href="https://drive.google.com/file/d/1g5CM8Mdy8SRJKwrrAVz9ZFpCFzH_UvIW/view?usp=sharing" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Anaplan Level 3</h4>
+                            <i class="fas fa-certificate cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">Anaplan</p>
-                        <p style="font-size: 0.75rem; color: #666; margin: 0;">Issued Jul 2021</p>
+                        <p class="cert-issuer">Anaplan</p>
+                        <p class="cert-date">Issued Jul 2021</p>
                     </a>
 
                     <!-- 4. Anaplan GTM -->
-                    <a href="https://drive.google.com/file/d/1k1ixUgSTBv_xjF7WBCr2ogfZarERDZTH/view?usp=sharing" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Anaplan GTM</h4>
-                            <i class="fas fa-certificate" style="color: #00ffff; font-size: 1.1rem; opacity: 0.6;"></i>
+                    <a href="https://drive.google.com/file/d/1k1ixUgSTBv_xjF7WBCr2ogfZarERDZTH/view?usp=sharing" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Anaplan GTM</h4>
+                            <i class="fas fa-certificate cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">Anaplan</p>
-                        <p style="font-size: 0.75rem; color: #666; margin: 0;">Issued Aug 2021</p>
+                        <p class="cert-issuer">Anaplan</p>
+                        <p class="cert-date">Issued Aug 2021</p>
                     </a>
 
                      <!-- 5. Anaplan Level 2 -->
-                     <a href="https://drive.google.com/file/d/1g0KjSh-lXpgJjl2BZoAFyoypH-NwZeI1/view?usp=sharing" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Anaplan Level 2</h4>
-                            <i class="fas fa-certificate" style="color: #00ffff; font-size: 1.1rem; opacity: 0.6;"></i>
+                     <a href="https://drive.google.com/file/d/1g0KjSh-lXpgJjl2BZoAFyoypH-NwZeI1/view?usp=sharing" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Anaplan Level 2</h4>
+                            <i class="fas fa-certificate cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">Anaplan</p>
-                        <p style="font-size: 0.75rem; color: #666; margin: 0;">Issued May 2021</p>
+                        <p class="cert-issuer">Anaplan</p>
+                        <p class="cert-date">Issued May 2021</p>
                     </a>
 
                     <!-- 6. Anaplan Level 1 -->
-                     <a href="https://drive.google.com/file/d/1vf6e339MgzIo6DGjaVGq-7rxwnpiE-RK/view?usp=sharing" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Anaplan Level 1</h4>
-                            <i class="fas fa-certificate" style="color: #00ffff; font-size: 1.1rem; opacity: 0.6;"></i>
+                     <a href="https://drive.google.com/file/d/1vf6e339MgzIo6DGjaVGq-7rxwnpiE-RK/view?usp=sharing" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Anaplan Level 1</h4>
+                            <i class="fas fa-certificate cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">Anaplan</p>
-                        <p style="font-size: 0.75rem; color: #666; margin: 0;">Issued Apr 2021</p>
+                        <p class="cert-issuer">Anaplan</p>
+                        <p class="cert-date">Issued Apr 2021</p>
                     </a>
 
                     <!-- 7. Anaplan Way -->
-                     <a href="https://drive.google.com/file/d/1SwTixJvuuPMmLPinUF6gzfyNC3nrektk/view?usp=sharing" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Anaplan Way</h4>
-                            <i class="fas fa-certificate" style="color: #00ffff; font-size: 1.1rem; opacity: 0.6;"></i>
+                     <a href="https://drive.google.com/file/d/1SwTixJvuuPMmLPinUF6gzfyNC3nrektk/view?usp=sharing" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Anaplan Way</h4>
+                            <i class="fas fa-certificate cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">Anaplan</p>
-                        <p style="font-size: 0.75rem; color: #666; margin: 0;">Issued May 2021</p>
+                        <p class="cert-issuer">Anaplan</p>
+                        <p class="cert-date">Issued May 2021</p>
                     </a>
 
                     <!-- 8. Android Developer Nanodegree -->
-                    <a href="https://confirm.udacity.com/2GENL4P6" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Android Developer Nanodegree</h4>
-                            <i class="fab fa-android" style="color: #00ffff; font-size: 1.1rem; opacity: 0.8;"></i>
+                    <a href="https://confirm.udacity.com/2GENL4P6" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Android Developer Nanodegree</h4>
+                            <i class="fab fa-android cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">Udacity</p>
-                        <p style="font-size: 0.75rem; color: #666; margin: 0;">Issued Apr 2020</p>
+                        <p class="cert-issuer">Udacity</p>
+                        <p class="cert-date">Issued Apr 2020</p>
                     </a>
 
                     <!-- 9. Android Foundation Nanodegree II -->
-                    <a href="https://confirm.udacity.com/GQK6YGWR" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Android Foundation Nanodegree II</h4>
-                            <i class="fab fa-android" style="color: #00ffff; font-size: 1.1rem; opacity: 0.8;"></i>
+                    <a href="https://confirm.udacity.com/GQK6YGWR" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Android Foundation Nanodegree II</h4>
+                            <i class="fab fa-android cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">Udacity</p>
-                        <p style="font-size: 0.75rem; color: #666; margin: 0;">Issued Sep 2018</p>
+                        <p class="cert-issuer">Udacity</p>
+                        <p class="cert-date">Issued Sep 2018</p>
                     </a>
 
                     <!-- 10. Android Foundation Nanodegree I -->
-                    <a href="https://confirm.udacity.com/XDPATUYG" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Android Foundation Nanodegree I</h4>
-                            <i class="fab fa-android" style="color: #00ffff; font-size: 1.1rem; opacity: 0.8;"></i>
+                    <a href="https://confirm.udacity.com/XDPATUYG" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Android Foundation Nanodegree I</h4>
+                            <i class="fab fa-android cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">Udacity</p>
-                        <p style="font-size: 0.75rem; color: #666; margin: 0;">Issued Jan 2018</p>
+                        <p class="cert-issuer">Udacity</p>
+                        <p class="cert-date">Issued Jan 2018</p>
                     </a>
 
                     <!-- 11. C Training -->
-                    <a href="https://spoken-tutorial.org/software-training/test/participant/certificate/38786/2015275/" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">C Training</h4>
-                            <i class="fas fa-code" style="color: #00ffff; font-size: 1.1rem; opacity: 0.8;"></i>
+                    <a href="https://spoken-tutorial.org/software-training/test/participant/certificate/38786/2015275/" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">C Training</h4>
+                            <i class="fas fa-code cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">National Mission on Education</p>
-                        <p style="font-size: 0.75rem; color: #666; margin-bottom: 2px;">Issued Feb 2019</p>
-                        <p style="font-size: 0.7rem; color: #555; font-family: monospace;">ID: 2015275RJL</p>
+                        <p class="cert-issuer">National Mission on Education</p>
+                        <p class="cert-date">Issued Feb 2019</p>
+                        <p class="cert-id">ID: 2015275RJL</p>
                     </a>
                     
                     <!-- 12. Cpp Training -->
-                    <a href="https://spoken-tutorial.org/software-training/test/participant/certificate/38787/2015275/" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">C++ Training</h4>
-                            <i class="fas fa-code" style="color: #00ffff; font-size: 1.1rem; opacity: 0.8;"></i>
+                    <a href="https://spoken-tutorial.org/software-training/test/participant/certificate/38787/2015275/" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">C++ Training</h4>
+                            <i class="fas fa-code cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">National Mission on Education</p>
-                        <p style="font-size: 0.75rem; color: #666; margin-bottom: 2px;">Issued Feb 2019</p>
-                        <p style="font-size: 0.7rem; color: #555; font-family: monospace;">ID: 20152759GE</p>
+                        <p class="cert-issuer">National Mission on Education</p>
+                        <p class="cert-date">Issued Feb 2019</p>
+                        <p class="cert-id">ID: 20152759GE</p>
                     </a>
 
                     <!-- 13. Java Training -->
-                    <a href="https://spoken-tutorial.org/software-training/test/participant/certificate/38789/2015275/" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Java Training</h4>
-                            <i class="fab fa-java" style="color: #00ffff; font-size: 1.1rem; opacity: 0.8;"></i>
+                    <a href="https://spoken-tutorial.org/software-training/test/participant/certificate/38789/2015275/" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Java Training</h4>
+                            <i class="fab fa-java cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">National Mission on Education</p>
-                        <p style="font-size: 0.75rem; color: #666; margin-bottom: 2px;">Issued Feb 2019</p>
-                        <p style="font-size: 0.7rem; color: #555; font-family: monospace;">ID: 2015275A9F</p>
+                        <p class="cert-issuer">National Mission on Education</p>
+                        <p class="cert-date">Issued Feb 2019</p>
+                        <p class="cert-id">ID: 2015275A9F</p>
                     </a>
 
                      <!-- 14. Python Training -->
-                     <a href="https://spoken-tutorial.org/software-training/test/participant/certificate/38791/2015275/" target="_blank" style="text-decoration:none; display:block; color:inherit; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateY(0)';">
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                            <h4 style="font-size: 1rem; margin: 0; color: #fff; line-height: 1.3;">Python Training</h4>
-                            <i class="fab fa-python" style="color: #00ffff; font-size: 1.1rem; opacity: 0.8;"></i>
+                     <a href="https://spoken-tutorial.org/software-training/test/participant/certificate/38791/2015275/" target="_blank" class="cert-card">
+                        <div class="cert-header">
+                            <h4 class="cert-title">Python Training</h4>
+                            <i class="fab fa-python cert-icon"></i>
                         </div>
-                        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 2px;">National Mission on Education</p>
-                        <p style="font-size: 0.75rem; color: #666; margin-bottom: 2px;">Issued Feb 2019</p>
-                        <p style="font-size: 0.7rem; color: #555; font-family: monospace;">ID: 2015275VU1</p>
+                        <p class="cert-issuer">National Mission on Education</p>
+                        <p class="cert-date">Issued Feb 2019</p>
+                        <p class="cert-id">ID: 2015275VU1</p>
                     </a>
 
                 </div>
@@ -464,15 +464,15 @@
         <section class="section job-tracker" id="job-tracker">
             <div class="light-beam" data-color="#00ff88"></div>
 
-            <div class="content-box wide-box" style="max-width: 900px; width: 100%;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 40px;">
+            <div class="content-box wide-box">
+                <div class="tracker-header-row">
                     <div>
-                        <h3 class="reveal-up" style="margin-bottom: 10px;">Application Status</h3>
-                        <p class="reveal-up" style="margin:0;">Live tracking via Google Sheets</p>
+                        <h3 class="reveal-up tracker-title">Application Status</h3>
+                        <p class="reveal-up tracker-subtitle">Live tracking via Google Sheets</p>
                     </div>
                     <div class="reveal-up">
-                        <span style="font-family:'Syne'; font-size:3rem; color:#fff;" class="application-count">0</span>
-                        <span style="display:block; text-align:right; font-size:0.8rem; color:#888;">APPLIED</span>
+                        <span class="application-count tracker-count-number">0</span>
+                        <span class="tracker-count-label">APPLIED</span>
                     </div>
                 </div>
 
@@ -487,12 +487,12 @@
         <section class="section projects" id="projects">
             <div class="light-beam" data-color="#ff0088"></div>
             
-            <div class="content-box wide-box" style="max-width: 900px; width: 100%;">
+            <div class="content-box wide-box">
                 <h3 class="reveal-up">Selected Works</h3>
                 
                 <!-- FEATURED PROJECT: ABOOKI -->
-                <div class="project-card featured-project reveal-up" style="background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.4) 100%); border: 1px solid rgba(255,255,255,0.1); padding: 40px; margin-bottom: 60px; position: relative; overflow: hidden;">
-                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,136,255,0.2) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; pointer-events: none;"></div>
+                <div class="featured-project-card reveal-up">
+                    <div class="project-glow-bg project-glow-blue"></div>
 
                     <div class="project-gallery gallery-layout-4" style="margin-bottom: 30px;">
                         <div class="gallery-item g-item-1"><img src="abooki1.png" alt="Abooki Interface 1"></div>
@@ -501,59 +501,59 @@
                         <div class="gallery-item g-item-4"><img src="abooki4.png" alt="Abooki Interface 4"></div>
                     </div>
 
-                    <div style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
-                        <div style="flex: 1; min-width: 300px;">
-                            <span style="font-family: 'Syne', sans-serif; font-size: 0.8rem; color: #0088ff; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 10px;">Featured Project</span>
-                            <h4 style="font-size: 2.5rem; margin-bottom: 15px;">Abooki 📚✨</h4>
-                            <p style="font-size: 1.05rem; color: #ddd; margin-bottom: 20px;">
+                    <div class="project-content-flex">
+                        <div class="project-info-col">
+                            <span class="project-meta-label project-meta-blue">Featured Project</span>
+                            <h4 class="project-title">Abooki 📚✨</h4>
+                            <p class="project-description">
                                 An AI-powered storytelling platform and dynamic library where technology meets creativity. 
                                 Generate 10-page mini-books with custom covers, read in a distraction-free environment, or listen via Audiobook mode.
                             </p>
                             
-                            <ul style="list-style: none; padding: 0; margin-bottom: 25px; color: #bbb; font-size: 0.95rem;">
-                                <li style="margin-bottom: 8px;"><i class="fas fa-robot" style="color: #0088ff; width: 20px;"></i> <strong>AI Generation:</strong> Custom stories & cover art from simple prompts.</li>
-                                <li style="margin-bottom: 8px;"><i class="fas fa-ghost" style="color: #0088ff; width: 20px;"></i> <strong>Social Library:</strong> See other readers as floating ghosts in real-time.</li>
-                                <li style="margin-bottom: 8px;"><i class="fas fa-medal" style="color: #0088ff; width: 20px;"></i> <strong>Gamification:</strong> Earn badges for streaks and reading.</li>
+                            <ul class="project-features-list">
+                                <li class="project-feature-item"><i class="fas fa-robot feature-icon icon-blue"></i> <strong>AI Generation:</strong> Custom stories & cover art from simple prompts.</li>
+                                <li class="project-feature-item"><i class="fas fa-ghost feature-icon icon-blue"></i> <strong>Social Library:</strong> See other readers as floating ghosts in real-time.</li>
+                                <li class="project-feature-item"><i class="fas fa-medal feature-icon icon-blue"></i> <strong>Gamification:</strong> Earn badges for streaks and reading.</li>
                             </ul>
 
-                            <div class="skill-chips" style="margin-bottom: 25px;">
+                            <div class="skill-chips project-chips-wrapper">
                                 <span>Vanilla JS</span><span>HTML/CSS</span><span>Google Firebase</span><span>AI Integration</span>
                             </div>
 
-                            <a href="https://abooki.co.uk/" target="_blank" class="cta-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">
-                                Launch Abooki <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                            <a href="https://abooki.co.uk/" target="_blank" class="cta-btn project-link-btn">
+                                Launch Abooki <i class="fas fa-external-link-alt link-icon-small"></i>
                             </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- FEATURED PROJECT: THIS PORTFOLIO -->
-                <div class="project-card featured-project reveal-up" style="background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.4) 100%); border: 1px solid rgba(255,255,255,0.1); padding: 40px; margin-bottom: 60px; position: relative; overflow: hidden; margin-top: 60px;">
+                <div class="featured-project-card second-project reveal-up">
                      <!-- Background decoration different color -->
-                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(124, 89, 240, 0.2) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; pointer-events: none;"></div>
+                    <div class="project-glow-bg project-glow-purple"></div>
 
-                    <div style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
-                        <div style="flex: 1; min-width: 300px;">
-                            <span style="font-family: 'Syne', sans-serif; font-size: 0.8rem; color: #7c59f0; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 10px;">Meta Project</span>
-                            <h4 style="font-size: 2.5rem; margin-bottom: 15px;">SatyamPatil.pro ⚡️</h4>
-                            <p style="font-size: 1.05rem; color: #ddd; margin-bottom: 20px;">
+                    <div class="project-content-flex">
+                        <div class="project-info-col">
+                            <span class="project-meta-label project-meta-purple">Meta Project</span>
+                            <h4 class="project-title">SatyamPatil.pro ⚡️</h4>
+                            <p class="project-description">
                                 You are looking at it. A high-performance, immersive 3D portfolio designed to push the boundaries of web interaction. 
                                 Built from scratch to demonstrate advanced technical capabilities in creative development, shader programming, and seamless UI/UX.
                             </p>
                             
-                            <ul style="list-style: none; padding: 0; margin-bottom: 25px; color: #bbb; font-size: 0.95rem;">
-                                <li style="margin-bottom: 8px;"><i class="fas fa-cube" style="color: #7c59f0; width: 20px;"></i> <strong>3D Interactivity:</strong> Custom Blender models rendered via Three.js with raycasting interaction.</li>
-                                <li style="margin-bottom: 8px;"><i class="fas fa-tint" style="color: #7c59f0; width: 20px;"></i> <strong>Liquid Shaders:</strong> Custom GLSL ink transitions that react to scroll velocity and cursor proximity.</li>
-                                <li style="margin-bottom: 8px;"><i class="fas fa-tachometer-alt" style="color: #7c59f0; width: 20px;"></i> <strong>Live Tracking:</strong> Real-time job application status fetched dynamically from Google Sheets APIs.</li>
-                                <li style="margin-bottom: 8px;"><i class="fas fa-mouse-pointer" style="color: #7c59f0; width: 20px;"></i> <strong>Dynamic Cursor:</strong> Context-aware cursor system that mimics physical properties of ink holding.</li>
+                            <ul class="project-features-list">
+                                <li class="project-feature-item"><i class="fas fa-cube feature-icon icon-purple"></i> <strong>3D Interactivity:</strong> Custom Blender models rendered via Three.js with raycasting interaction.</li>
+                                <li class="project-feature-item"><i class="fas fa-tint feature-icon icon-purple"></i> <strong>Liquid Shaders:</strong> Custom GLSL ink transitions that react to scroll velocity and cursor proximity.</li>
+                                <li class="project-feature-item"><i class="fas fa-tachometer-alt feature-icon icon-purple"></i> <strong>Live Tracking:</strong> Real-time job application status fetched dynamically from Google Sheets APIs.</li>
+                                <li class="project-feature-item"><i class="fas fa-mouse-pointer feature-icon icon-purple"></i> <strong>Dynamic Cursor:</strong> Context-aware cursor system that mimics physical properties of ink holding.</li>
                             </ul>
 
-                            <div class="skill-chips" style="margin-bottom: 25px;">
+                            <div class="skill-chips project-chips-wrapper">
                                 <span>Three.js</span><span>GLSL Shaders</span><span>GSAP</span><span>Lenis Scroll</span><span>Google Cloud API</span>
                             </div>
 
-                            <a href="#" class="cta-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px; opacity: 0.7; cursor: default;">
-                                Currently Viewing <i class="fas fa-eye" style="font-size: 0.8rem;"></i>
+                            <a href="#" class="cta-btn project-link-btn project-link-disabled">
+                                Currently Viewing <i class="fas fa-eye link-icon-small"></i>
                             </a>
                         </div>
                     </div>
@@ -563,64 +563,64 @@
         </section>
 
         <!-- RESUME DOSSIER (New Section) -->
-        <section class="section resume-section" id="resume" style="justify-content: center; position: relative;">
+        <section class="section resume-section" id="resume">
             <div class="light-beam" data-color="#7c59f0"></div> <!-- Red Beam for Confidential Dossier -->
 
-            <div class="content-box reveal-up" style="max-width: 600px; text-align: left; padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); background: rgba(10,10,10,0.8);">
+            <div class="content-box reveal-up dossier-box">
                 
                 <!-- Digital Scan Header -->
-                <div style="background: rgba(255,255,255,0.03); padding: 15px 25px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-family: 'Syne', sans-serif; font-size: 0.8rem; color: #7c59f0; letter-spacing: 2px;">CONFIDENTIAL DOSSIER</span> <!-- Changed text color to match beam -->
-                    <span style="font-family: 'Courier New', monospace; font-size: 0.7rem; color: #666;">ID: SP-2026-CV</span>
+                <div class="dossier-header">
+                    <span class="dossier-label">CONFIDENTIAL DOSSIER</span> <!-- Changed text color to match beam -->
+                    <span class="dossier-id">ID: SP-2026-CV</span>
                 </div>
 
-                <div style="padding: 40px; position: relative;">
+                <div class="dossier-body">
                     <!-- Scanning Line Animation -->
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: #7c59f0; box-shadow: 0 0 15px #7c59f0; opacity: 0.5; animation: scanLine 4s infinite linear;"></div> <!-- Changed scan line to Red -->
+                    <div class="scan-line"></div> <!-- Changed scan line to Red -->
 
-                    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px;">
+                    <div class="dossier-content-row">
                         <!-- CHANGED: Replaced FontAwesome Icon with Image -->
-                        <div style="width: 60px; height: 60px; background: #222; border-radius: 50%; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
-                            <img src="my_photo.png" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="dossier-profile-img">
+                            <img src="my_photo.png" alt="Profile">
                         </div>
                         
                         <div>
-                            <h3 style="margin: 0 0 5px 0; font-size: 1.8rem;">Satyam Patil</h3>
-                            <p style="margin: 0; font-size: 0.9rem; color: #888;">Data Analyst & Anaplan Solution Architect</p>
-                            <p style="margin: 5px 0 0 0; font-size: 0.8rem; color: #666;"><i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i> Stansted, United Kingdom</p>
+                            <h3 class="dossier-title">Satyam Patil</h3>
+                            <p class="dossier-role">Data Analyst & Anaplan Solution Architect</p>
+                            <p class="dossier-loc"><i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i> Stansted, United Kingdom</p>
                         </div>
                     </div>
 
-                    <p style="font-size: 0.95rem; color: #ccc; line-height: 1.6; margin-bottom: 30px;">
+                    <p class="dossier-desc">
                         Transforming complex datasets into actionable business insights. Expert in building scalable forecasting models, automating workflows, and driving efficiency.
                     </p>
 
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                         <a href="CV_IT_Jan_2026.pdf" target="_blank" class="cta-btn" style="background: #fff; color: #000; border-radius: 4px; font-size: 0.9rem; padding: 12px 25px;">
+                    <div class="dossier-actions">
+                         <a href="CV_IT_Jan_2026.pdf" target="_blank" class="cta-btn dossier-download-btn">
                             <i class="fas fa-download" style="margin-right: 10px;"></i> Download CV
                         </a>
-                        <div style="display: flex; align-items: center; gap: 10px; padding: 0 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;">
+                        <div class="dossier-verified-badge">
                             <i class="fas fa-check-circle" style="color: #00ff88;"></i>
-                            <span style="font-size: 0.8rem; color: #aaa;">Verified Jan 2026</span>
+                            <span class="dossier-verified-text">Verified Jan 2026</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Decorative Footer -->
-                <div style="background: rgba(0,0,0,0.3); padding: 10px 25px; border-top: 1px solid rgba(255,255,255,0.05); font-family: 'Courier New', monospace; font-size: 0.65rem; color: #444; text-align: right;">
+                <div class="dossier-footer">
                     SECURE CONNECTION ESTABLISHED
                 </div>
             </div>
         </section>
 
                 <!-- EXPERIMENT LINK -->
-        <section class="section experiment" id="experiment" style="justify-content: center;">
+        <section class="section experiment" id="experiment">
             <div class="light-beam" data-color="#ffcc00"></div> <!-- Golden Beam for The Lab -->
             
-            <div class="content-box reveal-up" style="text-align: center;">
+            <div class="content-box reveal-up experiment-content">
                 <h3>The Lab</h3>
                 <p>Experimental visual effects and code sketches.</p>
-                <div class="experiment-controls" style="margin-top: 30px;">
+                <div class="experiment-controls experiment-btn-wrapper">
                     <button class="cta-btn" onclick="window.location.href='experiment.html'">Enter Playground</button>
                 </div>
             </div>
@@ -667,13 +667,5 @@
     <script type="module" src="loader.js"></script>
     <script type="module" src="intro.js"></script>
     <script type="module" src="js/main.js"></script>
-    <style>
-        @keyframes scanLine {
-            0% { top: 0%; opacity: 0; }
-            10% { opacity: 0.5; }
-            90% { opacity: 0.5; }
-            100% { top: 100%; opacity: 0; }
-        }
-    </style>
 </body>
 </html>

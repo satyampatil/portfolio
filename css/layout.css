@@ -116,12 +116,19 @@ main {
     pointer-events: auto;
 }
 
+/* --- FIXED CANVAS ELEMENTS --- */
+.intro-canvas-fixed {
+    position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none;
+}
+
 /* --- TYPOGRAPHY --- */
 h1 { font-family: 'Syne', sans-serif; font-size: 7rem; line-height: 0.9; margin: 0 0 20px 0; letter-spacing: -3px; color: #fff; }
 h2 { font-family: 'Inter', sans-serif; font-size: 1.2rem; font-weight: 300; color: #aaa; margin-bottom: 40px; letter-spacing: 0.5px; max-width: 500px; }
 h3 { font-family: 'Syne', sans-serif; font-size: 3.5rem; margin-bottom: 40px; color: #fff; line-height: 1; }
 h4 { font-family: 'Syne', sans-serif; margin: 0 0 10px 0; font-size: 1.5rem; color: #fff; }
 p { font-size: 1.1rem; line-height: 1.7; color: #bbb; margin-bottom: 20px; }
+
+.company { font-size: 0.9rem; color: #aaa; }
 
 /* --- TIMELINE --- */
 .timeline { border-left: 1px solid rgba(255,255,255,0.1); padding-left: 40px; }
@@ -131,6 +138,15 @@ p { font-size: 1.1rem; line-height: 1.7; color: #bbb; margin-bottom: 20px; }
     background: #fff; 
     border-radius: 50%;
     box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* --- RESUME SECTION SPECIFIC --- */
+.section.resume-section {
+    justify-content: center; position: relative;
+}
+
+.section.experiment {
+    justify-content: center;
 }
 
 /* --- RESPONSIVE --- */
