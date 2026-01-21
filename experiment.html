@@ -25,7 +25,7 @@
         <header class="lab-header">
             <div class="lab-logo">
                 <span class="logo-text">SATYAM.</span>
-                <span class="logo-badge">LAB v1.0</span>
+                <span class="logo-badge">LAB v2.0 <span style="color:var(--color-accent); margin-left:5px;">// AUDIO REACTIVE</span></span>
             </div>
             
             <a href="index.html" class="exit-btn">
@@ -43,14 +43,31 @@
             <div class="interaction-hint">
                 <i class="fas fa-mouse-pointer"></i> <span>INTERACT WITH MOUSE</span>
             </div>
+            <!-- Audio Indicator -->
+            <div id="audio-indicator" class="audio-hint hidden">
+                <i class="fas fa-microphone-lines"></i> <span>LISTENING...</span>
+            </div>
         </div>
 
-        <!-- NEW: Dynamic Control Panel -->
+        <!-- CONTROL PANEL -->
         <div class="control-panel-wrapper">
+            <!-- NEW: Toolbox Header -->
             <div class="cp-header">
-                <span class="cp-title">PARAMETERS</span>
-                <div class="cp-indicator"></div>
+                <span class="cp-title">TOOLBOX</span>
+                <div class="cp-tools">
+                    <button id="btn-audio" class="tool-btn" title="Enable Audio Reactivity">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="btn-chaos" class="tool-btn" title="Randomize Parameters">
+                        <i class="fas fa-random"></i>
+                    </button>
+                    <button id="btn-snap" class="tool-btn" title="Take Snapshot">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
             </div>
+
+            <!-- Parameters Content -->
             <div id="control-panel-content" class="cp-content">
                 <!-- Controls injected via JS -->
             </div>
@@ -97,8 +114,8 @@
                 <span class="value" id="fps-counter">60</span>
             </div>
             <div class="tech-item">
-                <span class="label">RENDER</span>
-                <span class="value">THREE.JS</span>
+                <span class="label">POST</span>
+                <span class="value">BLOOM + GRAIN</span>
             </div>
         </div>
     </div>

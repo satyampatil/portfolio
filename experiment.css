@@ -168,12 +168,34 @@ body {
     animation: slideIn 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.audio-hint {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ff0055;
+    animation: pulse 1.5s infinite;
+}
+
+.audio-hint.hidden {
+    display: none;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
 @keyframes slideIn {
     from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
 
-/* --- CONTROL PANEL (NEW) --- */
+/* --- CONTROL PANEL --- */
 .control-panel-wrapper {
     position: absolute;
     top: 50%;
@@ -193,12 +215,13 @@ body {
 }
 
 .cp-header {
-    padding: 15px 20px;
+    padding: 10px 15px;
     border-bottom: 1px solid var(--color-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: rgba(255, 255, 255, 0.03);
+    height: 50px;
 }
 
 .cp-title {
@@ -209,12 +232,34 @@ body {
     color: #fff;
 }
 
-.cp-indicator {
-    width: 8px;
-    height: 8px;
+.cp-tools {
+    display: flex;
+    gap: 5px;
+}
+
+.tool-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    color: rgba(255,255,255,0.7);
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.tool-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+.tool-btn.active {
     background: var(--color-accent);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--color-accent);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(124, 89, 240, 0.5);
 }
 
 .cp-content {

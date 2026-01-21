@@ -1,9 +1,81 @@
 import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 
 // --- GLOBAL STATE ---
 const state = {
-    activeExperimentId: 'Exp7', // Start with Ink
+    activeExperimentId: 'Exp7',
+    audioActive: false,
+    chaosMode: false,
 };
+
+// --- AUDIO ANALYZER SETUP ---
+let audioContext, analyser, dataArray;
+let audioVolume = 0; // 0.0 to 1.0
+
+function toggleAudio() {
+    const btn = document.getElementById('btn-audio');
+    const indicator = document.getElementById('audio-indicator');
+
+    if (state.audioActive) {
+        // Turn OFF
+        state.audioActive = false;
+        if (audioContext) audioContext.suspend();
+        btn.classList.remove('active');
+        indicator.classList.add('hidden');
+    } else {
+        // Turn ON
+        if (!audioContext) {
+            // First time initialization
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioContext = new AudioContext();
+                navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+                    const source = audioContext.createMediaStreamSource(stream);
+                    analyser = audioContext.createAnalyser();
+                    analyser.fftSize = 256; 
+                    source.connect(analyser);
+                    dataArray = new Uint8Array(analyser.frequencyBinCount);
+                    
+                    state.audioActive = true;
+                    btn.classList.add('active');
+                    indicator.classList.remove('hidden');
+                }).catch(err => {
+                    console.error('Mic access denied:', err);
+                    alert('Microphone access needed for audio reactivity.');
+                });
+            } catch (e) {
+                console.error('Audio API not supported');
+            }
+        } else {
+            // Resume existing context
+            audioContext.resume();
+            state.audioActive = true;
+            btn.classList.add('active');
+            indicator.classList.remove('hidden');
+        }
+    }
+}
+
+function updateAudio() {
+    if (!state.audioActive || !analyser) {
+        // Smooth decay to 0 if off
+        audioVolume *= 0.9;
+        return;
+    }
+    analyser.getByteFrequencyData(dataArray);
+    // Calculate average volume
+    let sum = 0;
+    for (let i = 0; i < dataArray.length; i++) {
+        sum += dataArray[i];
+    }
+    const avg = sum / dataArray.length;
+    // Normalize and smooth
+    const target = avg / 128.0; // 0 to ~2.0
+    audioVolume += (target - audioVolume) * 0.1; // Smoothing
+}
+
 
 // --- METADATA FOR UI ---
 const experimentData = {
@@ -29,21 +101,61 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 camera.position.set(0, 0, 100); 
 
 const canvas = document.querySelector('#experiment-canvas');
-const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+const renderer = new THREE.WebGLRenderer({ 
+    canvas: canvas, 
+    antialias: false, // Disabled for Post-Processing Performance
+    alpha: true,
+    preserveDrawingBuffer: true // Required for Snapshots
+});
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// --- POST PROCESSING SETUP ---
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera);
+composer.addPass(renderPass);
+
+// Grain Shader (Custom)
+const GrainShader = {
+    uniforms: {
+        "tDiffuse": { value: null },
+        "amount": { value: 0.05 },
+        "time": { value: 0.0 }
+    },
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform float amount;
+        uniform float time;
+        uniform sampler2D tDiffuse;
+        varying vec2 vUv;
+        float random(vec2 p) { return fract(cos(dot(p,vec2(23.14069263277926,2.665144142690225)))*12345.6789); }
+        void main() {
+            vec4 color = texture2D(tDiffuse, vUv);
+            float noise = random(vUv * time);
+            // Blend mode: Overlay-ish
+            gl_FragColor = vec4(color.rgb + (noise - 0.5) * amount, color.a);
+        }
+    `
+};
+const grainPass = new ShaderPass(GrainShader);
+composer.addPass(grainPass);
+
 
 // --- MOUSE INTERACTION ---
 const mouse = new THREE.Vector2();
 const cursorFollower = document.getElementById('cursor-follower');
 
 window.addEventListener('mousemove', (event) => {
-    // Custom Cursor Logic
     if (cursorFollower) {
         cursorFollower.style.left = event.clientX + 'px';
         cursorFollower.style.top = event.clientY + 'px';
     }
-    // Three.js Normalized Mouse
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 });
@@ -63,18 +175,20 @@ function initExp1() {
     const group = new THREE.Group(); group.add(mesh); group.visible = false; scene.add(group);
 
     return {
-        id: 'Exp1', group,
-        config,
+        id: 'Exp1', group, config,
         settings: [
             { id: 'speed', type: 'range', min: 0, max: 5, step: 0.1, label: 'Speed' },
             { id: 'height', type: 'range', min: 0, max: 30, step: 1, label: 'Height' },
             { id: 'color', type: 'color', label: 'Color', onChange: (v) => meshMaterial.color.set(v) }
         ],
-        animate: (t) => {
+        animate: (t, vol) => {
             const pos = geometry.attributes.position;
+            // REACTIVITY
+            const hMult = 1.0 + (vol * 2.0); // Audio increases height
+            
             for(let i=0; i<pos.count; i++){
                 const x = pos.getX(i); const y = pos.getY(i);
-                let z = Math.sin(x * 0.05 + t * config.speed) * config.height + Math.cos(y * 0.05 + t * config.speed) * config.height;
+                let z = Math.sin(x * 0.05 + t * config.speed) * (config.height * hMult) + Math.cos(y * 0.05 + t * config.speed) * (config.height * hMult);
                 pos.setZ(i, z);
             }
             pos.needsUpdate = true;
@@ -99,16 +213,18 @@ function initExp2() {
     mesh.visible = false; scene.add(mesh);
     
     return { 
-        id:'Exp2', group:mesh, 
-        config,
+        id:'Exp2', group:mesh, config,
         settings: [
             { id: 'speed', type: 'range', min: 0, max: 2, step: 0.1, label: 'Speed' },
             { id: 'displacement', type: 'range', min: 0, max: 50, step: 1, label: 'Noise Height', onChange: (v) => uniforms.uDisp.value = v },
             { id: 'density', type: 'range', min: 0.1, max: 5, step: 0.1, label: 'Smoke Density', onChange: (v) => uniforms.uDens.value = v },
             { id: 'color', type: 'color', label: 'Smoke Color', onChange: (v) => uniforms.uColor.value.set(v) }
         ],
-        animate:(t)=>{ 
+        animate:(t, vol)=>{ 
             uniforms.uTime.value=t*config.speed; 
+            // REACTIVITY: Audio displaces mesh more
+            uniforms.uDisp.value = config.displacement + (vol * 30.0);
+            
             mesh.rotation.x=mouse.y*0.2; 
             mesh.rotation.y=mouse.x*0.2; 
         }
@@ -132,23 +248,25 @@ function initExp3() {
     const fill = new THREE.DirectionalLight(0x4444ff, 0.6); fill.position.set(-20,20,-20); scene.add(fill); fill.visible=false;
 
     return {
-        id:'Exp3', group, lights: [light, fill],
-        config,
+        id:'Exp3', group, lights: [light, fill], config,
         settings: [
             { id: 'speed', type: 'range', min: 0, max: 5, step: 0.1, label: 'Speed' },
             { id: 'heightScale', type: 'range', min: 0, max: 50, step: 1, label: 'Data Scale' }
         ],
-        animate:(t)=>{
+        animate:(t, vol)=>{
             light.visible=true; fill.visible=true;
             let i=0; const sz=30; const barSpacing=2.0;
+            // REACTIVITY: Scale jumps
+            const scaleMod = 1 + vol;
+
             for(let x=0; x<sz; x++){
                 for(let z=0; z<sz; z++){
                     const xp = (x-sz/2)*barSpacing; const zp = (z-sz/2)*barSpacing;
                     const n = Math.sin(x*0.2 + t*config.speed) + Math.cos(z*0.2 + t*config.speed*0.8);
-                    const h = Math.max(0.1, (n+2)*(config.heightScale/3));
+                    const h = Math.max(0.1, (n+2)*(config.heightScale/3) * scaleMod);
                     dummy.position.set(xp, h/2 - 10, zp); dummy.scale.set(1,h,1); dummy.updateMatrix();
                     mesh.setMatrixAt(i, dummy.matrix);
-                    color.lerpColors(cLow, cHigh, Math.min(1, Math.max(0, h/config.heightScale)));
+                    color.lerpColors(cLow, cHigh, Math.min(1, Math.max(0, h/(config.heightScale*scaleMod))));
                     mesh.setColorAt(i, color);
                     i++;
                 }
@@ -168,10 +286,7 @@ function initExp4() {
     const geom = new THREE.BoxGeometry(1,1,1);
     const mat = new THREE.MeshPhongMaterial({ shininess: 80, flatShading: false });
     const terrainMesh = new THREE.InstancedMesh(geom, mat, 20000);
-    const group = new THREE.Group(); 
-    group.add(terrainMesh);
-    group.visible = false;
-    scene.add(group);
+    const group = new THREE.Group(); group.add(terrainMesh); group.visible = false; scene.add(group);
 
     const texLoader = new THREE.TextureLoader();
     const texture = texLoader.load('my_photo.png', undefined, undefined, () => {});
@@ -180,7 +295,8 @@ function initExp4() {
         uTime: { value: 0 },
         uTexture: { value: texture },
         uColor: { value: new THREE.Color(0xffffff) },
-        uMouse: { value: new THREE.Vector2(0, 0) }
+        uMouse: { value: new THREE.Vector2(0, 0) },
+        uAudio: { value: 0 }
     };
 
     const imgMaterial = new THREE.ShaderMaterial({
@@ -190,9 +306,12 @@ function initExp4() {
             varying vec2 vUv;
             uniform float uTime;
             uniform vec2 uMouse;
+            uniform float uAudio;
             void main() {
                 vUv = uv;
                 vec3 pos = position;
+                // Reactivity: Glitch displacement
+                pos.x += sin(pos.y * 20.0 + uTime * 10.0) * uAudio * 0.5;
                 pos.y += sin(uTime * 1.0 + pos.x * 2.0) * 0.5;
                 pos.x += (uMouse.x * 2.0);
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
@@ -201,12 +320,16 @@ function initExp4() {
         fragmentShader: `
             uniform sampler2D uTexture;
             uniform float uTime;
+            uniform float uAudio;
             varying vec2 vUv;
             void main() {
                 vec2 uv = vUv;
-                float wave = sin(uv.y * 10.0 + uTime) * 0.005;
-                uv.x += wave;
-                vec4 color = texture2D(uTexture, uv);
+                // Reactivity: RGB Split
+                float shift = uAudio * 0.02;
+                float r = texture2D(uTexture, uv + vec2(shift, 0.0)).r;
+                float g = texture2D(uTexture, uv).g;
+                float b = texture2D(uTexture, uv - vec2(shift, 0.0)).b;
+                vec4 color = vec4(r,g,b, texture2D(uTexture, uv).a);
                 if(color.a < 0.1) discard; 
                 gl_FragColor = color;
             }
@@ -228,7 +351,7 @@ function initExp4() {
             { id: 'speed', type: 'range', min: 0, max: 5, step: 0.1, label: 'Speed' },
             { id: 'heightScale', type: 'range', min: 0, max: 50, step: 1, label: 'Noise Scale' }
         ],
-        animate:(t)=>{
+        animate:(t, vol)=>{
             light.visible=true; fill.visible=true;
             let i=0; const sz=60; const barSpacing=2.5;
             for(let x=0; x<sz*2; x++){
@@ -247,6 +370,7 @@ function initExp4() {
             terrainMesh.count=i; terrainMesh.instanceMatrix.needsUpdate=true; terrainMesh.instanceColor.needsUpdate=true;
             imgUniforms.uTime.value = t;
             imgUniforms.uMouse.value.lerp(mouse, 0.05);
+            imgUniforms.uAudio.value = vol; // Pass audio to shader
             camera.position.x += (mouse.x * 20 - camera.position.x) * 0.02;
             camera.position.y += (10 + mouse.y * 10 - camera.position.y) * 0.02;
             camera.lookAt(0,5,0);
@@ -267,19 +391,22 @@ function initExp5() {
         uColor: { value: new THREE.Color(config.color) },
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
         uFrequency: { value: config.frequency },
-        uLineWidth: { value: config.lineWidth }
+        uLineWidth: { value: config.lineWidth },
+        uAudio: { value: 0 }
     };
 
     const material = new THREE.ShaderMaterial({
         vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
         fragmentShader: `
             uniform float uTime; uniform vec3 uColor; uniform vec2 uResolution;
-            uniform float uFrequency; uniform float uLineWidth; varying vec2 vUv;
+            uniform float uFrequency; uniform float uLineWidth; uniform float uAudio; varying vec2 vUv;
             void main() {
                 vec2 st = vUv - 0.5; st.x *= uResolution.x / uResolution.y;
                 float dist = length(st);
-                float pattern = sin(dist * uFrequency * 6.28 - uTime);
-                float ring = smoothstep(0.5 - uLineWidth, 0.5, pattern) - smoothstep(0.5, 0.5 + uLineWidth, pattern);
+                // Reactivity: Distort rings
+                float pattern = sin(dist * uFrequency * 6.28 - uTime + (uAudio * dist * 5.0));
+                float width = uLineWidth + (uAudio * 0.1);
+                float ring = smoothstep(0.5 - width, 0.5, pattern) - smoothstep(0.5, 0.5 + width, pattern);
                 float mask = 1.0 - smoothstep(0.2, 0.5, dist);
                 gl_FragColor = vec4(uColor, ring * mask);
             }
@@ -298,8 +425,9 @@ function initExp5() {
             { id: 'lineWidth', type: 'range', min: 0.01, max: 0.5, step: 0.01, label: 'Width', onChange: (v) => uniforms.uLineWidth.value = v },
             { id: 'color', type: 'color', label: 'Color', onChange: (v) => uniforms.uColor.value.set(v) }
         ],
-        animate: (t) => {
+        animate: (t, vol) => {
             uniforms.uTime.value = t * config.speed;
+            uniforms.uAudio.value = vol;
             uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
             camera.position.set(0, 0, 100); camera.lookAt(0, 0, 0);
         }
@@ -347,9 +475,11 @@ function initExp6() {
             { id: 'speed', type: 'range', min: 0.1, max: 5, step: 0.1, label: 'Rotation Speed' },
             { id: 'color', type: 'color', label: 'Gold Color', onChange: (v) => tubeColor.set(v) }
         ],
-        animate: (t) => {
+        animate: (t, vol) => {
             light.visible = true; rimLight.visible = true;
-            let i = 0; const time = t * config.speed;
+            let i = 0; 
+            // Reactivity: Speed up rotation
+            const time = t * (config.speed + (vol * 2.0));
             const progress = (time * 0.2) % 1.5; const slide = progress > 1 ? 1 : progress; const extrusion = slide * 25;
 
             holderData.forEach(d => {
@@ -385,11 +515,12 @@ function initExp7() {
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
         uInkColor: { value: new THREE.Color(config.inkColor) },
         uBgColor: { value: new THREE.Color(config.bgColor) },
-        uFlow: { value: config.flowStrength }
+        uFlow: { value: config.flowStrength },
+        uAudio: { value: 0 }
     };
 
     const fragmentShader = `
-        uniform float uTime; uniform vec2 uResolution; uniform vec3 uInkColor; uniform vec3 uBgColor; uniform float uFlow;
+        uniform float uTime; uniform vec2 uResolution; uniform vec3 uInkColor; uniform vec3 uBgColor; uniform float uFlow; uniform float uAudio;
         varying vec2 vUv;
         float random (in vec2 st) { return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123); }
         float noise (in vec2 st) {
@@ -407,9 +538,10 @@ function initExp7() {
         }
         void main() {
             vec2 st = gl_FragCoord.xy / uResolution.xy; st.x *= uResolution.x / uResolution.y;
+            // Reactivity: Audio makes warp more aggressive
             vec2 q = vec2(0.); q.x = fbm( st + 0.00 * uTime); q.y = fbm( st + vec2(1.0));
             vec2 r = vec2(0.); r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 0.15*uTime ); r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*uTime);
-            float f = fbm(st + r * uFlow);
+            float f = fbm(st + r * (uFlow + uAudio * 2.0));
             vec3 color = mix(uBgColor, uInkColor * 0.5, clamp((f*f)*4.0, 0.0, 1.0));
             color = mix(color, uInkColor, clamp(length(q), 0.0, 1.0));
             color = mix(color, vec3(1.0), clamp(length(r.x), 0.0, 1.0) * 0.1); 
@@ -432,8 +564,9 @@ function initExp7() {
             { id: 'inkColor', type: 'color', label: 'Ink Color', onChange: (v) => uniforms.uInkColor.value.set(v) },
             { id: 'bgColor', type: 'color', label: 'Background', onChange: (v) => uniforms.uBgColor.value.set(v) }
         ],
-        animate: (t) => {
+        animate: (t, vol) => {
             uniforms.uTime.value = t * config.speed;
+            uniforms.uAudio.value = vol;
             uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
             camera.position.set(0, 0, 1);
         }
@@ -472,6 +605,7 @@ function buildControls(expId) {
         const valDisplay = document.createElement('span');
         valDisplay.className = 'control-value';
         valDisplay.innerText = exp.config[setting.id];
+        valDisplay.id = `val-${setting.id}`; // Add ID for chaotic updates
         
         labelRow.appendChild(label);
         labelRow.appendChild(valDisplay);
@@ -480,6 +614,7 @@ function buildControls(expId) {
         // Input
         const input = document.createElement('input');
         input.type = setting.type;
+        input.id = `inp-${setting.id}`; // Add ID for chaotic updates
         
         if (setting.type === 'range') {
             input.min = setting.min;
@@ -493,11 +628,8 @@ function buildControls(expId) {
         // Event Listener
         input.addEventListener('input', (e) => {
             const val = e.target.value;
-            // Update Config
             exp.config[setting.id] = val;
-            // Update Display
             valDisplay.innerText = val;
-            // Trigger Callback if exists (for uniforms etc)
             if (setting.onChange) setting.onChange(val);
         });
 
@@ -551,6 +683,51 @@ function switchExperiment(id) {
     }, 300);
 }
 
+// --- CHAOS MODE LOGIC ---
+function triggerChaos() {
+    const act = experiments[state.activeExperimentId];
+    if (!act || !act.settings) return;
+
+    // Randomize all settings
+    act.settings.forEach(setting => {
+        if (setting.type === 'range') {
+            const min = parseFloat(setting.min);
+            const max = parseFloat(setting.max);
+            const rand = (Math.random() * (max - min) + min).toFixed(2);
+            
+            // Update Data
+            act.config[setting.id] = rand;
+            if(setting.onChange) setting.onChange(rand);
+
+            // Update UI
+            const inp = document.getElementById(`inp-${setting.id}`);
+            const val = document.getElementById(`val-${setting.id}`);
+            if(inp) inp.value = rand;
+            if(val) val.innerText = rand;
+        }
+        else if (setting.type === 'color') {
+             // Random hex color
+             const randColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+             act.config[setting.id] = randColor;
+             if(setting.onChange) setting.onChange(randColor);
+             
+             const inp = document.getElementById(`inp-${setting.id}`);
+             if(inp) inp.value = randColor;
+        }
+    });
+}
+
+// --- SNAPSHOT LOGIC ---
+function takeSnapshot() {
+    render(); // Force a render to ensure buffer is populated
+    const dataURL = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.download = `SATYAM-LAB-${state.activeExperimentId}-${Date.now()}.png`;
+    link.href = dataURL;
+    link.click();
+}
+
+
 // --- BIND UI EVENTS ---
 document.querySelectorAll('.dock-item').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -561,6 +738,11 @@ document.querySelectorAll('.dock-item').forEach(btn => {
     });
 });
 
+// Toolbox Events
+document.getElementById('btn-audio').addEventListener('click', toggleAudio);
+document.getElementById('btn-chaos').addEventListener('click', triggerChaos);
+document.getElementById('btn-snap').addEventListener('click', takeSnapshot);
+
 // Start with Experiment 7
 switchExperiment('Exp7');
 
@@ -570,13 +752,22 @@ const fpsCounter = document.getElementById('fps-counter');
 let frameCount = 0;
 let lastTime = 0;
 
-function animate() {
+function render() {
     const time = clock.getElapsedTime();
+    updateAudio();
+    grainPass.uniforms["time"].value = time;
+    
     const active = experiments[state.activeExperimentId];
-    if (active) active.animate(time);
-    renderer.render(scene, camera);
+    if (active) active.animate(time, audioVolume);
+    
+    composer.render(); // USE COMPOSER INSTEAD OF RENDERER
+}
+
+function animate() {
+    render();
     
     // Simple FPS Counter
+    const time = clock.getElapsedTime();
     frameCount++;
     if(time - lastTime >= 1.0) {
         if(fpsCounter) fpsCounter.innerText = frameCount;
@@ -591,6 +782,7 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    composer.setSize(window.innerWidth, window.innerHeight); // Update Composer Size
 });
 
 animate();
