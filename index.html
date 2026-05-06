@@ -57,7 +57,6 @@
     </div>
 
     <!-- === FIXED BACKGROUND LAYER (MOVED OUTSIDE MAIN) === -->
-    <!-- These must be outside <main> to avoid being affected by the Scroll Skew transform -->
     
     <!-- 1. Background Heatmap -->
     <canvas id="intro-canvas" class="intro-canvas-fixed"></canvas>
@@ -472,29 +471,6 @@
             </div>
         </section>
 
-        <!-- JOB APPLICATION TRACKER (Green Beam) -->
-        <section class="section job-tracker" id="job-tracker">
-            <div class="light-beam" data-color="#00ff88"></div>
-
-            <div class="content-box wide-box">
-                <div class="tracker-header-row">
-                    <div>
-                        <h3 class="reveal-up tracker-title">Application Status</h3>
-                        <p class="reveal-up tracker-subtitle">Live tracking via Google Sheets</p>
-                    </div>
-                    <div class="reveal-up">
-                        <span class="application-count tracker-count-number">0</span>
-                        <span class="tracker-count-label">APPLIED</span>
-                    </div>
-                </div>
-
-                <div class="tracker-container reveal-up">
-                    <!-- Javascript will inject job cards here -->
-                    <div class="tracker-loading">Loading Data...</div>
-                </div>
-            </div>
-        </section>
-
         <!-- PROJECTS (Magenta Beam) -->
         <section class="section projects" id="projects">
             <div class="light-beam" data-color="#ff0088"></div>
@@ -539,6 +515,86 @@
                     </div>
                 </div>
 
+                <div class="project-showcase-intro reveal-up">
+                    <span class="project-meta-label project-meta-purple">Recent Launches</span>
+                    <p>Sharp, production-ready sites with distinct brand systems and tactile front-end detail.</p>
+                </div>
+
+                <div class="project-showcase-grid reveal-up">
+                    <a href="https://orlux-428b8.web.app/" target="_blank" rel="noopener noreferrer" class="showcase-card showcase-card-large" style="--accent: #b08945;">
+                        <div class="showcase-preview">
+                            <div class="showcase-browser-bar">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <img src="public/project-previews/orlux.png" alt="Orlux Creative website preview">
+                            <span class="showcase-corner-label">Brand Agency</span>
+                        </div>
+                        <div class="showcase-copy">
+                            <span class="showcase-index">01</span>
+                            <div>
+                                <h4>Orlux Creative</h4>
+                                <p>Bold agency landing experience with oversized typography, cinematic pacing, and premium conversion flow.</p>
+                                <div class="showcase-tags">
+                                    <span>Brand System</span>
+                                    <span>Landing Page</span>
+                                    <span>Motion UI</span>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-up-right-from-square showcase-link-icon"></i>
+                        </div>
+                    </a>
+
+                    <a href="https://umu-caffe.web.app/" target="_blank" rel="noopener noreferrer" class="showcase-card" style="--accent: #c56a42;">
+                        <div class="showcase-preview">
+                            <div class="showcase-browser-bar">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <img src="public/project-previews/umu-caffe.png" alt="UMU Caffe website preview">
+                            <span class="showcase-corner-label">Hospitality</span>
+                        </div>
+                        <div class="showcase-copy">
+                            <span class="showcase-index">02</span>
+                            <div>
+                                <h4>UMU Caffe</h4>
+                                <p>Editorial cafe identity with warm product storytelling, refined type contrast, and soft sensory interaction.</p>
+                                <div class="showcase-tags">
+                                    <span>Hospitality</span>
+                                    <span>Art Direction</span>
+                                    <span>Responsive</span>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-up-right-from-square showcase-link-icon"></i>
+                        </div>
+                    </a>
+
+                    <a href="https://rockandblu.co.uk/" target="_blank" rel="noopener noreferrer" class="showcase-card showcase-card-signal" style="--accent: #4aa3ff;">
+                        <div class="showcase-preview showcase-preview-signal">
+                            <div class="showcase-browser-bar">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="signal-grid" aria-hidden="true"></div>
+                            <div class="signal-title">
+                                <span>Rock</span>
+                                <strong>&amp; Blu</strong>
+                            </div>
+                            <span class="showcase-corner-label">Commerce</span>
+                        </div>
+                        <div class="showcase-copy">
+                            <span class="showcase-index">03</span>
+                            <div>
+                                <h4>Rock &amp; Blu</h4>
+                                <p>Dark retail showcase direction with confident hierarchy, fast product scanning, and polished launch detail.</p>
+                                <div class="showcase-tags">
+                                    <span>Commerce</span>
+                                    <span>Fashion</span>
+                                    <span>UI Polish</span>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-up-right-from-square showcase-link-icon"></i>
+                        </div>
+                    </a>
+                </div>
+
                 <!-- FEATURED PROJECT: THIS PORTFOLIO -->
                 <div class="featured-project-card second-project reveal-up">
                      <!-- Background decoration different color -->
@@ -556,7 +612,6 @@
                             <ul class="project-features-list">
                                 <li class="project-feature-item"><i class="fas fa-cube feature-icon icon-purple"></i> <strong>3D Interactivity:</strong> Custom Blender models rendered via Three.js with raycasting interaction.</li>
                                 <li class="project-feature-item"><i class="fas fa-tint feature-icon icon-purple"></i> <strong>Liquid Shaders:</strong> Custom GLSL ink transitions that react to scroll velocity and cursor proximity.</li>
-                                <li class="project-feature-item"><i class="fas fa-tachometer-alt feature-icon icon-purple"></i> <strong>Live Tracking:</strong> Real-time job application status fetched dynamically from Google Sheets APIs.</li>
                                 <li class="project-feature-item"><i class="fas fa-mouse-pointer feature-icon icon-purple"></i> <strong>Dynamic Cursor:</strong> Context-aware cursor system that mimics physical properties of ink holding.</li>
                             </ul>
 
@@ -613,7 +668,7 @@
                         </a>
                         <div class="dossier-verified-badge">
                             <i class="fas fa-check-circle" style="color: #00ff88;"></i>
-                            <span class="dossier-verified-text">Verified Jan 2026</span>
+                            <span class="dossier-verified-text">Verified May 2026</span>
                         </div>
                     </div>
                 </div>

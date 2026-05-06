@@ -18,27 +18,8 @@ export const lenis = new Lenis({
 });
 
 export function initScrollAnimations() {
-    
-    // --- 1. VELOCITY SKEW EFFECT (The Awwwards Feel) ---
-    const mainContent = document.querySelector('main');
-    
-    // Hook into Lenis scroll event
-    lenis.on('scroll', (e) => {
-        // e.velocity is the speed of scroll
-        // We limit it so it doesn't skew too crazy
-        const skewAmount = Math.max(Math.min(e.velocity * 0.15, 5), -5);
-        
-        // Apply skew to content
-        if (mainContent) {
-            gsap.to(mainContent, { 
-                skewY: skewAmount, 
-                duration: 0.1, 
-                ease: "power1.out" 
-            });
-        }
-    });
 
-    // --- 2. PREMIUM TEXT REVEALS (Masking instead of Fading) ---
+    // --- 1. PREMIUM TEXT REVEALS (Masking instead of Fading) ---
     // Elements needing reveal must have .reveal-text or .reveal-up class
     
     // Setup initial state for text reveals
@@ -67,7 +48,7 @@ export function initScrollAnimations() {
     });
 
 
-    // --- 3. LIGHT BEAM LOGIC ---
+    // --- 2. LIGHT BEAM LOGIC ---
     const lightBeams = document.querySelectorAll('.light-beam');
     lightBeams.forEach(beam => {
         const color = beam.getAttribute('data-color') || '#7c59f0';
@@ -96,7 +77,7 @@ export function initScrollAnimations() {
         });
     });
 
-    // --- 4. PARALLAX EFFECT ---
+    // --- 3. PARALLAX EFFECT ---
     const scrollReactors = document.querySelectorAll('.scroll-reactor');
     scrollReactors.forEach(el => {
         const speed = parseFloat(el.getAttribute('data-speed')) || 0.05;
@@ -113,7 +94,7 @@ export function initScrollAnimations() {
         }
     });
 
-    // --- 5. START BUTTON LOGIC ---
+    // --- 4. START BUTTON LOGIC ---
     const startScrollBtn = document.getElementById('start-scroll-btn');
     if(startScrollBtn) {
         startScrollBtn.addEventListener('click', (e) => {

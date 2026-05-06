@@ -2,7 +2,6 @@
 main { 
     position: relative; 
     z-index: 10; 
-    /* The skew transform happens here in JS, which is why we moved fixed elements OUT of main */
 }
 
 .section {

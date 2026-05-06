@@ -40,7 +40,7 @@ export function initUI() {
     window.addEventListener('mousemove', moveCursor);
 
     // Interactive Hover States
-    const interactiveElements = document.querySelectorAll('a, button, .switch, .project-card, .gallery-item, .work-banner-content, .project-row, h1, h2, h3');
+    const interactiveElements = document.querySelectorAll('a, button, .switch, .project-card, .showcase-card, .gallery-item, .work-banner-content, .project-row, h1, h2, h3');
     
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => { if(cursorFollower) cursorFollower.classList.add('hovered'); });

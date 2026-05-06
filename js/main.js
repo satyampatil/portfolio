@@ -9,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger);
 // --- MODULE IMPORTS ---
 import { lenis, initScrollAnimations } from './utils/scroll.js';
 import { initUI } from './utils/ui.js';
-import { initTracker } from './utils/tracker.js'; 
 import { initLoader } from './utils/loader.js';
 import { initInkBackground } from './utils/ink.js'; 
 import { scene, camera, renderer, sunLight, spotLight, warmLight } from './scene/setup.js';
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initLoader(); 
     initUI();
     initScrollAnimations();
-    initTracker();
     
     // --- MOBILE WARNING LOGIC ---
     const mobileWarning = document.getElementById('mobile-warning');
