@@ -220,14 +220,22 @@ export function initUI() {
     window.addEventListener('load', () => {
         // Staggered reveal of hero elements
         const timeline = gsap.timeline({ delay: 0.2 });
+        const isMobileView = window.matchMedia('(max-width: 768px)').matches;
 
         timeline.from('.nav-brand', { y: -20, opacity: 0, duration: 1, ease: "power4.out" })
                 .from('.nav-links li', { y: -20, opacity: 0, stagger: 0.1, duration: 1, ease: "power4.out" }, "-=0.8")
-                .from('.nav-actions', { y: -20, opacity: 0, duration: 1, ease: "power4.out" }, "-=0.9")
-                .from('.hero-pos-top', { y: 50, opacity: 0, duration: 1.2, ease: "power4.out" }, "-=0.5")
-                .from('.giant-first-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1")
-                .from('.giant-last-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1.3")
-                .from('.hero-pos-bottom', { y: 30, opacity: 0, duration: 1, ease: "power4.out" }, "-=1");
+                .from('.nav-actions', { y: -20, opacity: 0, duration: 1, ease: "power4.out" }, "-=0.9");
+
+        if (isMobileView) {
+            timeline.from('.hero-pos-top', { opacity: 0, duration: 0.8, ease: "power3.out" }, "-=0.3")
+                    .from('.giant-first-name', { opacity: 0, duration: 0.9, ease: "power3.out" }, "-=0.55")
+                    .from('.giant-last-name', { opacity: 0, duration: 0.9, ease: "power3.out" }, "-=0.65");
+        } else {
+            timeline.from('.hero-pos-top', { y: 50, opacity: 0, duration: 1.2, ease: "power4.out" }, "-=0.5")
+                    .from('.giant-first-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1")
+                    .from('.giant-last-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1.3")
+                    .from('.hero-pos-bottom', { y: 30, opacity: 0, duration: 1, ease: "power4.out" }, "-=1");
+        }
     });
 
     // --- EXPERIENCE TOGGLE ---

@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 // --- MODULE IMPORTS ---
 import { lenis, initScrollAnimations } from './utils/scroll.js';
 import { initUI } from './utils/ui.js';
-import { initLoader } from './utils/loader.js';
+import { initLoader, updateLoadProgress } from './utils/loader.js';
 import { initInkBackground } from './utils/ink.js'; 
 import { scene, camera, renderer, sunLight, spotLight, warmLight } from './scene/setup.js';
 import { loadDeskModel, deskState } from './scene/desk.js';
@@ -20,20 +20,13 @@ const LIGHT_DEBUG_MODE = false;
 
 // --- INITIALIZATION ---
 let inkEffect = null; 
+const mobileMedia = window.matchMedia('(max-width: 768px)');
+const isMobileView = () => mobileMedia.matches;
 
 document.addEventListener('DOMContentLoaded', () => {
     initLoader(); 
     initUI();
     initScrollAnimations();
-
-    const mobileWarning = document.getElementById('mobile-warning');
-    const closeWarningBtn = document.getElementById('close-mobile-warning');
-
-    if (closeWarningBtn && mobileWarning) {
-        closeWarningBtn.addEventListener('click', () => {
-            mobileWarning.style.display = 'none';
-        });
-    }
 
     inkEffect = initInkBackground(scene);
 
@@ -47,7 +40,16 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer.domElement.style.zIndex = '0'; 
     }
 
-    loadDeskModel('my_desk.glb', false); 
+    if (isMobileView()) {
+        document.body.classList.add('mobile-view');
+        updateLoadProgress(1);
+
+        if (renderer.domElement) {
+            renderer.domElement.style.display = 'none';
+        }
+    } else {
+        loadDeskModel('my_desk.glb', false);
+    }
     
     if(LIGHT_DEBUG_MODE) initLightDebugPanel();
 });
@@ -55,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
 const renderToggle = document.getElementById('render-mode');
 if(renderToggle) {
     renderToggle.addEventListener('change', (e) => {
+        if (isMobileView()) return;
+
         if(e.target.checked) {
             loadDeskModel('my_desk_colour.glb', true);
         } else {
@@ -130,41 +134,44 @@ window.addEventListener('beam-interaction', (e) => {
 
 
 // --- SCENE SCROLL TRIGGERS ---
-ScrollTrigger.create({
-    trigger: ".desk-animation-spacer",
-    start: "top bottom", 
-    end: "bottom bottom", 
-    scrub: 1, 
-    onUpdate: (self) => {
-        sceneState.deskProgress = self.progress;
-    }
-});
-
-ScrollTrigger.create({
-    trigger: ".desk-animation-spacer",
-    start: "top bottom",
-    end: "20% top",
-    scrub: true,
-    onUpdate: (self) => {
-        sceneState.heroOpacity = 1 - self.progress;
-    }
-});
-
-gsap.set("#hero-face", { opacity: 1 }); 
-
-gsap.to("#hero-face", {
-    opacity: 0,
-    ease: "power1.inOut", 
-    scrollTrigger: {
+if (!isMobileView()) {
+    ScrollTrigger.create({
         trigger: ".desk-animation-spacer",
-        start: "top bottom", 
-        end: "+=50", 
-        scrub: true 
-    }
-});
+        start: "top bottom",
+        end: "bottom bottom",
+        scrub: 1,
+        onUpdate: (self) => {
+            sceneState.deskProgress = self.progress;
+        }
+    });
+
+    ScrollTrigger.create({
+        trigger: ".desk-animation-spacer",
+        start: "top bottom",
+        end: "20% top",
+        scrub: true,
+        onUpdate: (self) => {
+            sceneState.heroOpacity = 1 - self.progress;
+        }
+    });
+
+    gsap.set("#hero-face", { opacity: 1 });
+
+    gsap.to("#hero-face", {
+        opacity: 0,
+        ease: "power1.inOut",
+        scrollTrigger: {
+            trigger: ".desk-animation-spacer",
+            start: "top bottom",
+            end: "+=50",
+            scrub: true
+        }
+    });
+}
 
 // --- 3D INTERACTIVE LABELS ---
 const labelContainer = document.createElement('div');
+labelContainer.className = 'interactive-label-layer';
 labelContainer.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:500;';
 document.body.appendChild(labelContainer);
 
@@ -254,6 +261,8 @@ window.addEventListener('mousemove', (event) => {
 });
 
 window.addEventListener('click', () => {
+    if (isMobileView()) return;
+
     if (hoveredObject) {
         const name = hoveredObject.name.toLowerCase();
         if (name === 'jzzwgjgqqvfdjsg' || name.includes('iphone') || name.includes('phone')) triggerAction('phone');
@@ -264,7 +273,22 @@ window.addEventListener('click', () => {
 
 window.addEventListener('resize', () => {
     if(inkEffect) inkEffect.resize(window.innerWidth, window.innerHeight);
+
+    if (isMobileView()) {
+        document.body.classList.add('mobile-view');
+        if (renderer.domElement) renderer.domElement.style.display = 'none';
+        labelContainer.style.display = 'none';
+    } else {
+        document.body.classList.remove('mobile-view', 'mobile-hero-hidden');
+        if (renderer.domElement) renderer.domElement.style.display = '';
+        labelContainer.style.display = '';
+    }
 });
+
+window.addEventListener('scroll', () => {
+    if (!isMobileView()) return;
+    document.body.classList.toggle('mobile-hero-hidden', window.scrollY > 40);
+}, { passive: true });
 
 // --- TRACK VISIBLE CARDS FOR INK MASK ---
 const contentCards = document.getElementsByClassName('content-box'); 
@@ -385,71 +409,81 @@ function animate(time) {
                  warmLight.visible = true;
              }
 
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(scene.children, true);
-
-            if (!interactables[0].mesh) {
-                scene.children.forEach(child => child.traverse(c => {
-                    if (c.isMesh) {
-                        const n = c.name.toLowerCase();
-                        if (n === 'jzzwgjgqqvfdjsg' || n.includes('iphone') || n.includes('phone')) interactables[0].mesh = c;
-                        if (n === 'object_24_custom_0' || ((n.includes('monitor')) && !n.includes('stand'))) interactables[1].mesh = c;
-                        if (n.includes('lamp') || n.includes('bulb')) interactables[2].mesh = c;
-                    }
-                }));
-                
+            if (isMobileView()) {
+                hoveredObject = null;
+                targetIntensity = 0;
+                labelContainer.style.display = 'none';
                 interactables.forEach(item => {
-                    if (item.mesh && !item.label) item.label = createLabel(item.name, item);
+                    if (item.label) item.label.element.style.opacity = '0';
                 });
-            }
+            } else {
+                labelContainer.style.display = '';
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(scene.children, true);
 
-            interactables.forEach(item => {
-                if (item.mesh && item.label && deskState.model.visible) {
-                    const pos = item.mesh.getWorldPosition(new THREE.Vector3());
-                    pos.y += 0.2; 
-                    pos.project(camera);
+                if (!interactables[0].mesh) {
+                    scene.children.forEach(child => child.traverse(c => {
+                        if (c.isMesh) {
+                            const n = c.name.toLowerCase();
+                            if (n === 'jzzwgjgqqvfdjsg' || n.includes('iphone') || n.includes('phone')) interactables[0].mesh = c;
+                            if (n === 'object_24_custom_0' || ((n.includes('monitor')) && !n.includes('stand'))) interactables[1].mesh = c;
+                            if (n.includes('lamp') || n.includes('bulb')) interactables[2].mesh = c;
+                        }
+                    }));
 
-                    const baseX = (pos.x * .5 + .5) * window.innerWidth;
-                    const baseY = (-(pos.y * .5) + .5) * window.innerHeight;
-                    
-                    const anchorX = baseX + item.anchorAdj.x;
-                    const anchorY = baseY + item.anchorAdj.y;
-
-                    item.label.element.style.transform = `translate(${anchorX}px, ${anchorY}px)`;
-                    item.label.box.style.transform = `translate(${item.labelOffset.x}px, ${item.labelOffset.y}px)`;
-
-                    const dist = Math.sqrt(item.labelOffset.x**2 + item.labelOffset.y**2);
-                    const angle = Math.atan2(item.labelOffset.y, item.labelOffset.x) * (180 / Math.PI);
-                    item.label.line.style.width = `${dist}px`;
-                    item.label.line.style.transform = `rotate(${angle}deg)`;
-                    
-                    item.label.element.style.opacity = (progress > 0.1 && progress < 0.9) ? '1' : '0';
+                    interactables.forEach(item => {
+                        if (item.mesh && !item.label) item.label = createLabel(item.name, item);
+                    });
                 }
-            });
 
-            if (intersects.length > 0) {
-                const hit = intersects.find(i => {
-                    const n = i.object.name.toLowerCase();
-                    return (n === 'jzzwgjgqqvfdjsg' || n.includes('iphone') || n.includes('phone')) ||
-                           ((n === 'object_24_custom_0' || n.includes('monitor')) && !n.includes('ipad')) ||
-                           (n.includes('lamp') || n.includes('bulb'));
+                interactables.forEach(item => {
+                    if (item.mesh && item.label && deskState.model.visible) {
+                        const pos = item.mesh.getWorldPosition(new THREE.Vector3());
+                        pos.y += 0.2;
+                        pos.project(camera);
+
+                        const baseX = (pos.x * .5 + .5) * window.innerWidth;
+                        const baseY = (-(pos.y * .5) + .5) * window.innerHeight;
+
+                        const anchorX = baseX + item.anchorAdj.x;
+                        const anchorY = baseY + item.anchorAdj.y;
+
+                        item.label.element.style.transform = `translate(${anchorX}px, ${anchorY}px)`;
+                        item.label.box.style.transform = `translate(${item.labelOffset.x}px, ${item.labelOffset.y}px)`;
+
+                        const dist = Math.sqrt(item.labelOffset.x**2 + item.labelOffset.y**2);
+                        const angle = Math.atan2(item.labelOffset.y, item.labelOffset.x) * (180 / Math.PI);
+                        item.label.line.style.width = `${dist}px`;
+                        item.label.line.style.transform = `rotate(${angle}deg)`;
+
+                        item.label.element.style.opacity = (progress > 0.1 && progress < 0.9) ? '1' : '0';
+                    }
                 });
 
-                if (hit) {
-                    hoveredObject = hit.object;
-                    document.body.style.cursor = 'pointer'; 
-                    if(spotLight.visible && (hit.object.name.toLowerCase().includes('lamp') || hit.object.name.toLowerCase().includes('bulb'))) {
-                        targetIntensity = 50;
+                if (intersects.length > 0) {
+                    const hit = intersects.find(i => {
+                        const n = i.object.name.toLowerCase();
+                        return (n === 'jzzwgjgqqvfdjsg' || n.includes('iphone') || n.includes('phone')) ||
+                               ((n === 'object_24_custom_0' || n.includes('monitor')) && !n.includes('ipad')) ||
+                               (n.includes('lamp') || n.includes('bulb'));
+                    });
+
+                    if (hit) {
+                        hoveredObject = hit.object;
+                        document.body.style.cursor = 'pointer';
+                        if(spotLight.visible && (hit.object.name.toLowerCase().includes('lamp') || hit.object.name.toLowerCase().includes('bulb'))) {
+                            targetIntensity = 50;
+                        }
+                    } else {
+                        hoveredObject = null;
+                        document.body.style.cursor = 'none';
+                        targetIntensity = 0;
                     }
                 } else {
                     hoveredObject = null;
-                    document.body.style.cursor = 'none'; 
+                    document.body.style.cursor = 'none';
                     targetIntensity = 0;
                 }
-            } else {
-                hoveredObject = null;
-                document.body.style.cursor = 'none';
-                targetIntensity = 0; 
             }
         } else {
              deskState.model.visible = false;

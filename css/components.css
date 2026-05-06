@@ -492,6 +492,15 @@ input:checked + .slider:before { transform: translateX(18px); background-color: 
         gap: 10px;
     }
 
+    .render-toggle-wrapper {
+        display: none;
+    }
+
+    .interactive-label-layer,
+    .interactive-label {
+        display: none !important;
+    }
+
     .render-toggle-wrapper,
     .nav-cta {
         min-height: 54px;
@@ -1406,58 +1415,4 @@ body:hover #cursor-follower.hovered {
 }
 .experiment-btn-wrapper {
     margin-top: 30px;
-}
-
-/* --- MOBILE WARNING POPUP --- */
-.mobile-warning-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 50000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    background: rgba(0,0,0,0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
-
-.mobile-warning-box {
-    width: min(340px, 100%);
-    padding: 40px 30px;
-    text-align: center;
-    background: #0a0a0a;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 12px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.8);
-}
-
-.mobile-warning-icon {
-    font-size: 2rem;
-    color: #7c59f0;
-    margin-bottom: 15px;
-}
-
-.mobile-warning-box h3 {
-    font-family: 'Syne', sans-serif;
-    margin: 0 0 10px;
-    color: #fff;
-    font-size: 1.6rem;
-}
-
-.mobile-warning-box p {
-    font-size: 0.9rem;
-    color: #aaa;
-    margin-bottom: 25px;
-}
-
-.mobile-warning-box .cta-btn {
-    font-size: 0.8rem;
-    padding: 10px 20px;
-}
-
-@media (max-width: 768px) {
-    .mobile-warning-overlay {
-        display: flex;
-    }
 }
