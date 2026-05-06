@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Satyam Patil | Mobile Experiment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --panel: #10100e;
+            --ink: #f4efe6;
+            --muted: rgba(244, 239, 230, 0.62);
+            --line: rgba(244, 239, 230, 0.13);
+            --acid: #d8ff4f;
+            --ember: #ff6b35;
+            --sea: #6ff6d3;
+            --pad: clamp(18px, 5vw, 24px);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+            scroll-behavior: smooth;
+            background: #000;
+        }
+
+        body {
+            min-height: 100%;
+            margin: 0;
+            font-family: Archivo, Inter, system-ui, sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 18% 0%, rgba(216, 255, 79, 0.14), transparent 22rem),
+                radial-gradient(circle at 100% 18%, rgba(255, 107, 53, 0.11), transparent 20rem),
+                linear-gradient(180deg, #060606 0%, #020202 72%);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 44px 44px;
+            mask-image: linear-gradient(to bottom, #000 0%, transparent 75%);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            overflow: hidden;
+            background: rgba(5,5,5,0.72);
+        }
+
+        .grain {
+            position: fixed;
+            inset: -50%;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.23;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+            animation: grain 0.28s steps(2) infinite;
+        }
+
+        @keyframes grain {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-5%, 3%, 0); }
+        }
+
+        .topbar {
+            position: fixed;
+            top: max(12px, env(safe-area-inset-top));
+            left: 12px;
+            right: 12px;
+            z-index: 30;
+            width: auto;
+            max-width: 456px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 10px 10px 14px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(10,10,9,0.72);
+            backdrop-filter: blur(22px);
+            box-shadow: 0 18px 60px rgba(0,0,0,0.48);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #050505;
+            background: var(--acid);
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .brand strong,
+        .brand span {
+            display: block;
+        }
+
+        .brand strong {
+            font-size: 0.86rem;
+            line-height: 1;
+            letter-spacing: -0.03em;
+        }
+
+        .brand span {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 0.58rem;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+        }
+
+        .menu-toggle {
+            width: 38px;
+            height: 38px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            position: relative;
+        }
+
+        .menu-toggle span {
+            position: absolute;
+            left: 10px;
+            width: 18px;
+            height: 2px;
+            border-radius: 999px;
+            background: var(--ink);
+        }
+
+        .menu-toggle span:first-child {
+            top: 14px;
+        }
+
+        .menu-toggle span:last-child {
+            top: 22px;
+        }
+
+        .menu-panel {
+            position: fixed;
+            top: 72px;
+            left: 12px;
+            right: 12px;
+            z-index: 29;
+            width: auto;
+            max-width: 456px;
+            margin: 0 auto;
+            transform: translateY(-12px);
+            visibility: hidden;
+            opacity: 0;
+            padding: 20px;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background: rgba(9,9,8,0.96);
+            backdrop-filter: blur(22px);
+            transition: opacity 240ms ease, transform 240ms ease, visibility 240ms ease;
+        }
+
+        .menu-panel.open {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .menu-panel a {
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--line);
+            font-size: 1.55rem;
+            font-weight: 900;
+            letter-spacing: -0.07em;
+        }
+
+        .menu-panel a span {
+            color: var(--acid);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+        }
+
+        .hero {
+            min-height: 100svh;
+            position: relative;
+            padding: 112px var(--pad) 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            isolation: isolate;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 82px 0 auto;
+            height: 62svh;
+            z-index: -2;
+            background:
+                linear-gradient(90deg, rgba(216,255,79,0.15) 1px, transparent 1px),
+                linear-gradient(rgba(216,255,79,0.11) 1px, transparent 1px);
+            background-size: 22px 22px;
+            transform: skewY(-10deg) translateY(42px);
+            opacity: 0.32;
+            mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 74%, transparent);
+        }
+
+        .hero-media {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            z-index: -1;
+            width: min(108vw, 520px);
+            transform: translateX(-50%);
+            filter: saturate(0.88) contrast(1.08) drop-shadow(0 32px 60px rgba(0,0,0,0.72));
+            opacity: 0.82;
+        }
+
+        .eyebrow {
+            width: max-content;
+            padding: 8px 12px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--acid);
+            background: rgba(216,255,79,0.07);
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            margin: 22px 0 0;
+            font-size: clamp(3.85rem, 18vw, 6.05rem);
+            line-height: 0.78;
+            letter-spacing: -0.1em;
+            text-transform: uppercase;
+        }
+
+        .hero-title span {
+            display: block;
+        }
+
+        .hero-note {
+            max-width: 285px;
+            margin: 18px 0 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        .hero-actions {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .button {
+            min-height: 52px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .button.primary {
+            color: #080806;
+            background: var(--acid);
+        }
+
+        .button.ghost {
+            padding-inline: 18px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.05);
+        }
+
+        section {
+            padding: 78px var(--pad);
+            position: relative;
+        }
+
+        .section-kicker {
+            color: var(--acid);
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            margin: 12px 0 24px;
+            font-size: clamp(2.7rem, 13vw, 4.4rem);
+            line-height: 0.88;
+            letter-spacing: -0.09em;
+            text-transform: uppercase;
+        }
+
+        .body-copy {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.72;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            margin-top: 28px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 26px;
+            background: var(--line);
+        }
+
+        .metric {
+            min-height: 118px;
+            padding: 18px;
+            background: rgba(255,255,255,0.045);
+        }
+
+        .metric strong {
+            display: block;
+            font-size: 2.6rem;
+            line-height: 0.9;
+            letter-spacing: -0.08em;
+        }
+
+        .metric span {
+            display: block;
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 0.72rem;
+            line-height: 1.35;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .skill-rail,
+        .work-rail,
+        .cert-rail {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            margin-inline: calc(var(--pad) * -1);
+            padding: 4px var(--pad) 12px;
+            scrollbar-width: none;
+        }
+
+        .skill-rail::-webkit-scrollbar,
+        .work-rail::-webkit-scrollbar,
+        .cert-rail::-webkit-scrollbar {
+            display: none;
+        }
+
+        .skill {
+            flex: 0 0 auto;
+            padding: 12px 16px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--muted);
+            background: rgba(255,255,255,0.045);
+            font-size: 0.84rem;
+            font-weight: 700;
+        }
+
+        .timeline {
+            border-top: 1px solid var(--line);
+        }
+
+        .role {
+            padding: 22px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .role time {
+            color: var(--acid);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .role h3 {
+            margin: 8px 0 6px;
+            font-size: 1.42rem;
+            line-height: 1;
+            letter-spacing: -0.05em;
+        }
+
+        .role p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .work-card,
+        .cert-card {
+            flex: 0 0 min(84vw, 360px);
+            scroll-snap-align: start;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .work-image {
+            height: 250px;
+            background: #111;
+            overflow: hidden;
+        }
+
+        .work-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .work-card:nth-child(1) .work-image img {
+            object-position: left top;
+        }
+
+        .work-copy {
+            padding: 20px;
+        }
+
+        .work-copy span {
+            color: var(--acid);
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .work-copy h3 {
+            margin: 10px 0;
+            font-size: 1.8rem;
+            line-height: 0.96;
+            letter-spacing: -0.07em;
+        }
+
+        .work-copy p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .rock-preview {
+            height: 250px;
+            display: grid;
+            place-items: center;
+            background:
+                linear-gradient(135deg, rgba(216,255,79,0.16), transparent),
+                #080808;
+        }
+
+        .rock-preview strong {
+            font-size: 4.1rem;
+            line-height: 0.82;
+            letter-spacing: -0.12em;
+            text-transform: uppercase;
+        }
+
+        .rock-preview em {
+            color: transparent;
+            -webkit-text-stroke: 1px var(--ink);
+            font-style: normal;
+        }
+
+        .cert-card {
+            min-height: 180px;
+            padding: 22px;
+        }
+
+        .cert-card span {
+            color: var(--acid);
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .cert-card h3 {
+            margin: 18px 0 10px;
+            font-size: 1.34rem;
+            line-height: 1.05;
+            letter-spacing: -0.05em;
+        }
+
+        .cert-card p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .contact-card {
+            padding: 24px;
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            background:
+                radial-gradient(circle at top right, rgba(216,255,79,0.18), transparent 13rem),
+                rgba(255,255,255,0.055);
+        }
+
+        .contact-card h2 {
+            margin: 0 0 18px;
+            font-size: clamp(2.4rem, 12vw, 4rem);
+            line-height: 0.88;
+            letter-spacing: -0.09em;
+            text-transform: uppercase;
+        }
+
+        .contact-links {
+            display: grid;
+            gap: 10px;
+        }
+
+        .footer {
+            padding: 22px var(--pad) max(28px, env(safe-area-inset-bottom));
+            color: rgba(244,239,230,0.38);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 520ms ease, transform 520ms ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (min-width: 700px) {
+            body {
+                background: #000;
+            }
+
+            .page {
+                min-height: 100vh;
+                border-inline: 1px solid var(--line);
+                box-shadow: 0 0 120px rgba(216,255,79,0.08);
+            }
+
+            .topbar,
+            .menu-panel {
+                left: 50%;
+                right: auto;
+                width: min(calc(100% - 24px), 456px);
+                transform: translateX(-50%);
+            }
+
+            .menu-panel {
+                transform: translate(-50%, -12px);
+            }
+
+            .menu-panel.open {
+                transform: translate(-50%, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+
+    <header class="topbar">
+        <a href="#top" class="brand" aria-label="Satyam Patil mobile experiment home">
+            <span class="brand-mark">SP</span>
+            <span>
+                <strong>Satyam Patil</strong>
+                <span>Mobile dossier</span>
+            </span>
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <nav class="menu-panel" aria-label="Mobile navigation">
+        <a href="#profile">Profile <span>01</span></a>
+        <a href="#work">Work <span>02</span></a>
+        <a href="#proof">Proof <span>03</span></a>
+        <a href="#contact">Contact <span>04</span></a>
+    </nav>
+
+    <main class="page" id="top">
+        <section class="hero">
+            <img class="hero-media" src="my_photo.webp" alt="Portrait of Satyam Patil">
+            <div class="eyebrow">Data x creative systems</div>
+            <h1 class="hero-title">
+                <span>Satyam</span>
+                <span>Patil</span>
+            </h1>
+            <p class="hero-note">Anaplan architect, data analyst, and builder of sharp web experiences.</p>
+            <div class="hero-actions">
+                <a class="button primary" href="#work">View work</a>
+                <a class="button ghost" href="https://rockandblu.co.uk/" target="_blank" rel="noopener noreferrer">R&B</a>
+            </div>
+        </section>
+
+        <section id="profile" class="reveal">
+            <span class="section-kicker">Profile</span>
+            <h2 class="section-title">Built for signal, not noise.</h2>
+            <p class="body-copy">
+                I turn complex data and operational problems into usable systems. My work sits between analytics,
+                Anaplan architecture, front-end craft, and the kind of calm execution that makes teams move faster.
+            </p>
+
+            <div class="metrics">
+                <div class="metric"><strong>3+</strong><span>Years in analytics and model building</span></div>
+                <div class="metric"><strong>25+</strong><span>Users trained across planning tools</span></div>
+                <div class="metric"><strong>40%</strong><span>Manual workflow effort reduced</span></div>
+                <div class="metric"><strong>UK</strong><span>Based in Stansted, open to work</span></div>
+            </div>
+
+            <div class="skill-rail" aria-label="Skills">
+                <span class="skill">Anaplan</span>
+                <span class="skill">Data Analysis</span>
+                <span class="skill">Web Design</span>
+                <span class="skill">Operations</span>
+                <span class="skill">Stakeholders</span>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <span class="section-kicker">Experience</span>
+            <h2 class="section-title">Planning systems with floor-level discipline.</h2>
+            <div class="timeline">
+                <article class="role">
+                    <time>2021 - 2023</time>
+                    <h3>Wipro, Anaplan delivery</h3>
+                    <p>Built scalable planning models, dashboards, integrations, and training workflows across sales and workforce planning.</p>
+                </article>
+                <article class="role">
+                    <time>2025 - Present</time>
+                    <h3>Caffe Nero, operations leadership</h3>
+                    <p>Lead shifts, coach teams, manage inventory pressure, and keep customer experience moving cleanly at speed.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="work" class="reveal">
+            <span class="section-kicker">Selected work</span>
+            <h2 class="section-title">Mobile-first project cuts.</h2>
+            <div class="work-rail">
+                <a href="https://orlux-428b8.web.app/" target="_blank" rel="noopener noreferrer" class="work-card">
+                    <div class="work-image"><img src="public/project-previews/orlux.png" alt="Orlux Creative website preview"></div>
+                    <div class="work-copy">
+                        <span>Brand agency</span>
+                        <h3>Orlux Creative</h3>
+                        <p>Dark, direct, conversion-led agency presence with strong typographic control.</p>
+                    </div>
+                </a>
+
+                <a href="https://umu-caffe.web.app/" target="_blank" rel="noopener noreferrer" class="work-card">
+                    <div class="work-image"><img src="public/project-previews/umu-caffe.png" alt="UMU Caffe website preview"></div>
+                    <div class="work-copy">
+                        <span>Hospitality</span>
+                        <h3>UMU Caffe</h3>
+                        <p>Warm editorial cafe experience, rebuilt here as a high-contrast mobile showcase.</p>
+                    </div>
+                </a>
+
+                <a href="https://rockandblu.co.uk/" target="_blank" rel="noopener noreferrer" class="work-card">
+                    <div class="rock-preview"><strong>Rock<br><em>&amp; Blu</em></strong></div>
+                    <div class="work-copy">
+                        <span>Company</span>
+                        <h3>Rock &amp; Blu</h3>
+                        <p>Your strongest benchmark: sharper retail direction and brand confidence.</p>
+                    </div>
+                </a>
+
+                <a href="https://abooki.co.uk/" target="_blank" rel="noopener noreferrer" class="work-card">
+                    <div class="work-image"><img src="abooki1.png" alt="Abooki website preview"></div>
+                    <div class="work-copy">
+                        <span>AI product</span>
+                        <h3>Abooki</h3>
+                        <p>Story generation, mini-books, library interaction, and playful reading flows.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section id="proof" class="reveal">
+            <span class="section-kicker">Proof</span>
+            <h2 class="section-title">Credentials that back the craft.</h2>
+            <div class="cert-rail">
+                <a class="cert-card" href="https://drive.google.com/file/d/1MifTjckoIJKEHzqQKa5uXktTqkvM1nl-/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                    <span>Anaplan</span>
+                    <h3>Certified Solution Architect</h3>
+                    <p>Issued Jul 2023</p>
+                </a>
+                <a class="cert-card" href="https://drive.google.com/file/d/1Qsnw4IvRb0mg_qY0HPU_Hi71O8y-b6_E/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                    <span>Anaplan</span>
+                    <h3>Certified Model Builder</h3>
+                    <p>Issued Jan 2022</p>
+                </a>
+                <a class="cert-card" href="https://confirm.udacity.com/2GENL4P6" target="_blank" rel="noopener noreferrer">
+                    <span>Udacity</span>
+                    <h3>Android Developer Nanodegree</h3>
+                    <p>Issued Apr 2020</p>
+                </a>
+            </div>
+        </section>
+
+        <section id="contact" class="reveal">
+            <div class="contact-card">
+                <span class="section-kicker">Contact</span>
+                <h2>Let the work speak, then let's talk.</h2>
+                <div class="contact-links">
+                    <a class="button primary" href="mailto:satyampatildurg@gmail.com">Email Satyam</a>
+                    <a class="button ghost" href="CV_IT_Jan_2026.pdf" target="_blank" rel="noopener noreferrer">Download CV</a>
+                    <a class="button ghost" href="https://rockandblu.co.uk/" target="_blank" rel="noopener noreferrer">Visit Rock &amp; Blu</a>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            Experimental mobile direction. Dark theme. Separate from the main portfolio.
+        </footer>
+    </main>
+
+    <script>
+        const toggle = document.querySelector('.menu-toggle');
+        const panel = document.querySelector('.menu-panel');
+        const links = document.querySelectorAll('.menu-panel a');
+
+        toggle.addEventListener('click', () => {
+            const open = panel.classList.toggle('open');
+            toggle.setAttribute('aria-expanded', String(open));
+        });
+
+        links.forEach((link) => {
+            link.addEventListener('click', () => {
+                panel.classList.remove('open');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.14 });
+
+        document.querySelectorAll('.reveal').forEach((item) => observer.observe(item));
+    </script>
+</body>
+</html>

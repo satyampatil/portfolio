@@ -25,11 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initLoader(); 
     initUI();
     initScrollAnimations();
-    
-    // --- MOBILE WARNING LOGIC ---
+
     const mobileWarning = document.getElementById('mobile-warning');
     const closeWarningBtn = document.getElementById('close-mobile-warning');
-    
+
     if (closeWarningBtn && mobileWarning) {
         closeWarningBtn.addEventListener('click', () => {
             mobileWarning.style.display = 'none';

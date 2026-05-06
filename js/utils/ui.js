@@ -3,11 +3,69 @@ import gsap from 'gsap';
 export function initUI() {
     const cursorFollower = document.getElementById('cursor-follower');
     const navbar = document.querySelector('.navbar');
+    const menuToggle = document.querySelector('.nav-menu-toggle');
+    const navPanel = document.getElementById('site-menu');
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
     let lastScrollY = window.scrollY;
+
+    const closeMenu = () => {
+        if (!navbar || !menuToggle) return;
+        navbar.classList.remove('menu-open');
+        document.body.classList.remove('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+    };
+
+    if (menuToggle && navbar && navPanel) {
+        menuToggle.addEventListener('click', () => {
+            const isOpen = navbar.classList.toggle('menu-open');
+            document.body.classList.toggle('menu-open', isOpen);
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
+            if (isOpen) navbar.classList.remove('nav-hidden');
+        });
+
+        navPanel.addEventListener('click', (event) => {
+            const target = event.target.closest('a');
+            if (target) closeMenu();
+        });
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') closeMenu();
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 860) closeMenu();
+        });
+    }
+
+    const updateActiveNav = () => {
+        if (!navLinks.length) return;
+
+        let currentId = 'hero';
+        document.querySelectorAll('main section[id]').forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top <= window.innerHeight * 0.35 && rect.bottom > window.innerHeight * 0.2) {
+                currentId = section.id;
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.toggle('is-active', link.getAttribute('href') === `#${currentId}`);
+        });
+    };
+
+    updateActiveNav();
 
     // --- SMART NAVBAR LOGIC ---
     window.addEventListener('scroll', () => {
+        if (!navbar) return;
         const currentScrollY = window.scrollY;
+        updateActiveNav();
+
+        if (navbar.classList.contains('menu-open')) {
+            navbar.classList.remove('nav-hidden');
+            lastScrollY = currentScrollY;
+            return;
+        }
         
         // Don't hide at very top
         if (currentScrollY < 50) {
@@ -48,7 +106,7 @@ export function initUI() {
     });
 
     // --- MAGNETIC BUTTONS ---
-    const magneticElements = document.querySelectorAll('.cta-btn, .nav-links li a, .social-links a, .work-banner-content');
+    const magneticElements = document.querySelectorAll('.cta-btn, .nav-links li a, .nav-brand, .nav-cta, .social-links a, .work-banner-content');
     magneticElements.forEach((el) => {
         el.addEventListener('mousemove', (e) => {
             const rect = el.getBoundingClientRect();
@@ -163,8 +221,9 @@ export function initUI() {
         // Staggered reveal of hero elements
         const timeline = gsap.timeline({ delay: 0.2 });
 
-        timeline.from('.nav-logo', { y: -20, opacity: 0, duration: 1, ease: "power4.out" })
+        timeline.from('.nav-brand', { y: -20, opacity: 0, duration: 1, ease: "power4.out" })
                 .from('.nav-links li', { y: -20, opacity: 0, stagger: 0.1, duration: 1, ease: "power4.out" }, "-=0.8")
+                .from('.nav-actions', { y: -20, opacity: 0, duration: 1, ease: "power4.out" }, "-=0.9")
                 .from('.hero-pos-top', { y: 50, opacity: 0, duration: 1.2, ease: "power4.out" }, "-=0.5")
                 .from('.giant-first-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1")
                 .from('.giant-last-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1.3")
