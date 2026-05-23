@@ -13,6 +13,17 @@
     background-size: 40px 40px;
 }
 
+#loader-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    min-height: 100svh;
+    display: block;
+    pointer-events: none;
+    z-index: 29999;
+}
+
 .loader-content {
     text-align: center;
     width: 300px;
@@ -600,7 +611,7 @@ body:hover #cursor-follower.hovered {
 }
 
 @media (max-width: 768px) {
-    .content-box { padding: 30px; width: 100%; }
+    .content-box { box-sizing: border-box; padding: 30px; width: 100%; }
 }
 
 /* --- BUTTONS & CHIPS --- */
@@ -1193,14 +1204,45 @@ body:hover #cursor-follower.hovered {
 .gallery-layout-4 .g-item-4 { grid-column: span 8; grid-row: span 1; }
 
 @media (max-width: 768px) {
+    .featured-project-card {
+        padding: 22px;
+        margin-bottom: 36px;
+    }
+
+    .featured-project-card.second-project {
+        margin-top: 28px;
+    }
+
+    .project-content-flex {
+        gap: 18px;
+    }
+
+    .project-info-col {
+        min-width: 0;
+    }
+
+    .project-title {
+        font-size: clamp(2rem, 10vw, 2.45rem);
+    }
+
     .project-showcase-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
-        margin-bottom: 50px;
+        gap: 14px;
+        margin-bottom: 28px;
     }
 
     .showcase-card-large {
         grid-row: auto;
+    }
+
+    .showcase-card:hover {
+        transform: none;
+        border-color: rgba(255,255,255,0.09);
+        background: rgba(255,255,255,0.035);
+    }
+
+    .showcase-card:hover::before {
+        opacity: 0;
     }
 
     .showcase-copy {
@@ -1219,8 +1261,18 @@ body:hover #cursor-follower.hovered {
         aspect-ratio: 4 / 3;
     }
 
+    .showcase-card:hover .showcase-preview img {
+        filter: grayscale(100%) contrast(1.15) brightness(0.72);
+        transform: scale(1.01);
+    }
+
+    .showcase-card:hover .showcase-link-icon {
+        transform: translate(-4px, 4px);
+        opacity: 0.8;
+    }
+
     .showcase-preview-signal {
-        min-height: 240px;
+        min-height: 210px;
     }
 
     .project-gallery { display: flex; flex-direction: column; gap: 10px; border: none; background: transparent; }
