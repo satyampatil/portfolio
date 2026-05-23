@@ -8,6 +8,12 @@ export function initUI() {
     const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
     let lastScrollY = window.scrollY;
 
+    const updateScrollProgress = () => {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+        document.documentElement.style.setProperty('--scroll-progress', progress.toFixed(4));
+    };
+
     const closeMenu = () => {
         if (!navbar || !menuToggle) return;
         navbar.classList.remove('menu-open');
@@ -34,6 +40,7 @@ export function initUI() {
 
         window.addEventListener('resize', () => {
             if (window.innerWidth > 860) closeMenu();
+            updateScrollProgress();
         });
     }
 
@@ -54,12 +61,14 @@ export function initUI() {
     };
 
     updateActiveNav();
+    updateScrollProgress();
 
     // --- SMART NAVBAR LOGIC ---
     window.addEventListener('scroll', () => {
         if (!navbar) return;
         const currentScrollY = window.scrollY;
         updateActiveNav();
+        updateScrollProgress();
 
         if (navbar.classList.contains('menu-open')) {
             navbar.classList.remove('nav-hidden');
@@ -98,7 +107,7 @@ export function initUI() {
     window.addEventListener('mousemove', moveCursor);
 
     // Interactive Hover States
-    const interactiveElements = document.querySelectorAll('a, button, .switch, .project-card, .showcase-card, .gallery-item, .work-banner-content, .project-row, h1, h2, h3');
+    const interactiveElements = document.querySelectorAll('a, button, .switch, .project-card, .showcase-card, .gallery-item, .work-banner-content, .project-row, .proof-grid div, .cert-card, h1, h2, h3');
     
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => { if(cursorFollower) cursorFollower.classList.add('hovered'); });
@@ -106,7 +115,7 @@ export function initUI() {
     });
 
     // --- MAGNETIC BUTTONS ---
-    const magneticElements = document.querySelectorAll('.cta-btn, .nav-links li a, .nav-brand, .nav-cta, .social-links a, .work-banner-content');
+    const magneticElements = document.querySelectorAll('.cta-btn, .nav-links li a, .nav-brand, .nav-cta, .hero-scroll-cue, .social-links a, .work-banner-content');
     magneticElements.forEach((el) => {
         el.addEventListener('mousemove', (e) => {
             const rect = el.getBoundingClientRect();
@@ -229,11 +238,13 @@ export function initUI() {
         if (isMobileView) {
             timeline.from('.hero-pos-top', { opacity: 0, duration: 0.8, ease: "power3.out" }, "-=0.3")
                     .from('.giant-first-name', { opacity: 0, duration: 0.9, ease: "power3.out" }, "-=0.55")
-                    .from('.giant-last-name', { opacity: 0, duration: 0.9, ease: "power3.out" }, "-=0.65");
+                    .from('.giant-last-name', { opacity: 0, duration: 0.9, ease: "power3.out" }, "-=0.65")
+                    .from('.hero-meta-strip, .hero-scroll-cue', { opacity: 0, duration: 0.7, stagger: 0.08, ease: "power3.out" }, "-=0.4");
         } else {
             timeline.from('.hero-pos-top', { y: 50, opacity: 0, duration: 1.2, ease: "power4.out" }, "-=0.5")
                     .from('.giant-first-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1")
                     .from('.giant-last-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1.3")
+                    .from('.hero-meta-strip, .hero-scroll-cue', { y: 24, opacity: 0, duration: 1, stagger: 0.08, ease: "power4.out" }, "-=0.85")
                     .from('.hero-pos-bottom', { y: 30, opacity: 0, duration: 1, ease: "power4.out" }, "-=1");
         }
     });

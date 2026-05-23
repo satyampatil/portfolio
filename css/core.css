@@ -1,11 +1,25 @@
 /* --- FONTS & IMPORTS --- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@400;700;800&display=swap');
 
+/* --- DESIGN TOKENS --- */
+:root {
+    --ink: #030303;
+    --panel: rgba(7, 8, 12, 0.64);
+    --line: rgba(255,255,255,0.12);
+    --muted: rgba(224,224,224,0.62);
+    --ice: #b8f5ff;
+    --cyan: #00ffff;
+    --violet: #7c59f0;
+    --magenta: #ff0088;
+    --amber: #f2b84b;
+}
+
 /* --- CORE LAYOUT --- */
 html {
     height: 100%;
     width: 100%;
     overflow-x: hidden; /* Critical */
+    background: var(--ink);
 }
 
 body {
@@ -13,13 +27,39 @@ body {
     width: 100%;
     margin: 0; 
     padding: 0;
-    background-color: #030303; /* Deepest black for contrast */
+    background:
+        linear-gradient(180deg, rgba(184,245,255,0.035) 0%, rgba(3,3,3,0) 26%),
+        linear-gradient(115deg, rgba(124,89,240,0.1), rgba(0,255,255,0.035) 38%, rgba(255,0,136,0.06) 72%, rgba(3,3,3,0) 100%),
+        #030303;
     cursor: none; 
     font-family: 'Inter', sans-serif;
     color: #e0e0e0; 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden; /* Double safety */
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.032) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.026) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent 72%);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: auto 0 0;
+    height: 38vh;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(to top, #030303 18%, rgba(3,3,3,0));
 }
 
 /* --- CUSTOM SCROLLBAR (BRUTAL MINIMALISM) --- */
@@ -48,6 +88,55 @@ html.lenis { height: auto; }
 body.no-scroll {
     overflow: hidden;
     height: 100vh;
+}
+
+.scroll-progress {
+    position: fixed;
+    top: 50%;
+    right: 22px;
+    width: 2px;
+    height: min(240px, 34vh);
+    transform: translateY(-50%);
+    z-index: 10020;
+    background: rgba(255,255,255,0.1);
+    pointer-events: none;
+}
+
+.scroll-progress span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: calc(var(--scroll-progress, 0) * 100%);
+    background: linear-gradient(to bottom, var(--cyan), var(--violet), var(--magenta));
+    box-shadow: 0 0 18px rgba(0,255,255,0.35);
+}
+
+.site-orbit {
+    position: fixed;
+    right: 28px;
+    bottom: 22px;
+    z-index: 10010;
+    display: grid;
+    gap: 4px;
+    padding: 10px 0;
+    color: rgba(255,255,255,0.72);
+    font-family: 'Inter', sans-serif;
+    text-align: right;
+    pointer-events: none;
+}
+
+.site-orbit span {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ice);
+}
+
+.site-orbit strong {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
 }
 
 /* --- GRAIN OVERLAY (Active Cinematic Texture) --- */
@@ -84,4 +173,40 @@ body.no-scroll {
 ::selection {
     background: #7c59f0;
     color: #fff;
+}
+
+@media (max-width: 768px) {
+    body {
+        cursor: auto;
+    }
+
+    .scroll-progress {
+        top: auto;
+        right: 16px;
+        left: 16px;
+        bottom: 0;
+        width: auto;
+        height: 2px;
+        transform: none;
+    }
+
+    .scroll-progress span {
+        width: calc(var(--scroll-progress, 0) * 100%);
+        height: 100%;
+    }
+
+    .site-orbit {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
 }
