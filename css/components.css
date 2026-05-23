@@ -1638,7 +1638,10 @@ body:hover #cursor-follower.hovered {
 
     .cert-grid {
         position: relative;
-        display: flex;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: min(78vw, 310px);
+        grid-template-rows: repeat(3, minmax(138px, auto));
         gap: 10px;
         margin-right: -22px;
         padding: 46px 22px 14px 0;
@@ -1670,8 +1673,7 @@ body:hover #cursor-follower.hovered {
     }
 
     .cert-card {
-        flex: 0 0 min(78vw, 310px);
-        min-height: 190px;
+        min-height: 138px;
         display: grid;
         align-content: space-between;
         scroll-snap-align: start;
@@ -1686,11 +1688,11 @@ body:hover #cursor-follower.hovered {
     }
 
     .cert-title {
-        font-size: 1.15rem;
+        font-size: 1rem;
     }
 
     .cert-icon {
-        font-size: 1.35rem;
+        font-size: 1.15rem;
     }
 
     .cert-issuer {
