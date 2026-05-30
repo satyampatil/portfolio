@@ -347,6 +347,12 @@ function updateInkMaskLogic(scrollPos) {
     // Grow cursor to 60px when scrolling from top until ink expands (hits first content)
     const cursorFollower = document.getElementById('cursor-follower');
     if (cursorFollower) {
+       if (isMobileView()) {
+           cursorFollower.style.display = 'none';
+           return;
+       }
+
+       cursorFollower.style.display = '';
        // Check if we are in the intro transition phase (scrolled > 10px but not yet finished desk animation)
        // And ensuring ink hasn't found a content card yet.
        // FIXED: Increased threshold to 1.01 so it doesn't shrink before the ink finds the first section

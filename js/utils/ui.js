@@ -6,7 +6,9 @@ export function initUI() {
     const menuToggle = document.querySelector('.nav-menu-toggle');
     const navPanel = document.getElementById('site-menu');
     const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    const finePointerMedia = window.matchMedia('(hover: hover) and (pointer: fine)');
     let lastScrollY = window.scrollY;
+    const hasCustomCursor = () => finePointerMedia.matches && window.innerWidth > 768;
 
     const updateScrollProgress = () => {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -97,27 +99,30 @@ export function initUI() {
 
 
     // --- CURSOR LOGIC ---
-    const moveCursor = (e) => {
-        if(!cursorFollower) return;
-        gsap.to(cursorFollower, {
-            x: e.clientX, y: e.clientY,
-            duration: 0.15, ease: "power2.out"
-        });
-    };
-    window.addEventListener('mousemove', moveCursor);
+    if (cursorFollower && hasCustomCursor()) {
+        const moveCursor = (e) => {
+            gsap.to(cursorFollower, {
+                x: e.clientX, y: e.clientY,
+                duration: 0.15, ease: "power2.out"
+            });
+        };
+        window.addEventListener('mousemove', moveCursor);
 
-    // Interactive Hover States
-    const interactiveElements = document.querySelectorAll('a, button, .switch, .project-card, .showcase-card, .gallery-item, .work-banner-content, .project-row, .proof-grid div, .cert-card, h1, h2, h3');
-    
-    interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', () => { if(cursorFollower) cursorFollower.classList.add('hovered'); });
-        el.addEventListener('mouseleave', () => { if(cursorFollower) cursorFollower.classList.remove('hovered'); });
-    });
+        // Interactive Hover States
+        const interactiveElements = document.querySelectorAll('a, button, .switch, .project-card, .showcase-card, .gallery-item, .work-banner-content, .project-row, .proof-grid div, .cert-card, h1, h2, h3');
+        
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => { cursorFollower.classList.add('hovered'); });
+            el.addEventListener('mouseleave', () => { cursorFollower.classList.remove('hovered'); });
+        });
+    }
 
     // --- MAGNETIC BUTTONS ---
     const magneticElements = document.querySelectorAll('.cta-btn, .nav-links li a, .nav-brand, .nav-cta, .hero-scroll-cue, .social-links a, .work-banner-content');
     magneticElements.forEach((el) => {
         el.addEventListener('mousemove', (e) => {
+            if (!hasCustomCursor()) return;
+
             const rect = el.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
@@ -142,6 +147,8 @@ export function initUI() {
         });
 
         el.addEventListener('mouseleave', () => {
+            if (!hasCustomCursor()) return;
+
             gsap.to(el, { x: 0, y: 0, duration: 0.3, ease: "elastic.out(1, 0.3)" });
             if(cursorFollower) gsap.to(cursorFollower, { scale: 1, duration: 0.3 });
         });
