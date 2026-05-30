@@ -24,14 +24,14 @@ let inkEffect = null;
 let performanceHud = null;
 const mobileMedia = window.matchMedia('(max-width: 768px)');
 const isMobileView = () => mobileMedia.matches;
+const shouldRenderScene = () => !isMobileView();
+const heroTextElements = document.querySelectorAll('.hero-pos-top, .hero-pos-left, .hero-pos-right');
 
 document.addEventListener('DOMContentLoaded', () => {
     initLoader(); 
     initUI();
     performanceHud = initPerformanceHud({ renderer });
     initScrollAnimations();
-
-    inkEffect = initInkBackground(scene);
 
     if (DEBUG_MODE) {
         initDebugGUI();
@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderer.domElement.style.display = 'none';
         }
     } else {
+        inkEffect = initInkBackground(scene);
         loadDeskModel('my_desk.glb', false);
     }
     
@@ -281,10 +282,16 @@ window.addEventListener('resize', () => {
         document.body.classList.add('mobile-view');
         if (renderer.domElement) renderer.domElement.style.display = 'none';
         labelContainer.style.display = 'none';
+        if (inkEffect) {
+            scene.remove(inkEffect.mesh);
+            inkEffect.dispose?.();
+            inkEffect = null;
+        }
     } else {
         document.body.classList.remove('mobile-view', 'mobile-hero-hidden');
         if (renderer.domElement) renderer.domElement.style.display = '';
         labelContainer.style.display = '';
+        if (!inkEffect) inkEffect = initInkBackground(scene);
     }
 });
 
@@ -383,8 +390,14 @@ const clock = new THREE.Clock();
 function animate(time) {
     if (performanceHud) performanceHud.beginFrame(time);
 
-    lenis.raf(time);
     requestAnimationFrame(animate);
+
+    if (isMobileView()) {
+        if (performanceHud) performanceHud.endFrame();
+        return;
+    }
+
+    lenis.raf(time);
 
     const currentTime = clock.getElapsedTime(); 
     
@@ -399,8 +412,7 @@ function animate(time) {
         updateInkMaskLogic(scrollPos); 
     }
 
-    const heroTextElements = document.querySelectorAll('.hero-pos-top, .hero-pos-left, .hero-pos-right');
-    if(heroTextElements.length > 0) {
+    if(!isMobileView() && heroTextElements.length > 0) {
         heroTextElements.forEach(el => {
             el.style.opacity = sceneState.heroOpacity;
             el.style.pointerEvents = sceneState.heroOpacity < 0.1 ? 'none' : 'auto';
@@ -520,12 +532,13 @@ function animate(time) {
         camera.lookAt(deskLookAt);
     }
 
-    if (performanceHud) performanceHud.beginGpuSample();
-    renderer.render(scene, camera);
-    if (performanceHud) {
-        performanceHud.endGpuSample();
-        performanceHud.endFrame();
+    if (shouldRenderScene()) {
+        if (performanceHud) performanceHud.beginGpuSample();
+        renderer.render(scene, camera);
+        if (performanceHud) performanceHud.endGpuSample();
     }
+
+    if (performanceHud) performanceHud.endFrame();
 }
 
 animate(0);

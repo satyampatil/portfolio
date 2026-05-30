@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 // --- CONFIGURATION ---
+const mobileExperience = window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches;
 const config = {
     lines: 50,          // Number of rings
     speed: 0.3,         // Animation speed
@@ -97,10 +98,12 @@ if (heroFace) {
     });
 }
 
-document.addEventListener('mousemove', (event) => {
-    mouse.x = (event.clientX - windowHalfX) * 0.0005;
-    mouse.y = (event.clientY - windowHalfY) * 0.0005;
-});
+if (!mobileExperience) {
+    document.addEventListener('mousemove', (event) => {
+        mouse.x = (event.clientX - windowHalfX) * 0.0005;
+        mouse.y = (event.clientY - windowHalfY) * 0.0005;
+    });
+}
 
 // --- ANIMATION LOOP ---
 const clock = new THREE.Clock();
@@ -128,7 +131,7 @@ function animate() {
     currentSpeed += (targetSpd - currentSpeed) * lerpFactor;
 
     // Animate Rings
-    rings.forEach((ring, i) => {
+    rings.forEach((ring) => {
         const positions = ring.geometry.attributes.position.array;
         const original = ring.geometry.userData.originalPositions;
         // const radius = ring.geometry.userData.radius;

@@ -5,6 +5,8 @@ import ScrollTrigger from 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigge
 // Register Plugin
 gsap.registerPlugin(ScrollTrigger);
 
+const mobileExperience = window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches;
+
 // --- LENIS SETUP ---
 export const lenis = new Lenis({
     duration: 1.2,
@@ -24,6 +26,16 @@ export function initScrollAnimations() {
     
     // Setup initial state for text reveals
     const revealElements = document.querySelectorAll('.reveal-up, h3, p, .content-box h4');
+
+    if (mobileExperience) {
+        revealElements.forEach(el => {
+            gsap.set(el, { y: 0, opacity: 1, clearProps: 'clipPath' });
+        });
+        ScrollTrigger.getAll().forEach(trigger => {
+            if (trigger.vars?.trigger !== 'body') trigger.kill();
+        });
+        return;
+    }
     
     revealElements.forEach(el => {
         // We use clip-path to "unroll" the element

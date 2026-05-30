@@ -40,6 +40,8 @@ function createGpuTimer(renderer) {
     if (!renderer || typeof renderer.getContext !== 'function') return null;
 
     const gl = renderer.getContext();
+    if (!gl) return null;
+
     const isWebGL2 = typeof WebGL2RenderingContext !== 'undefined' && gl instanceof WebGL2RenderingContext;
     const ext = isWebGL2
         ? gl.getExtension('EXT_disjoint_timer_query_webgl2')

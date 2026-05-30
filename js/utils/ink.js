@@ -152,6 +152,10 @@ export function initInkBackground(scene) {
             const normY = (screenH - (y + h)) / screenH;
             const normH = h / screenH;
             uniforms.uMask.value.set(normX, normY, normW, normH);
+        },
+        dispose: () => {
+            geometry.dispose();
+            material.dispose();
         }
     };
 }

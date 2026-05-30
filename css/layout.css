@@ -355,14 +355,14 @@ p { font-size: 1.1rem; line-height: 1.7; color: #bbb; margin-bottom: 20px; }
         bottom: 0;
         z-index: 5;
         opacity: 1 !important;
-        transition: opacity 0.45s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s ease;
-        filter: contrast(1.05) saturate(1.04) drop-shadow(0 28px 58px rgba(0,0,0,0.76));
+        transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        filter: none;
+        will-change: transform, opacity;
     }
 
     body.mobile-hero-hidden #hero-face {
         opacity: 0 !important;
         transform: translate(-50%, 14%);
-        filter: blur(6px) drop-shadow(0 28px 58px rgba(0,0,0,0));
     }
 
     .hero-pos-bottom {
