@@ -11,6 +11,7 @@ import { lenis, initScrollAnimations } from './utils/scroll.js';
 import { initUI } from './utils/ui.js';
 import { initLoader, updateLoadProgress } from './utils/loader.js';
 import { initInkBackground } from './utils/ink.js'; 
+import { initPerformanceHud } from './utils/performance-hud.js';
 import { scene, camera, renderer, sunLight, spotLight, warmLight } from './scene/setup.js';
 import { loadDeskModel, deskState } from './scene/desk.js';
 
@@ -20,12 +21,14 @@ const LIGHT_DEBUG_MODE = false;
 
 // --- INITIALIZATION ---
 let inkEffect = null; 
+let performanceHud = null;
 const mobileMedia = window.matchMedia('(max-width: 768px)');
 const isMobileView = () => mobileMedia.matches;
 
 document.addEventListener('DOMContentLoaded', () => {
     initLoader(); 
     initUI();
+    performanceHud = initPerformanceHud({ renderer });
     initScrollAnimations();
 
     inkEffect = initInkBackground(scene);
@@ -372,6 +375,8 @@ function updateInkMaskLogic(scrollPos) {
 const clock = new THREE.Clock();
 
 function animate(time) {
+    if (performanceHud) performanceHud.beginFrame(time);
+
     lenis.raf(time);
     requestAnimationFrame(animate);
 
@@ -509,7 +514,12 @@ function animate(time) {
         camera.lookAt(deskLookAt);
     }
 
+    if (performanceHud) performanceHud.beginGpuSample();
     renderer.render(scene, camera);
+    if (performanceHud) {
+        performanceHud.endGpuSample();
+        performanceHud.endFrame();
+    }
 }
 
 animate(0);
