@@ -1,0 +1,22 @@
+{
+  "name": "Markou Design London website rebuild before-and-after results",
+  "publisher": "Satyam Patil / Rock & Blu Ltd",
+  "datePublished": "2026-07-29",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "methodology": "Comparative before-and-after audit values supplied from the client website rebuild. Values are diagnostic audit results, not Chrome UX Report field data. Public raw Lighthouse report files and tool-version identifiers were not retained, so the dataset should not be treated as a controlled benchmark.",
+  "subject": "https://markoudesignlondon.co.uk/",
+  "results": [
+    {"metric":"Mobile performance","category":"Web performance","unit":"score","before":63,"after":90,"absoluteChange":27,"relativeChangePercent":42.9,"higherIsBetter":true},
+    {"metric":"First Contentful Paint","category":"Web performance","unit":"seconds","before":4.3,"after":0.9,"absoluteChange":-3.4,"relativeChangePercent":-79.1,"higherIsBetter":false},
+    {"metric":"Largest Contentful Paint","category":"Web performance","unit":"seconds","before":9.1,"after":3.2,"absoluteChange":-5.9,"relativeChangePercent":-64.8,"higherIsBetter":false},
+    {"metric":"AEO readiness","category":"Search and AI visibility","unit":"score","before":25,"after":100,"absoluteChange":75,"relativeChangePercent":300.0,"higherIsBetter":true},
+    {"metric":"AI-SEO/GEO","category":"Search and AI visibility","unit":"score","before":53,"after":89,"absoluteChange":36,"relativeChangePercent":67.9,"higherIsBetter":true},
+    {"metric":"Accessibility","category":"Accessibility","unit":"score","before":97,"after":100,"absoluteChange":3,"relativeChangePercent":3.1,"higherIsBetter":true}
+  ],
+  "limitations": [
+    "The public dataset contains the recorded summary values rather than raw audit exports.",
+    "Lab scores vary with tool version, device emulation, network conditions and run-to-run variance.",
+    "The results describe one website rebuild and should not be generalized as an industry benchmark.",
+    "The post-rebuild LCP of 3.2 seconds remained above Google's 2.5-second good threshold and still had room for improvement."
+  ]
+}

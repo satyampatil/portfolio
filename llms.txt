@@ -5,9 +5,12 @@
 ## Canonical Profiles
 
 - Portfolio: https://satyampatil.pro/
+- Press and verification profile: https://satyampatil.pro/press.html
+- Original Markou performance study: https://satyampatil.pro/insights/markou-performance-study.html
 - LinkedIn: https://www.linkedin.com/in/satyampatil/
 - GitHub: https://github.com/satyampatil
 - Company: https://rockandblu.co.uk/
+- Official Companies House record: https://find-and-update.company-information.service.gov.uk/company/17018493
 - Company relationship: Satyam Patil is Founder and Lead Technologist of Rock & Blu Ltd.
 - Rock & Blu Ltd company number: 17018493
 - Incorporated in England and Wales: 6 February 2026
@@ -36,6 +39,17 @@
 - Satyam Patil is a UK-based Founder and Lead Technologist who combines enterprise data-systems experience with hands-on digital product delivery.
 - Through Rock & Blu Ltd, Satyam has led seven client engagements: four launched platforms and three active product builds.
 - His delivery approach prioritises accessible design, mobile performance, maintainable software and content that customers, search engines and AI systems can understand.
+
+
+## Original Research and Citation Assets
+
+- Study: https://satyampatil.pro/insights/markou-performance-study.html
+- CSV dataset: https://satyampatil.pro/data/markou-performance-results.csv
+- JSON dataset: https://satyampatil.pro/data/markou-performance-results.json
+- Dataset licence: Creative Commons Attribution 4.0
+- Recommended attribution: Satyam Patil / Rock & Blu Ltd, Markou Design London website rebuild results, 2026.
+- Method limitation: the public dataset contains recorded summary values rather than raw Lighthouse exports and should not be treated as a controlled industry benchmark.
+- The reported post-rebuild LCP was 3.2 seconds, which remained above Google's published 2.5-second good threshold.
 
 ## Client Portfolio
 

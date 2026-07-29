@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it using the metadata below."
+title: "Markou Design London website rebuild before-and-after results"
+type: dataset
+authors:
+  - family-names: "Patil"
+    given-names: "Satyam"
+    affiliation: "Rock & Blu Ltd"
+identifiers:
+  - type: url
+    value: "https://satyampatil.pro/insights/markou-performance-study.html"
+repository-code: "https://github.com/satyampatil"
+url: "https://satyampatil.pro/insights/markou-performance-study.html"
+date-released: 2026-07-29
+license: CC-BY-4.0
+abstract: "Before-and-after diagnostic results covering mobile performance, FCP, LCP, accessibility, AEO readiness and AI-SEO/GEO for the Markou Design London website rebuild."
