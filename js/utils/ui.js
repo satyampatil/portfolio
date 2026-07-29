@@ -118,7 +118,7 @@ export function initUI() {
     }
 
     // --- MAGNETIC BUTTONS ---
-    const magneticElements = document.querySelectorAll('.cta-btn, .nav-links li a, .nav-brand, .nav-cta, .hero-scroll-cue, .social-links a, .work-banner-content');
+    const magneticElements = document.querySelectorAll('.cta-btn, .nav-links li a, .nav-brand, .nav-cta, .social-links a, .work-banner-content');
     magneticElements.forEach((el) => {
         el.addEventListener('mousemove', (e) => {
             if (!hasCustomCursor()) return;
@@ -246,12 +246,12 @@ export function initUI() {
             timeline.from('.hero-pos-top', { opacity: 0, duration: 0.8, ease: "power3.out" }, "-=0.3")
                     .from('.giant-first-name', { opacity: 0, duration: 0.9, ease: "power3.out" }, "-=0.55")
                     .from('.giant-last-name', { opacity: 0, duration: 0.9, ease: "power3.out" }, "-=0.65")
-                    .from('.hero-meta-strip, .hero-scroll-cue', { opacity: 0, duration: 0.7, stagger: 0.08, ease: "power3.out" }, "-=0.4");
+                    .from('.hero-meta-strip', { opacity: 0, duration: 0.7, stagger: 0.08, ease: "power3.out" }, "-=0.4");
         } else {
             timeline.from('.hero-pos-top', { y: 50, opacity: 0, duration: 1.2, ease: "power4.out" }, "-=0.5")
                     .from('.giant-first-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1")
                     .from('.giant-last-name', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" }, "-=1.3")
-                    .from('.hero-meta-strip, .hero-scroll-cue', { y: 24, opacity: 0, duration: 1, stagger: 0.08, ease: "power4.out" }, "-=0.85")
+                    .from('.hero-meta-strip', { y: 24, opacity: 0, duration: 1, stagger: 0.08, ease: "power4.out" }, "-=0.85")
                     .from('.hero-pos-bottom', { y: 30, opacity: 0, duration: 1, ease: "power4.out" }, "-=1");
         }
     });

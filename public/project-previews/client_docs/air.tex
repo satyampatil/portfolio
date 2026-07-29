@@ -1,0 +1,253 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+
+\definecolor{AirBlue}{HTML}{0055FF}
+\definecolor{AirInk}{HTML}{1F2440}
+\definecolor{AirMuted}{HTML}{5F668A}
+\definecolor{AirSoft}{HTML}{F3F6FF}
+\definecolor{AirLine}{HTML}{D9E1FF}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=AirBlue,
+  urlcolor=AirBlue,
+  citecolor=AirBlue,
+  pdftitle={AIR: The Invisible Canvas Case Study},
+  pdfauthor={Company Portfolio}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.72em}
+\renewcommand{\arraystretch}{1.28}
+\setlist[itemize]{leftmargin=1.4em, itemsep=0.28em, topsep=0.3em}
+\setlist[enumerate]{leftmargin=1.5em, itemsep=0.28em, topsep=0.3em}
+
+\newcommand{\CompanyName}{[Your Company Name]}
+\newcommand{\ProjectName}{AIR: The Invisible Canvas}
+\newcommand{\ProjectUrl}{[Add live URL when ready]}
+\newcommand{\CaseStudyDate}{June 2026}
+
+\newcommand{\sectionrule}{\vspace{0.2em}{\color{AirLine}\hrule height 0.8pt}\vspace{0.8em}}
+\newcommand{\metric}[2]{\textbf{\textcolor{AirBlue}{#1}}\\{\small #2}}
+
+\begin{document}
+
+{\Large \textbf{\textcolor{AirBlue}{\CompanyName}}}
+\vspace{0.4em}
+
+{\Huge \textbf{\ProjectName}}
+
+{\Large Interactive WebGL experience for making invisible physics visible}
+
+\vspace{0.8em}
+{\small \textcolor{AirMuted}{Case study prepared for company portfolio \textbullet{} \CaseStudyDate \textbullet{} Status: active prototype / in-progress website}}
+
+\sectionrule
+
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.22\textwidth} X}
+Project type & Interactive web experience, creative technology prototype, browser-based physics study \\
+Primary stack & HTML, CSS, JavaScript, Three.js, custom GLSL shaders, GSAP ScrollTrigger, Lenis smooth scrolling, Firebase Hosting \\
+Core interaction & Scroll-driven narrative chapters plus pointer-driven particle physics and tuning controls \\
+Prototype scope & Air, water, fire, ice, and storm simulations built as separate experiments and unified into a single continuous story \\
+Portfolio note & The public website is still incomplete, but the current build already demonstrates the visual system, interaction model, technical direction, and engineering approach. \\
+\end{tabularx}
+
+\section*{Executive Summary}
+\sectionrule
+
+\ProjectName{} is an experimental browser experience that treats air as a visible design material. Instead of presenting a conventional landing page, the project opens with a living particle field that forms the word AIR, responds to pointer movement, and then unfolds through elemental chapters: still air, moving air, water, fire, ice, and storm.
+
+The aim was to create a portfolio-grade interactive piece that could communicate technical craft before the full website content was complete. The result is a working visual prototype with a distinctive concept, a scroll-based narrative structure, a realtime particle engine, environmental transitions, and performance-aware rendering. It gives the company something credible to show immediately while leaving room for copy, case-study imagery, brand refinement, and production hardening.
+
+The project sits at the intersection of brand storytelling, WebGL engineering, and experiential interface design. Its central question is simple: what if a website could make the invisible feel tactile?
+
+\section*{The Challenge}
+\sectionrule
+
+Most company portfolio websites explain technical ability through screenshots, service lists, or static write-ups. AIR needed to do something more direct. It had to act as evidence of capability: a self-contained demonstration of design direction, realtime graphics, interaction design, and browser performance.
+
+The immediate challenge was practical as well as creative. The website was still incomplete, so the portfolio asset needed to be honest about the project state while still presenting the work with confidence. The case study therefore frames AIR as an active prototype: not a finished product launch, but a strong proof of direction with enough substance to show concept, execution, and next steps.
+
+The technical challenge was to make high-density particle scenes feel fluid inside a browser. The build includes scenes with up to 240,000 particles, custom shader materials, scroll-linked chapter states, multiple environmental simulations, interactive tuning panels, and fallback behavior when optional animation dependencies are unavailable.
+
+\section*{Objectives}
+\sectionrule
+
+\begin{itemize}
+  \item Create a memorable first-viewport experience around the AIR identity.
+  \item Turn an abstract concept, invisible air, into a visible, interactive medium.
+  \item Build a modular system of elemental simulations that can support future content sections.
+  \item Demonstrate advanced frontend capability using realtime graphics rather than static portfolio claims.
+  \item Keep the prototype deployable as a static web project through Firebase Hosting.
+  \item Balance visual ambition with browser performance through adaptive quality controls and careful particle budgeting.
+\end{itemize}
+
+\section*{Creative Concept}
+\sectionrule
+
+The creative premise is that air is not empty space. It has pressure, movement, resistance, turbulence, temperature, and memory. AIR visualizes that idea through thousands of small particles suspended in a browser canvas.
+
+The first scene forms the word AIR from a living aerosol field. The letters are not treated as flat typography; they are built from particles that shimmer, drift, scatter, and return. As the user scrolls, the system moves from quiet suspension into more expressive states. Each chapter gives air a different context:
+
+\begin{longtable}{>{\bfseries}p{0.18\textwidth} p{0.74\textwidth}}
+Still air & A calm field where the particle system feels suspended, quiet, and almost architectural. \\
+Motion & A transitional state where the particle field begins to show turbulence, wake, and directional energy. \\
+Water & A liquid sphere and boundary layer where air responds to a moving oceanic surface. \\
+Fire & A combustion study where oxygen-like and carbon-dioxide-like particles feed, rise, convert, and recirculate around a flame. \\
+Ice & A cryo crystal scene where ambient air cools into visible vapor and some particles freeze to the surface. \\
+Storm & A volumetric vortex where air becomes a rotating thermodynamic system with eyewall, updraft, debris, and lightning controls. \\
+\end{longtable}
+
+This chapter structure gives the incomplete site a complete-feeling backbone. Even before final business copy is added, the prototype already has a narrative arc: air appears, moves, reacts, transforms, and becomes environment.
+
+\section*{User Experience Strategy}
+\sectionrule
+
+The experience is designed as a cinematic scroll rather than a standard page of stacked sections. The user does not simply read about AIR; they move through it.
+
+\textbf{Opening:} The project starts with minimal interface chrome, a soft atmospheric background, and the headline ``AIR is made of air.'' This immediately places the user inside the concept.
+
+\textbf{Progression:} Scroll acts as the director. As the user moves down the page, camera position, particle behavior, copy visibility, background color, and environmental simulation states are all updated together.
+
+\textbf{Interaction:} Pointer movement is treated as a physical input. The cursor pushes, pulls, drags, or disturbs the particle system depending on the chapter. This makes the page feel less like an animation and more like a responsive medium.
+
+\textbf{Control surfaces:} The prototype includes hidden or contextual controls for tuning density, opacity, turbulence, spring force, combustion rate, ice size, vortex energy, and other parameters. These controls are useful for development, demos, and future art direction.
+
+\textbf{Mobile awareness:} The layout includes responsive behavior and a landscape recommendation, acknowledging that dense WebGL work needs space and that mobile viewing requires special framing.
+
+\section*{Technical Architecture}
+\sectionrule
+
+AIR is currently implemented as a static web project inside the \texttt{public/} directory and configured for Firebase Hosting. The main experience lives in \texttt{index.html}, with standalone experimental scenes in files such as \texttt{air.html}, \texttt{air\_intro.html}, \texttt{water.html}, \texttt{fire.html}, \texttt{ice.html}, and \texttt{storm.html}.
+
+The architecture favors direct creative iteration: each scene is a self-contained HTML document with embedded styling and JavaScript. For a prototype, this keeps visual experiments easy to isolate, test, and merge into the main narrative. The production direction can later consolidate shared physics utilities, shader code, design tokens, and scene orchestration into modules.
+
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.24\textwidth} X}
+Rendering & Three.js WebGL renderer, point-cloud particle systems, shader materials, perspective and orthographic cameras \\
+Animation & RequestAnimationFrame render loop, GSAP timeline/ScrollTrigger for scroll direction, Lenis for smoothed scroll input \\
+Physics & CPU-side particle arrays using \texttt{Float32Array}, custom velocity integration, collision boundaries, turbulence fields, and mode-specific forces \\
+Shaders & Custom vertex and fragment shaders for particle size, opacity, color blending, shimmer, additive glow, water, fire, ice, and storm effects \\
+Performance & Device-pixel-ratio caps, draw-range adjustments, render-scale adaptation, FPS HUD, and particle-count scaling under load \\
+Deployment & Static hosting configured with Firebase Hosting through \texttt{firebase.json} \\
+\end{tabularx}
+
+\section*{Implementation Detail}
+\sectionrule
+
+\textbf{Particle system.} The prototype uses typed arrays for positions, velocities, seeds, alpha values, and mode-specific particle types. This keeps particle updates predictable and efficient, especially in high-count scenes. In the main experience, the system advertises a 240k-particle canvas, while separate experiments use dense configurations such as 100k, 120k, 150k, 180k, and 240k particles depending on the scene.
+
+\textbf{Typography as simulation.} The AIR wordmark is generated as a particle field rather than a static asset. Letter targets are derived from text sampling, then particles are assigned base positions and allowed to scatter, spring back, and respond to pointer disturbance. This makes the brand mark behave like air instead of merely representing it.
+
+\textbf{Scroll choreography.} The main page maps scroll progress into chapter progress. The active chapter determines copy, headline state, visual stage, particle mode, background treatment, camera movement, and which environmental modules are initialized or destroyed. This gives the experience a cinematic rhythm while preventing every heavy scene from running at full force all the time.
+
+\textbf{Environmental simulations.} Each element has its own visual and physical rules. Water emphasizes boundary-layer flow and refraction-like surfaces. Fire uses particle types to imply oxygen and carbon dioxide conversion. Ice maps particles to a faceted crystal boundary and includes cooling/freezing behavior. Storm uses a three-dimensional vortex field with eyewall radius, updraft intensity, debris entrainment, lightning, and kinetic energy readout.
+
+\textbf{Performance budgeting.} The main render loop monitors FPS and adjusts particle scale and render scale. Heavy scenes receive stricter budgets, and inactive WebGL states can be idled. This matters because a visually ambitious portfolio piece only works if it remains responsive enough to explore.
+
+\section*{Design System Direction}
+\sectionrule
+
+The design direction is atmospheric but restrained. The UI lets the simulation take the lead: large typography, minimal controls, fine-line meters, compact performance readouts, and translucent panels only where they help tune or inspect the system.
+
+The visual language changes by chapter while preserving the core idea of suspended matter:
+
+\begin{itemize}
+  \item AIR uses pastel light, fine particle shimmer, and a soft custom cursor.
+  \item Water shifts into deep navy and cyan, with additive particles around a liquid body.
+  \item Fire uses warm darkness, orange emission, and chemistry-inspired particle coloration.
+  \item Ice uses white, cyan, glassy material response, and HUD-like labels.
+  \item Storm uses cinematic darkness, bloom, lightning flashes, and volumetric depth.
+\end{itemize}
+
+This gives the unfinished site enough range to feel like a system rather than a single visual trick.
+
+\section*{Current Outcomes}
+\sectionrule
+
+\begin{tabularx}{\textwidth}{>{\centering\arraybackslash}p{0.2\textwidth} >{\centering\arraybackslash}p{0.2\textwidth} >{\centering\arraybackslash}p{0.2\textwidth} >{\centering\arraybackslash}X}
+\metric{240k}{Particle target in the main AIR experience} &
+\metric{5+}{Elemental / physics scenes created} &
+\metric{Static}{Firebase Hosting-ready architecture} &
+\metric{Realtime}{Pointer and scroll-driven interaction model} \\
+\end{tabularx}
+
+\begin{itemize}
+  \item A working WebGL homepage prototype exists and can already demonstrate the concept.
+  \item The project has a distinctive story: air becomes visible through interaction.
+  \item Multiple standalone physics experiments have been built and can be folded into the final site.
+  \item The codebase includes practical performance affordances such as FPS reporting, render scaling, and draw-range management.
+  \item The visual system is strong enough for portfolio presentation while the business-facing website copy continues to evolve.
+\end{itemize}
+
+\section*{What Makes This Portfolio-Worthy Now}
+\sectionrule
+
+Although the site is not finished, AIR is already valuable as a company portfolio case because it shows process and capability. It proves that the team can move beyond template websites into custom interaction, realtime rendering, technical art direction, shader work, and performance-conscious frontend engineering.
+
+For a portfolio, the honest framing is important. The project should not be presented as a fully launched commercial website yet. It should be presented as an active R\&D prototype, a creative technology study, or an in-progress interactive identity system. That framing turns incompleteness into momentum rather than weakness.
+
+A suitable portfolio caption would be:
+
+\begin{quote}
+\textit{AIR is an active WebGL prototype exploring how invisible physical forces can become a brand experience. Built with Three.js, custom shaders, scroll choreography, and high-density particle systems, the project turns air, water, fire, ice, and storm into interactive chapters for a future company website.}
+\end{quote}
+
+\section*{Risks and Constraints}
+\sectionrule
+
+\begin{itemize}
+  \item \textbf{Performance range:} High particle counts can behave differently across devices, so production release should include device-class profiling and conservative defaults.
+  \item \textbf{Content completion:} The core experience exists, but final portfolio copy, conversion sections, service pages, and calls to action still need to be integrated.
+  \item \textbf{Accessibility:} The visual prototype should be paired with reduced-motion support, keyboard-accessible controls, readable fallback content, and semantic page structure.
+  \item \textbf{Maintainability:} The prototype is intentionally iteration-friendly. A production pass should modularize shared systems and reduce repeated shader/control logic.
+  \item \textbf{External dependencies:} CDN-loaded libraries are convenient for prototyping. Production should decide whether to bundle dependencies locally for reliability and version control.
+\end{itemize}
+
+\section*{Next Steps}
+\sectionrule
+
+\begin{enumerate}
+  \item Convert the strongest prototype scenes into final homepage chapters.
+  \item Add company positioning, services, selected work, contact pathways, and credibility signals around the interactive core.
+  \item Create a reduced-motion and low-power rendering mode.
+  \item Consolidate repeated particle, control, and shader utilities.
+  \item Capture portfolio imagery and short video clips from each chapter.
+  \item Run device testing across desktop, tablet, and mobile browsers.
+  \item Publish the first public version through Firebase Hosting.
+\end{enumerate}
+
+\section*{Suggested Portfolio Layout}
+\sectionrule
+
+\begin{longtable}{>{\bfseries}p{0.25\textwidth} p{0.67\textwidth}}
+Hero block & Large still or video loop of the AIR particle typography with the title ``AIR: The Invisible Canvas.'' \\
+Short summary & One paragraph explaining that this is an active interactive prototype for a company website. \\
+Role / scope & Creative direction, frontend engineering, WebGL, interaction design, shader development, deployment setup. \\
+Challenge & Making an incomplete website portfolio-ready by foregrounding technical craft and concept clarity. \\
+Solution & A scroll-directed WebGL narrative where air transforms through elemental physics chapters. \\
+Technology & Three.js, custom GLSL shaders, typed-array particle simulation, GSAP, Lenis, Firebase Hosting. \\
+Proof points & 240k-particle canvas, realtime pointer interaction, multiple physics studies, adaptive performance controls. \\
+Next phase & Production copy, accessibility pass, mobile optimization, modular architecture, launch packaging. \\
+\end{longtable}
+
+\section*{Final Statement}
+\sectionrule
+
+\ProjectName{} demonstrates how an unfinished website can still become a meaningful portfolio story when the prototype itself carries a strong idea. The work already communicates ambition, technical range, and visual identity. It does not need to pretend to be complete; it needs to show where the product is going and why the direction is worth following.
+
+AIR makes the invisible visible. That is both the concept and the proof of craft.
+
+\vfill
+{\small \textcolor{AirMuted}{Prepared by \CompanyName{} \textbullet{} Project URL: \ProjectUrl}}
+
+\end{document}

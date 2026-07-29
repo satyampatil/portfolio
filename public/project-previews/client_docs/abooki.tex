@@ -1,0 +1,252 @@
+% --- UNIVERSAL PREAMBLE BLOCK ---
+% This document is intentionally standalone so it can be compiled or
+% included in a client-docs workflow without relying on shared templates.
+\documentclass[11pt, a4paper]{article}
+
+% Page geometry and typography
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[english, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{english}
+
+% Set default/Latin font to Sans Serif in the main (rm) slot.
+% Compile with XeLaTeX or LuaLaTeX for fontspec support.
+\babelfont{rm}{Noto Sans}
+
+% Color and styling packages
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+% --- Abooki Brand Colors ---
+% These values mirror the production site's premium editorial palette:
+% OLED black base, warm paper text, antique gold accent, and soft sage green.
+\definecolor{abookiblack}{HTML}{070708}
+\definecolor{abookisurface}{HTML}{101012}
+\definecolor{abookipaper}{HTML}{F0ECE1}
+\definecolor{abookimuted}{HTML}{8E8B82}
+\definecolor{abookigold}{HTML}{C9A05B}
+\definecolor{abookigreen}{HTML}{588157}
+
+% Custom section formatting
+\titleformat{\section}
+  {\Large\bfseries\color{abookigold}}
+  {\thesection}{1em}{}[{\color{abookigold}\titlerule[0.8pt]}]
+\titleformat{\subsection}
+  {\large\bfseries\color{abookipaper}}
+  {\thesubsection}{1em}{}
+
+% Spacing and list polish
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8em}
+\setlist{nosep}
+\setlist[itemize]{itemsep=0.55em, topsep=0.6em}
+\setlist[enumerate]{itemsep=0.65em, topsep=0.6em}
+
+\begin{document}
+
+% Apply brand colors to the document canvas.
+\pagecolor{abookiblack}
+\color{abookipaper}
+
+% --- TITLE PAGE ---
+\begin{titlepage}
+    \centering
+    \vspace*{4cm}
+
+    {\Huge \bfseries \textcolor{abookigold}{Abooki}}\\[1cm]
+    {\LARGE Digital Experience \& Architecture Report}\\[0.5cm]
+    {\large A Technical Breakdown of a Premium AI-Powered Reading Platform}\\[3cm]
+
+    {\large \textbf{Prepared for:}}\\[0.2cm]
+    {\large The Abooki Team}\\[2cm]
+
+    {\large \textbf{Created by:}}\\[0.2cm]
+    {\large ROCK \& BLU LTD}\\[2cm]
+
+    \vfill
+
+    {\large April 2026}\\[1cm]
+\end{titlepage}
+
+% --- MAIN CONTENT ---
+
+% --- SECTION 1 ---
+\section{Executive Summary}
+Abooki is a premium AI-powered digital library that combines generative storytelling, social discovery, immersive reading, user profiles, and community publishing into one cohesive web application. The platform is designed to feel less like a basic utility and more like a polished editorial product: a living archive where users can author books, read public releases, manage a private collection, customize their identity, and return to an experience that feels carefully composed.
+
+The implementation goes well beyond a static website. Abooki includes a production Firebase backend, a secure Cloud Functions proxy for Gemini-powered book generation, Firestore-backed public and private libraries, real-time community presence, profile customization, ratings, feedback, settings, support flows, responsive navigation, and a bespoke visual system. The result is a complete web product with the depth, interaction design, and infrastructure expected from a high-end build.
+
+% --- SECTION 2 ---
+\section{The ``Premium Editorial Library'' Aesthetic}
+The visual direction positions Abooki as a modern digital archive: cinematic, refined, and quietly playful. Every page uses a controlled design language so the product feels consistent across browsing, reading, writing, account management, and support journeys.
+
+\begin{itemize}[label=\textcolor{abookigold}{\textbullet}]
+    \item \textbf{OLED Editorial Canvas:} The primary interface uses a near-black \texttt{\#070708} canvas with warm paper text (\texttt{\#F0ECE1}). This creates deep contrast, supports long-form reading, and gives generated book covers a gallery-like stage.
+    \item \textbf{Antique Gold Accent System:} The gold accent (\texttt{\#C9A05B}) is used for active navigation markers, loaders, calls-to-action, rating stars, brand highlights, and key interaction states. It gives the product a premium literary tone without overwhelming the UI.
+    \item \textbf{Cinematic Texture \& Depth:} The interface includes subtle film-grain overlays, radial lighting, soft gradients, frosted navigation, and layered shadows. These details make the screen feel tactile and crafted rather than flat.
+    \item \textbf{Editorial Typography Pairing:} Inter provides clarity for interface controls while Playfair Display supports brand moments, title treatments, and hero content. This pairing gives Abooki the feel of a digital magazine and a modern reading app at the same time.
+    \item \textbf{Polished Responsive Navigation:} Desktop users receive a floating glass navigation bar with active state markers and animated AIBook text reveals. Mobile users receive a full-screen menu with staggered transitions, profile-aware actions, and touch-friendly spacing.
+\end{itemize}
+
+% --- SECTION 3 ---
+\section{Core Product Features}
+Abooki is structured around a complete reader-author loop: users generate books, read them, save them, publish them, rate community releases, and build a personal profile over time.
+
+\subsection{AI Book Generation}
+The AIBook workflow allows signed-in users to generate structured 10-page mini-books from a title, genre, and story idea. The generation system uses a Firebase Cloud Function endpoint at \texttt{/api/generateBook}, which securely calls Google's Gemini API from the backend instead of exposing AI credentials in the browser.
+
+\begin{itemize}[label=\textcolor{abookigold}{\textbullet}]
+    \item \textbf{Structured JSON Output:} The generation endpoint requests a strict response schema containing title, genre, description, image prompt, cover colors, and exactly ten pages of story content.
+    \item \textbf{Backend Secret Handling:} The Gemini key is stored as a Firebase secret and accessed only by the Cloud Function, keeping sensitive credentials away from client-side JavaScript.
+    \item \textbf{Authenticated Usage Controls:} Users must be signed in with a non-anonymous account before generating books, protecting the feature from casual abuse.
+    \item \textbf{Cooldown Protection:} Generation requests are rate-limited with a server-side cooldown stored in Firestore, reducing accidental repeat submissions and controlling compute usage.
+\end{itemize}
+
+\subsection{Dynamic Public Library}
+The homepage acts as a live editorial archive. It pulls public books from Firestore, calculates rating statistics, and organizes the library into meaningful shelves such as critics' selections, widely read titles, and recent additions.
+
+\begin{itemize}[label=\textcolor{abookigold}{\textbullet}]
+    \item \textbf{Firestore-Powered Shelves:} Public book data is loaded from \texttt{artifacts/\{appId\}/public/data/books}, enabling fresh content without rebuilding the frontend.
+    \item \textbf{Rating-Aware Curation:} Books are sorted by average rating, rating count, and creation time so the homepage can surface stronger community content.
+    \item \textbf{Client-Side Search:} Users can instantly search by title or author from the homepage, with dynamic shelf replacement and an empty-state fallback.
+    \item \textbf{Continue Reading State:} A local reading checkpoint detects the last active generated book and displays a return path back into the reader.
+\end{itemize}
+
+\subsection{Immersive Reader Experience}
+The reader is built to make generated stories feel like finished digital books rather than raw AI output. It supports page-based reading, accessibility-minded preferences, and offline-friendly export.
+
+\begin{itemize}[label=\textcolor{abookigold}{\textbullet}]
+    \item \textbf{Distraction-Free Layout:} The reading interface separates story content from discovery flows, helping users focus on the text.
+    \item \textbf{Text-to-Speech Audiobook Mode:} Browser speech synthesis allows users to listen to generated stories, expanding accessibility and creating a richer reading experience.
+    \item \textbf{PDF Export:} Generated books can be exported for offline reading, sharing, or archiving through the client-side PDF workflow.
+    \item \textbf{Reading Preferences:} Settings pages provide user-level controls for typography, theme, text sizing, and ghost-mode preferences.
+\end{itemize}
+
+% --- SECTION 4 ---
+\section{Community, Profiles \& Gamification}
+Abooki is not only a generator; it is a community reading product. The platform includes public releases, star ratings, real-time presence, feedback, avatars, and badges to encourage return usage.
+
+\subsection{Private Library \& Publishing Workflow}
+Users can keep generated books private in My List or publish them to the shared public archive. The platform preserves ownership metadata, ratings, public IDs, and author attribution so books can move between private and public states cleanly.
+
+\begin{itemize}[label=\textcolor{abookigold}{\textbullet}]
+    \item \textbf{Private Collections:} User-owned books live under authenticated Firestore paths and can be managed independently of the public shelf.
+    \item \textbf{Publish/Unpublish Controls:} Books can be promoted to public releases or returned to private status while preserving relevant rating metadata.
+    \item \textbf{Genre Filtering:} Library views include genre-aware filtering to make larger collections easier to navigate.
+\end{itemize}
+
+\subsection{Real-Time Social Presence}
+The Central Library concept uses Firestore's real-time snapshot listeners to represent active readers as customizable floating avatars. This creates the feeling of a shared space without requiring a heavy multiplayer backend.
+
+\begin{itemize}[label=\textcolor{abookigold}{\textbullet}]
+    \item \textbf{Active Reader Records:} Presence is stored in \texttt{active\_readers}, allowing clients to render who is currently inside the library.
+    \item \textbf{Custom Ghost Avatars:} The avatar generator creates SVG-based identity graphics from user preferences such as color, mood, and accessories.
+    \item \textbf{Performance Guardrails:} The presence renderer limits rendered avatars so the interface stays smooth even when the community layer grows.
+\end{itemize}
+
+\subsection{Badges \& Profile Progression}
+Profile and library logic supports a lightweight achievement system. Users can earn badges for reading, publishing, streaks, and loyalty milestones, with badge notifications providing immediate feedback when progress unlocks.
+
+\begin{itemize}[label=\textcolor{abookigold}{\textbullet}]
+    \item \textbf{Firestore Badge Storage:} Badge state is stored on user documents, making progress persistent across sessions.
+    \item \textbf{Achievement Feedback:} Badge toast notifications acknowledge completed milestones at the moment they are earned.
+    \item \textbf{Profile Identity Layer:} Profile pages connect avatar customization, user progress, and account state into one coherent personal hub.
+\end{itemize}
+
+% --- SECTION 5 ---
+\section{Infrastructure, Security \& Deployment}
+The project uses Firebase as a production-grade backend and deployment platform. Hosting, Functions, Authentication, Firestore, and security rules work together to support the product's AI, community, and account features.
+
+\begin{itemize}[label=\textcolor{abookigold}{\textbullet}]
+    \item \textbf{Firebase Hosting:} Static assets are served from Firebase Hosting with rewrites that route AI generation requests to the Cloud Function.
+    \item \textbf{Cloud Functions API Layer:} The \texttt{generateBookApi} function verifies Firebase ID tokens, validates request methods, restricts allowed origins, enforces cooldowns, and calls Gemini from a controlled backend environment.
+    \item \textbf{Cloud Firestore Data Model:} Firestore stores public books, private user books, user profiles, gamification documents, ratings, site feedback, and active reader presence.
+    \item \textbf{Authentication-Aware Rules:} Security rules restrict private reads/writes to the owning user, allow public book reads, protect user profile fields, and permit rating-only updates for community interactions.
+    \item \textbf{Content Security Policy:} Hosting headers define a CSP that limits script, style, image, media, connection, frame, base URI, and form-action behavior. This creates a stronger browser security posture for a public-facing web app.
+    \item \textbf{Additional Security Headers:} The deployment includes \texttt{X-Content-Type-Options}, \texttt{Referrer-Policy}, \texttt{Permissions-Policy}, and \texttt{upgrade-insecure-requests} for more disciplined client-side behavior.
+\end{itemize}
+
+% --- SECTION 6 ---
+\section{Engineering Detail \& UX Polish}
+The experience includes a number of engineering decisions that are easy to miss from a surface-level review but contribute heavily to perceived quality.
+
+\begin{itemize}[label=\textcolor{abookigold}{\textbullet}]
+    \item \textbf{Skeleton Loading States:} The homepage renders book-card skeletons while Firestore content loads, preventing abrupt layout shifts and making the product feel responsive.
+    \item \textbf{Custom Cursor \& Magnetic Interactions:} Fine-pointer devices receive premium cursor and magnetic button behavior, while touch devices automatically receive a simpler interaction model.
+    \item \textbf{Three.js Hero Treatment:} The homepage includes a Three.js-enhanced featured book presentation, giving the main archive a richer and more cinematic first impression.
+    \item \textbf{Responsive Mobile System:} Mobile navigation, profile actions, library cards, hero spacing, and menu overlays are explicitly adjusted for narrow screens rather than left to default browser stacking.
+    \item \textbf{Graceful Fallbacks:} The product includes placeholder covers, empty library states, archive offline states, missing-avatar fallbacks, and local preview fallbacks for safer operation.
+    \item \textbf{Support \& Feedback Pages:} Dedicated support and feedback journeys help the product feel complete, not just technically functional.
+\end{itemize}
+
+% --- SECTION 7 ---
+\section{Project Effort \& Timeline Breakdown}
+Creating a platform of this caliber requires product strategy, interface design, AI integration, backend security, data modeling, and responsive quality assurance. Below is an estimated effort breakdown for architecting this platform from scratch:
+
+\begin{enumerate}[label=\textcolor{abookigold}{\textbf{\arabic*.}}]
+    \item \textbf{Product Strategy, UX Mapping \& Content Architecture (14 Hours)}
+    \begin{itemize}[label=\textcolor{abookipaper}{\textbullet}]
+        \item Defining the reader-author loop: generate, read, save, publish, rate, and return.
+        \item Planning page flows for Home, AIBook, Reader, My List, Library, Profile, Settings, Feedback, Support, Login, and 404 states.
+        \item Mapping Firestore collections for private books, public releases, users, badges, feedback, ratings, and active readers.
+    \end{itemize}
+
+    \item \textbf{Premium Visual Design System \& Responsive UI Build (22 Hours)}
+    \begin{itemize}[label=\textcolor{abookipaper}{\textbullet}]
+        \item Creating the editorial black/gold/paper palette, typography system, cards, buttons, navigation states, and mobile menu.
+        \item Building responsive layouts for home discovery, book shelves, reader views, profile cards, settings controls, and support flows.
+        \item Adding loader sequences, subtle texture overlays, glass navigation, hover states, and polished empty states.
+    \end{itemize}
+
+    \item \textbf{AI Generation Pipeline \& Cloud Function Security (16 Hours)}
+    \begin{itemize}[label=\textcolor{abookipaper}{\textbullet}]
+        \item Implementing the \texttt{/api/generateBook} endpoint and Gemini response schema.
+        \item Adding Firebase ID token verification, non-anonymous account enforcement, origin checks, request validation, and server-side cooldown logic.
+        \item Normalizing generated book data into a format usable by the reader, library, publishing, and cover systems.
+    \end{itemize}
+
+    \item \textbf{Firestore Integration, Auth \& Data Workflows (20 Hours)}
+    \begin{itemize}[label=\textcolor{abookipaper}{\textbullet}]
+        \item Building authenticated user flows, profile loading, avatar persistence, and nav-state awareness.
+        \item Implementing public shelves, private My List storage, publish/unpublish workflows, search, filtering, rating calculations, and feedback storage.
+        \item Writing and refining Firestore rules for ownership, public reads, rating updates, feedback creation, and active reader presence.
+    \end{itemize}
+
+    \item \textbf{Reader, Export, Accessibility \& Preferences (14 Hours)}
+    \begin{itemize}[label=\textcolor{abookipaper}{\textbullet}]
+        \item Building the reader interface, local continuation state, page rendering, and book handoff between routes.
+        \item Integrating text-to-speech behavior, PDF export, theme/font preferences, and user-facing reading controls.
+        \item Handling fallbacks for malformed stored books, missing covers, and interrupted reading sessions.
+    \end{itemize}
+
+    \item \textbf{Community Presence, Avatars \& Gamification (16 Hours)}
+    \begin{itemize}[label=\textcolor{abookipaper}{\textbullet}]
+        \item Engineering active reader presence with Firestore real-time listeners.
+        \item Building SVG avatar generation with customizable visual attributes.
+        \item Implementing badge thresholds, profile progress, toast notifications, and milestone persistence.
+    \end{itemize}
+
+    \item \textbf{Deployment, QA, Hardening \& Polish (14 Hours)}
+    \begin{itemize}[label=\textcolor{abookipaper}{\textbullet}]
+        \item Configuring Firebase Hosting rewrites, security headers, CSP, cache behavior, and deployment structure.
+        \item Testing responsive behavior across desktop and mobile breakpoints.
+        \item Polishing loading states, error states, navigation behavior, reader handoff, and cross-page consistency.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.5cm}
+\textbf{Total Estimated Effort: $\sim$116 Working Hours (3 Weeks)}
+
+% --- SECTION 8 ---
+\section{About the Creators}
+This report and the underlying digital experience were crafted by \textbf{ROCK \& BLU LTD}. We specialize in architecting resilient software and fluid digital experiences. Our focus is on delivering robust, visually stunning, and highly performant solutions tailored for modern, ambitious brands.
+
+% --- SECTION 9 ---
+\section{Conclusion}
+Abooki is a fully realized web application, not a template or single-purpose demo. It combines generative AI, secure backend infrastructure, editorial interaction design, private and public content flows, social presence, profile progression, and production deployment discipline into one cohesive platform.
+
+The strongest part of the build is how much of the product feels connected: the AI generator creates books that flow into the reader, the reader connects back to personal libraries and public releases, public releases feed homepage discovery, profiles carry identity and achievements, and Firebase provides the real-time backbone underneath. This gives Abooki the depth and credibility of a serious digital product while preserving a distinctive creative personality.
+
+\end{document}

@@ -1,0 +1,296 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{array}
+
+\definecolor{SLBlack}{HTML}{000000}
+\definecolor{SLCream}{HTML}{FFFDD0}
+\definecolor{SLOlive}{HTML}{BAB86C}
+\definecolor{SLSand}{HTML}{E2CEB1}
+\definecolor{SLSoft}{HTML}{F7F5F0}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=SLBlack,
+    urlcolor=SLBlack
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.72em}
+\setlist[itemize]{leftmargin=1.35em, itemsep=0.28em, topsep=0.4em}
+\setlist[enumerate]{leftmargin=1.55em, itemsep=0.28em, topsep=0.4em}
+\renewcommand{\arraystretch}{1.35}
+
+\titleformat{\section}
+  {\Large\bfseries\color{SLBlack}}
+  {}
+  {0em}
+  {}
+  [\vspace{0.25em}{\color{SLOlive}\titlerule[1.2pt]}]
+
+\titleformat{\subsection}
+  {\large\bfseries\color{SLBlack}}
+  {}
+  {0em}
+  {}
+
+\newcommand{\project}{SL London}
+\newcommand{\studio}{rock \& blu LTD}
+\newcommand{\status}{In progress}
+\newcommand{\role}{Strategy, art direction, UX/UI, front-end build, ecommerce architecture}
+\newcommand{\stack}{HTML, Tailwind CSS, JavaScript, GSAP, Lenis, Firebase Auth, Firestore, Firebase Hosting}
+
+\begin{document}
+
+\begin{center}
+    {\Huge \textbf{\project}}\\[0.35em]
+    {\Large Redefining Essentials Through a Cinematic Commerce Experience}\\[1.2em]
+    \textbf{Case Study Status: \status}\\
+    \textbf{Studio: \studio}\\
+    \textbf{Prepared for website publication}
+\end{center}
+
+\vspace{1.25em}
+
+\begin{tabular}{>{\bfseries}p{0.22\linewidth} p{0.70\linewidth}}
+Client & \project, London-based premium essentials and streetwear brand \\
+Project type & Brand-led ecommerce website and account experience \\
+Status & Active build, content refinement, asset finalisation, and pre-launch validation \\
+Role & \role \\
+Stack & \stack \\
+Core catalogue & 42 draft products across T-shirts, long sleeves, oversized hoodies, essentials hoodies, sweatshirts, and joggers \\
+Primary objective & Transform a premium basics proposition into a high-trust, visually memorable online store that can support browsing, purchase, account retention, and future drops \\
+\end{tabular}
+
+\section{Executive Summary}
+
+\project{} is being built as a premium ecommerce experience for a London essentials brand with a sharper point of view than the standard fashion storefront. The product is not positioned as throwaway basics. The proposition centres on heavyweight cotton, considered silhouettes, British production cues, understated colourways, and a retail experience that feels closer to an editorial studio than a conventional catalogue grid.
+
+The current build establishes a complete end-to-end customer journey: cinematic homepage, editorial brand story, dynamic product catalogue, category and colour filtering, product detail pages, favourites, cart, gifting options, promo logic, checkout, account creation, saved delivery details, masked payment summaries, and order history. The work is still in progress, so this case study intentionally avoids final launch claims or invented performance metrics. Instead, it documents the strategy, design system, interaction model, technical decisions, and measurable outcomes that will be validated after launch.
+
+\section{The Challenge}
+
+Premium clothing sites often face a quiet contradiction. The brand wants to feel elevated, but the ecommerce layer needs to be fast, clear, and commercially direct. A purely editorial site can look beautiful while under-serving the customer. A purely transactional store can convert but dilute the brand.
+
+For \project{}, the challenge was to build both at once:
+
+\begin{itemize}
+    \item Create a memorable first impression around the idea of ``redefining essentials.''
+    \item Make a broad catalogue of 42 products feel curated rather than overwhelming.
+    \item Turn supplier lookbook material into usable draft web assets while preserving a premium impression.
+    \item Support real ecommerce behaviours: product selection, sizing, cart persistence, gifting, delivery, promo codes, checkout, and order history.
+    \item Keep the design flexible while the brand, final photography, and commercial policies continue to evolve.
+\end{itemize}
+
+\section{Strategic Direction}
+
+The strategic decision was to frame the website as a studio-like retail environment. Instead of leading with discounts, generic product grids, or lifestyle filler, the experience opens with motion, material cues, and a restrained visual language. The site uses a limited but distinctive palette: cream, black, sand, and olive. Typography pairs strong editorial display energy with functional sans-serif interfaces. The result is designed to feel premium without becoming precious.
+
+The guiding principles were:
+
+\begin{enumerate}
+    \item \textbf{Make the brand immediate.} The logo, cinematic hero, material language, and London identity appear in the first viewport.
+    \item \textbf{Let product carry the design.} Product images, lifestyle shots, colour swatches, and garment details are treated as the visual system.
+    \item \textbf{Keep commerce friction visible and solvable.} Size selection, delivery cost, promo feedback, checkout validation, and saved details are surfaced clearly.
+    \item \textbf{Design for iteration.} The build uses reusable data structures and client-side state management so products, colours, content, and policies can change during the in-progress phase.
+\end{enumerate}
+
+\section{Experience Architecture}
+
+The site is structured around a complete customer journey rather than a single showcase page.
+
+\subsection{Homepage}
+
+The homepage introduces \project{} through a cinematic hero with video and fallback montage behaviour. A custom loader, animated logo treatment, smooth scrolling, custom cursor states, editorial story sections, and product bridges are used to create a launch-like brand moment.
+
+Key intent:
+
+\begin{itemize}
+    \item Establish mood and credibility before asking the customer to shop.
+    \item Use motion to make the brand feel alive without hiding navigation.
+    \item Explain the material story through scroll-led content: heavyweight feel, organic cotton cues, British production, and ``anything but basic'' positioning.
+\end{itemize}
+
+\subsection{Shop}
+
+The shop page converts the catalogue into a browsable system. Products can be filtered by category and colour, sorted by price, saved to favourites, and opened into a focused product detail page. Product cards use hover transitions between clean packshots and lifestyle imagery to make the grid feel tactile.
+
+The catalogue is divided into four product zones:
+
+\begin{itemize}
+    \item Zone 001: T-shirts and long sleeve T-shirts.
+    \item Zone 002: Oversized hoodies and essentials hoodies.
+    \item Zone 003: Oversized sweatshirts and essentials sweatshirts.
+    \item Zone 004: Joggers.
+\end{itemize}
+
+\subsection{Product Detail}
+
+The product page is intentionally focused. It gives the item room to breathe through a split layout, large product imagery, colour details, SKU logic, size selection, accordions for care and delivery, and a clear add-to-bag action. If a customer quick-adds from the shop, they are routed to the product page with the size selector prompted, avoiding accidental size-less cart entries.
+
+\subsection{Cart and Checkout}
+
+The cart is treated as a retail service moment rather than a basic summary page. It includes editable quantities, removal animation, favourites access, gifting, signature bag selection, shipping method selection, promo code handling, free-shipping progress, and a clear route into checkout.
+
+Checkout includes delivery details, email suggestions, UK-first phone formatting, card formatting, field validation, saved delivery options, masked saved-card usage, order confirmation, order ID generation, tracking ID generation, invoice download, and a branded success overlay.
+
+\subsection{Account and Retention}
+
+The account system supports login, sign up, Google authentication, password reset, saved profile data, favourites, order history, saved delivery details, and masked card summaries. This matters because \project{} is expected to grow through future drops. The account layer turns one-time visitors into returning customers with persistent data and preferences.
+
+\section{Design System and Art Direction}
+
+The visual language uses contrast rather than clutter. Cream and black create the core retail frame. Olive operates as the brand accent for motion states, selection cues, badges, and calls to action. Sand softens the editorial and footer areas. The system is intentionally compact, avoiding decorative excess so the products and movement do the heavy lifting.
+
+\subsection{Motion}
+
+Motion is used as a quality signal:
+
+\begin{itemize}
+    \item GSAP drives loader sequencing, scroll reveals, hero transitions, product card entrances, success overlays, and editorial progress moments.
+    \item Lenis provides smooth scrolling for a more considered browsing rhythm.
+    \item Custom cursor states create distinct feedback for links and product imagery on desktop.
+    \item Page-transition hooks help internal navigation feel continuous.
+\end{itemize}
+
+The motion approach is designed to be premium but practical. It adds pace and personality while keeping the purchase journey legible.
+
+\subsection{Imagery}
+
+The current imagery pipeline uses supplier lookbook extractions as draft build assets. The extracted asset set includes product packshots, lifestyle images, screenshot crops, and full-page lookbook references. This made it possible to build a realistic ecommerce prototype before final commercial assets are delivered.
+
+Important in-progress note: the lookbook extraction README identifies these assets as suitable for draft website build and mockups. For final ecommerce launch, the recommendation is to replace them with original high-resolution supplier or brand-owned photography.
+
+\section{Technical Approach}
+
+\subsection{Data Model}
+
+The product catalogue is held in a structured JavaScript data file. Each product includes ID, zone, name, price, colour, hex value, product image, and lifestyle image. This keeps the front end flexible while the collection remains active and subject to change.
+
+\subsection{State and Persistence}
+
+The shared \texttt{SLData} layer manages cart, favourites, orders, profile metadata, and order preferences. Guest users can use the store through local storage. Authenticated users sync their data with Firestore, allowing the experience to carry across sessions and devices.
+
+State includes:
+
+\begin{itemize}
+    \item Cart items with product ID, size, quantity, colour, image, and price.
+    \item Favourites with deduplication.
+    \item Orders with tracking ID, delivery estimate, payment summary, customer details, shipping method, promo code, gift note, and totals.
+    \item Profile metadata including phone, city, style notes, delivery address, and masked payment card summary.
+\end{itemize}
+
+\subsection{Authentication}
+
+The account flow uses Firebase Authentication for email/password sign up, login, password reset, and Google sign-in. The profile page uses the authenticated user as the anchor for saved details, favourites, and order history.
+
+\subsection{Commerce Logic}
+
+The current commerce layer includes:
+
+\begin{itemize}
+    \item Size-aware add-to-cart logic.
+    \item Quantity changes and removal transitions.
+    \item Shipping methods for Royal Mail standard and premium delivery.
+    \item Complimentary shipping threshold at \pounds150.
+    \item Promo code states including bundle, free shipping, referral, and new customer examples.
+    \item Gift message and signature bag preferences.
+    \item Checkout validation and order record generation.
+    \item Invoice text generation and download.
+\end{itemize}
+
+\section{In-Progress Considerations}
+
+Because the project is still active, the case study should be published with transparent wording. The website is already designed and built as a functioning experience, but several areas should be considered pre-launch or interim:
+
+\begin{itemize}
+    \item Final product photography and commercial rights should replace draft lookbook extractions.
+    \item Live payment integration should be connected before real transactions are accepted.
+    \item Shipping, returns, privacy, and terms content should be finalised legally.
+    \item Product descriptions, size guide, care details, and stock availability should be reviewed against the final collection.
+    \item Accessibility, performance, cross-browser QA, and mobile checkout QA should be completed before public launch.
+    \item Analytics events should be added for product views, filter usage, add-to-cart, checkout start, promo usage, purchase completion, account creation, and favourite saves.
+\end{itemize}
+
+\section{Current Outcomes}
+
+The work has already delivered a high-fidelity ecommerce foundation:
+
+\begin{itemize}
+    \item A premium brand-led homepage with cinematic motion and editorial storytelling.
+    \item A dynamic catalogue of 42 draft products with product, colour, price, and imagery metadata.
+    \item A shop experience with category filtering, colour filtering, sorting, hover imagery, quick-add routing, and favourites.
+    \item A product detail page with image visualisation, size selection, SKU display, care content, delivery information, and add-to-bag logic.
+    \item A cart with shipping selection, promo feedback, gifting, packaging, quantity controls, and persistent preferences.
+    \item A checkout flow with validation, saved details, masked saved-card support, order creation, invoice generation, and branded confirmation.
+    \item A Firebase-backed account area with authentication, profile editing, favourites, and order history.
+    \item A Firebase Hosting configuration ready for static deployment.
+\end{itemize}
+
+\section{What Will Be Measured After Launch}
+
+Final performance claims should be added only after public launch. Recommended metrics:
+
+\begin{itemize}
+    \item Homepage to shop click-through rate.
+    \item Product detail view rate from shop cards.
+    \item Add-to-cart rate by category and colour.
+    \item Size-selection error rate.
+    \item Cart abandonment and checkout abandonment.
+    \item Promo code usage and margin impact.
+    \item Account creation rate.
+    \item Favourites saved per session.
+    \item Returning customer rate.
+    \item Core Web Vitals and mobile page-load performance.
+\end{itemize}
+
+\section{Roadmap}
+
+\begin{enumerate}
+    \item Replace draft imagery with final high-resolution ecommerce and lifestyle assets.
+    \item Add inventory, stock states, low-stock messaging, and unavailable-size behaviour.
+    \item Integrate a live payment processor such as Stripe.
+    \item Add analytics and conversion event tracking.
+    \item Finalise legal, shipping, returns, privacy, and brand-support content.
+    \item Harden accessibility for keyboard navigation, reduced motion, colour contrast, and screen-reader labels.
+    \item Optimise media loading, image formats, and third-party script strategy.
+    \item Run mobile checkout QA across real devices.
+\end{enumerate}
+
+\section{Suggested Website Copy}
+
+\subsection{Short Case Study Intro}
+
+\textbf{\project{} is a premium London essentials ecommerce experience designed to turn everyday clothing into a cinematic retail journey.} The project combines editorial storytelling, motion-led art direction, a dynamic product catalogue, Firebase-backed accounts, favourites, cart persistence, gifting, checkout, and order history. The build is currently in progress, with final imagery, legal content, payment integration, and launch analytics still to be completed before public release.
+
+\subsection{Portfolio Teaser}
+
+For \project{}, we built more than a storefront. We shaped a digital retail studio: cinematic at first glance, structured in the browse, and practical at checkout. The result is a launch-ready foundation for a fashion brand that wants essentials to feel considered, collected, and commercially credible.
+
+\section{Editorial Pull Quotes}
+
+\begin{itemize}
+    \item ``A fashion ecommerce build where the product grid feels like part of the brand world, not the end of it.''
+    \item ``Designed for the tension every premium store has to solve: editorial desire on the way in, commercial clarity on the way out.''
+    \item ``The current build turns a 42-product essentials catalogue into a complete customer journey, from first impression to saved profile.''
+\end{itemize}
+
+\section{Launch-Ready Case Study Conclusion}
+
+\project{} is still in progress, but the foundation is already clear: a brand-led ecommerce system with the visual confidence of an editorial site and the operational structure of a modern online store. The build gives the client a flexible platform for product drops, customer retention, and future storytelling while leaving space for the realities of launch: final assets, real payments, QA, compliance, and measured optimisation.
+
+\vfill
+
+\begin{center}
+    \textbf{Prepared by \studio}\\
+    \textit{Case study draft for website publication. Update final metrics after launch.}
+\end{center}
+
+\end{document}

@@ -1,0 +1,317 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1.85cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{array}
+\usepackage{tabularx}
+
+\definecolor{AnkaInk}{HTML}{201D1A}
+\definecolor{AnkaMuted}{HTML}{675F55}
+\definecolor{AnkaPaper}{HTML}{FFFDF8}
+\definecolor{AnkaSand}{HTML}{E8DFD0}
+\definecolor{AnkaAmber}{HTML}{E96F1A}
+\definecolor{AnkaGold}{HTML}{C98618}
+\definecolor{AnkaTeal}{HTML}{0F766E}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=AnkaAmber,
+    urlcolor=AnkaTeal
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{AnkaMuted}{Anka Academy Case Study}}
+\rhead{\textcolor{AnkaMuted}{In Progress}}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\titleformat{\section}
+  {\Large\bfseries\color{AnkaInk}}
+  {\thesection}{0.75em}{}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{AnkaInk}}
+  {\thesubsection}{0.75em}{}
+
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.35em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.4em,itemsep=0.35em,topsep=0.35em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.75em}
+
+\newcommand{\kicker}[1]{\textcolor{AnkaAmber}{\textbf{\MakeUppercase{#1}}}}
+\newcommand{\metric}[2]{\textbf{\textcolor{AnkaAmber}{#1}}\\{\small\textcolor{AnkaMuted}{#2}}}
+\newcommand{\callout}[1]{%
+    \vspace{0.4em}
+    \noindent
+    \fcolorbox{AnkaSand}{AnkaPaper}{%
+        \begin{minipage}{0.96\linewidth}
+        \vspace{0.7em}
+        #1
+        \vspace{0.7em}
+        \end{minipage}
+    }
+    \vspace{0.4em}
+}
+
+\begin{document}
+
+\begin{center}
+    \vspace*{0.5em}
+    \kicker{Digital Product Case Study}
+
+    {\Huge\bfseries\color{AnkaInk} Anka Academy}
+
+    {\Large\color{AnkaMuted} Building a premium learning platform for primary education, live tutoring, and confident parent trust.}
+
+    \vspace{0.75em}
+    {\small\textcolor{AnkaMuted}{Project status: In active development. This case study describes the current product direction, implemented foundations, and next-stage roadmap.}}
+\end{center}
+
+\vspace{1em}
+
+\begin{tabularx}{\linewidth}{>{\bfseries\color{AnkaInk}}p{3.2cm} X}
+Sector & Education technology, private tutoring, primary learning \\
+Audience & Parents, Year 1-6 pupils, tutors, administrators \\
+Core offer & Premium UK-curriculum tutoring, 11+ preparation, small-group and one-to-one support \\
+Product type & Responsive website, booking portal, classroom interface, learning games, profile system \\
+Technology & HTML, Tailwind CSS, JavaScript, GSAP, Three.js, Lucide icons, Firebase Auth, Firestore, Firebase Hosting \\
+Current stage & Public-facing experience and core portal workflows are being shaped, tested, and refined \\
+\end{tabularx}
+
+\section{Executive Summary}
+
+Anka Academy is being developed as more than a brochure site for a tutoring business. The product is a digital learning environment designed to help parents discover the academy, register interest, book support, and move naturally into a structured tutoring experience. The platform combines a premium public brand with practical operational tooling: authentication, student and tutor profiles, calendar-based scheduling, admin review of enrolment requests, classroom entry points, curriculum activities, and interactive study spaces.
+
+The creative ambition is to make Anka feel warm, capable, and differentiated in a crowded tutoring market. The operational ambition is equally important: reduce manual coordination, give tutors and students clearer workflows, and create a foundation that can grow into a complete learning platform as the academy scales.
+
+\callout{
+\textbf{In-progress note.} The project is still evolving. The current release should be understood as a strong product foundation rather than a final case-closed system. Some areas are live as functional prototypes, some are ready for content expansion, and some require further validation before public launch.
+}
+
+\section{The Challenge}
+
+Primary tutoring is a trust-led purchase. Parents need to feel that a provider is academically serious, emotionally attentive, and organised enough to support their child over time. At the same time, younger pupils need a digital experience that feels approachable rather than institutional.
+
+The challenge was to design a platform that could hold both sides of that tension:
+
+\begin{itemize}
+    \item communicate premium academic value without becoming cold or corporate;
+    \item support Year 1-6 learning, 11+ preparation, and subject-specific tutoring;
+    \item make booking and session management feel simple across parents, students, tutors, and administrators;
+    \item create a distinctive visual language that could compete with modern product sites, not only local tutoring pages;
+    \item build the product in stages so the academy can begin testing real workflows before the full platform is complete.
+\end{itemize}
+
+\section{Strategic Direction}
+
+The platform direction is built around a simple idea: Anka Academy should feel like a premium learning studio with the reliability of a managed digital service.
+
+The public website introduces the brand with a warm, high-touch tone: ``Primary tutoring, designed around your child.'' It frames the offer around UK-curriculum support, small-group and one-to-one learning, progress notes, and 11+ preparation. From there, the user journey moves directly into meaningful actions: secure a place, book a tutor, explore the curriculum, or log into the portal.
+
+The product strategy has three layers:
+
+\begin{enumerate}
+    \item \textbf{Trust layer:} A polished public site with clear positioning, visual consistency, tutor presentation, and parent-oriented calls to action.
+    \item \textbf{Workflow layer:} Authentication, profiles, calendar slots, booking requests, admin review, and role-aware navigation.
+    \item \textbf{Learning layer:} Classroom spaces, whiteboard tools, subject activities, library resources, and curriculum games that can grow over time.
+\end{enumerate}
+
+\section{Experience Design}
+
+\subsection{Brand Feel}
+
+The visual system uses a tactile, clay-inspired interface with warm paper tones, amber accents, soft shadows, and rounded but disciplined UI surfaces. The style is intended to feel premium and child-friendly without drifting into cartoonish design.
+
+Interactive details support the high-end feel: GSAP animations, magnetic call-to-action buttons, a custom desktop cursor, smooth page transitions, responsive navigation, and a Three.js-enhanced hero. These choices make the experience feel crafted while still keeping the core actions clear.
+
+\subsection{Public Website}
+
+The homepage introduces the proposition quickly:
+
+\begin{itemize}
+    \item Year 1-6 UK curriculum support;
+    \item 11+ exam preparation;
+    \item live booking portal;
+    \item secure student profiles;
+    \item small-group and one-to-one tutoring pathways;
+    \item parent-facing enrolment forms connected to Firestore.
+\end{itemize}
+
+The design avoids a passive marketing-only experience. Booking, enrolment, profile access, and curriculum exploration are all surfaced as active product pathways.
+
+\subsection{Role-Aware Portal}
+
+The platform supports different user roles: student, tutor, and administrator. Navigation adapts based on authentication and profile data, with profile avatars, mobile menu states, and admin access controls.
+
+This matters because the platform is not serving one generic user. Each role has different needs:
+
+\begin{itemize}
+    \item students need to request sessions, join classes, and access learning activities;
+    \item tutors need to publish availability, accept requests, and start sessions;
+    \item administrators need to review enrolment interest and manage the service pipeline.
+\end{itemize}
+
+\section{Product Architecture}
+
+\subsection{Scheduling System}
+
+The calendar is one of the central product surfaces. It supports tutor availability, student session requests, booking states, seat limits, completed sessions, and admin/tutor controls. Sessions can carry subject, date, time, tutor, year group, status, and booked-student information.
+
+Key behaviours currently represented in the platform include:
+
+\begin{itemize}
+    \item tutors and admins can publish available slots;
+    \item students can request sessions or book compatible tutor slots;
+    \item year-group compatibility helps protect pupils from booking unsuitable sessions;
+    \item tutors can accept student requests;
+    \item sessions can move toward classroom entry points through a start or join class action;
+    \item completed and upcoming sessions are separated for clearer review.
+\end{itemize}
+
+\subsection{Classroom Experience}
+
+The classroom page is being shaped as the live learning environment. It includes a video stage, participant areas, waiting states, screen-focused layout behaviour, QR support, role chips, and an integrated whiteboard.
+
+The whiteboard direction is especially important. It moves the classroom away from passive video calls and toward active tutoring: drawing, working through problems, annotating, and making lessons feel collaborative.
+
+\subsection{Learning Activities}
+
+The platform includes subject surfaces for maths and science. The science area is framed as a ``Discovery Lab'' with year-group selection, timed challenges, scoring, progress feedback, and curriculum-style question sets. This creates a route for gamified practice that can sit alongside live tutoring.
+
+The product direction here is not to replace tutors with games, but to give pupils lightweight, repeatable learning moments that reinforce confidence between sessions.
+
+\subsection{Profiles and Tutor Identity}
+
+Profile data is stored in Firestore and used across the navigation and tutor presentation. Registered tutor bios can be pulled into the public-facing team area, giving the academy a scalable way to showcase tutor expertise as the network grows.
+
+For an education brand, this is a trust mechanic. Parents are not only choosing a subject. They are choosing people. The profile system creates the foundation for that human layer.
+
+\section{Technical Foundation}
+
+The current implementation is intentionally pragmatic: static pages enhanced with JavaScript modules and Firebase services. This allows the product to move quickly while still supporting real authenticated workflows.
+
+\begin{itemize}
+    \item \textbf{Firebase Authentication} supports logged-in sessions and role-aware UI.
+    \item \textbf{Firestore} stores enrolment applications, user profiles, tutor bios, and calendar slots.
+    \item \textbf{Firebase Hosting} provides a straightforward deployment path.
+    \item \textbf{Tailwind CSS} accelerates responsive UI composition.
+    \item \textbf{GSAP and Three.js} add premium motion and visual depth to the public experience.
+    \item \textbf{Lucide icons} provide a consistent icon language across navigation, forms, controls, and classroom actions.
+\end{itemize}
+
+This architecture is suitable for the current stage: fast iteration, lightweight deployment, and direct testing of product assumptions. As the platform matures, the next technical focus should be permission hardening, data model refinement, analytics, accessibility testing, and classroom reliability.
+
+\section{Design System Principles}
+
+The design language is guided by five principles:
+
+\begin{enumerate}
+    \item \textbf{Warm authority.} The academy should feel academically credible without feeling intimidating.
+    \item \textbf{Action over decoration.} Visual polish should guide the user toward enrolment, booking, learning, or session management.
+    \item \textbf{Role clarity.} Students, tutors, and admins should see the controls that matter to them.
+    \item \textbf{Responsive calm.} The interface should stay usable on mobile, where many parents will browse and book.
+    \item \textbf{Expandable learning.} Curriculum games, library resources, classroom tools, and progress features should be able to grow without redesigning the product from scratch.
+\end{enumerate}
+
+\section{Current Progress}
+
+\begin{tabularx}{\linewidth}{>{\bfseries\color{AnkaInk}}p{4cm} X}
+Public site & Premium homepage, brand positioning, curriculum messaging, calls to action, animated interactions, responsive navigation \\
+Enrolment flow & Parent/student interest form, sibling fields, trial subject capture, Firestore submission, admin review surface \\
+Authentication & Login and registration for student and tutor roles, demo access patterns, profile document creation \\
+Calendar & Tutor slots, student requests, status badges, filters, seat counts, request acceptance, classroom entry actions \\
+Classroom & Video-stage layout, whiteboard tools, waiting states, participant areas, role chips, expanded stage behaviour \\
+Learning tools & Maths and science surfaces, year-group science challenge flow, scoring, timed missions, progress states \\
+Admin tooling & Enrolment request review, guarded admin access, contact-parent workflow \\
+\end{tabularx}
+
+\section{What Makes the Work Distinctive}
+
+The strongest part of the product is the way it connects brand, operations, and learning into one coherent direction. Many tutoring websites stop at credibility: testimonials, subject lists, and a contact form. Anka Academy is being built as a fuller ecosystem.
+
+The premium visual treatment helps the academy stand out, but the deeper value is in the connected journey:
+
+\begin{itemize}
+    \item a parent discovers the academy and submits interest;
+    \item an admin can review the request;
+    \item a student or tutor can log in;
+    \item availability and requests can be managed through the calendar;
+    \item sessions can lead into a live classroom;
+    \item pupils can continue learning through games and resources.
+\end{itemize}
+
+That end-to-end thinking gives the platform room to become a real service product, not just a digital storefront.
+
+\section{Risks and Open Work}
+
+Because the project is still in progress, the case study should be transparent about what remains to be validated. The next phase should focus on the areas that matter most for trust, safety, and operational reliability.
+
+\begin{itemize}
+    \item \textbf{Security rules:} Firestore permissions should be reviewed and hardened before full production use.
+    \item \textbf{Role verification:} Tutor/admin status should rely on trusted profile claims or server-side checks rather than email conventions alone.
+    \item \textbf{Classroom reliability:} Live video, whiteboard persistence, session state, and recording policies should be tested under real usage.
+    \item \textbf{Accessibility:} Keyboard navigation, focus states, reduced motion, colour contrast, and screen-reader labels should be audited.
+    \item \textbf{Content depth:} Curriculum pages, tutor bios, FAQs, policies, safeguarding copy, and parent guidance should be expanded.
+    \item \textbf{Measurement:} Analytics should be added for enquiry conversion, booking completion, active learners, and session attendance.
+\end{itemize}
+
+\section{Roadmap}
+
+\subsection{Near Term}
+
+\begin{itemize}
+    \item refine the homepage content and proof points for launch;
+    \item complete profile fields for students, parents, and tutors;
+    \item harden Firestore rules and admin permissions;
+    \item improve booking confirmation states and email/notification handoff;
+    \item add real tutor bios, images, subjects, and availability.
+\end{itemize}
+
+\subsection{Mid Term}
+
+\begin{itemize}
+    \item introduce progress notes after sessions;
+    \item expand the library into structured resource collections;
+    \item add parent dashboards for upcoming sessions and learning history;
+    \item build clearer tutor onboarding and availability management;
+    \item test the classroom workflow with real tutors and pupils.
+\end{itemize}
+
+\subsection{Long Term}
+
+\begin{itemize}
+    \item add learning plans and progress reporting;
+    \item integrate payment or subscription workflows if required;
+    \item introduce automated reminders and attendance tracking;
+    \item develop richer curriculum games by year group and subject;
+    \item evolve the product into a complete academy operating system.
+\end{itemize}
+
+\section{Outcome So Far}
+
+The project has established a strong foundation for a modern tutoring platform. It now has a recognisable brand system, a premium public experience, core portal flows, early learning tools, and a scalable Firebase-backed data model.
+
+The work is not finished, and that is the point. The platform is now in the stage where product decisions can be tested against real users: parents trying to understand the offer, tutors managing availability, students joining sessions, and administrators handling demand. The next phase should turn this strong prototype into a reliable, measured, production-ready service.
+
+\callout{
+\textbf{Case study positioning for the website:} ``We are helping Anka Academy move from a tutoring service into a digital learning platform: one that can attract parents, support tutors, organise bookings, and create a warmer online classroom for primary pupils.''
+}
+
+\section{Credits}
+
+\begin{tabularx}{\linewidth}{>{\bfseries\color{AnkaInk}}p{4cm} X}
+Client & Anka Academy \\
+Work & Product strategy, interface design, frontend development, Firebase integration, booking workflows, classroom tooling, learning experiences \\
+Status & In active development \\
+\end{tabularx}
+
+\end{document}

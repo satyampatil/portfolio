@@ -86,7 +86,7 @@ main::before {
 .hero-card > * { pointer-events: auto; position: absolute; }
 
 .hero-pos-top {
-    top: 1%; left: 50%;
+    top: 20%; left: 50%;
     transform: translateX(-50%);
     text-align: center;
     width: 100%;
@@ -162,36 +162,6 @@ main::before {
     backdrop-filter: blur(16px);
 }
 
-.hero-scroll-cue {
-    right: 60px;
-    bottom: 46px;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    color: rgba(255,255,255,0.82);
-    text-decoration: none;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    z-index: 16;
-}
-
-.hero-scroll-cue i {
-    width: 32px;
-    height: 32px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(255,255,255,0.14);
-    border-radius: 50%;
-    color: #00ffff;
-    animation: scrollCuePulse 1.8s ease-in-out infinite;
-}
-
-@keyframes scrollCuePulse {
-    0%, 100% { transform: translateY(0); opacity: 0.7; }
-    50% { transform: translateY(6px); opacity: 1; }
-}
 
 /* --- FIXED CANVAS ELEMENTS --- */
 .intro-canvas-fixed {
@@ -282,8 +252,8 @@ p { font-size: 1.1rem; line-height: 1.7; color: #bbb; margin-bottom: 20px; }
 
     .section.hero {
         --mobile-hero-inset: clamp(22px, 6vw, 34px);
-        --mobile-role-top: clamp(130px, 15svh, 158px);
-        --mobile-name-top: clamp(186px, 22svh, 218px);
+        --mobile-role-top: 20%;
+        --mobile-name-top: 40%;
         --mobile-name-size: clamp(2.65rem, 11.2vw, 3.55rem);
 
         height: 100dvh;
@@ -395,19 +365,6 @@ p { font-size: 1.1rem; line-height: 1.7; color: #bbb; margin-bottom: 20px; }
         text-align: center;
     }
 
-    .hero-scroll-cue {
-        left: var(--mobile-hero-inset);
-        right: auto;
-        bottom: 28px;
-        gap: 8px;
-        font-size: 0.66rem;
-        letter-spacing: 0.12em;
-    }
-
-    .hero-scroll-cue i {
-        width: 28px;
-        height: 28px;
-    }
 
     .section:not(.hero)::before {
         top: 34px;
