@@ -5,6 +5,8 @@
 ## Canonical Profiles
 
 - Portfolio: https://satyampatil.pro/
+- LinkedIn: https://www.linkedin.com/in/satyampatil/
+- GitHub: https://github.com/satyampatil
 - Company: https://rockandblu.co.uk/
 - Company relationship: Satyam Patil is Founder and Lead Technologist of Rock & Blu Ltd.
 - Rock & Blu Ltd company number: 17018493
@@ -20,6 +22,20 @@
 - Credentials: https://satyampatil.pro/#certificates
 - Client case studies: https://satyampatil.pro/#projects
 - CV: https://satyampatil.pro/CV_IT_Jan_2026.pdf
+
+
+## Clear Definitions
+
+- Founder-led digital delivery: a delivery model in which Satyam Patil remains directly responsible for product strategy, user experience, technical architecture, development and launch.
+- Technical SEO: work that helps search engines crawl, render, understand and index a website while improving performance, mobile usability and semantic structure.
+- Answer engine optimisation (AEO): structuring accurate information as direct, retrievable answers for search assistants and voice systems.
+- Generative engine optimisation (GEO): making content clear, well-evidenced and machine-readable so generative AI systems can understand entities, relationships and claims.
+
+## Key Takeaways
+
+- Satyam Patil is a UK-based Founder and Lead Technologist who combines enterprise data-systems experience with hands-on digital product delivery.
+- Through Rock & Blu Ltd, Satyam has led seven client engagements: four launched platforms and three active product builds.
+- His delivery approach prioritises accessible design, mobile performance, maintainable software and content that customers, search engines and AI systems can understand.
 
 ## Client Portfolio
 
