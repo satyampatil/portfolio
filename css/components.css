@@ -683,6 +683,25 @@ body:hover #cursor-follower.hovered {
 .about-footer-text {
     margin-bottom: 30px;
 }
+.profile-context-links {
+    display: grid;
+    gap: 10px;
+    padding: 22px 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 28px;
+    background: rgba(255,255,255,0.025);
+}
+.profile-context-links p { margin: 0; }
+.profile-context-links a {
+    color: #b8f5ff;
+    text-decoration-color: rgba(184,245,255,0.4);
+    text-underline-offset: 4px;
+}
+.profile-context-links a:hover,
+.profile-context-links a:focus-visible {
+    color: #fff;
+    text-decoration-color: #fff;
+}
 .about-skills-title {
     font-size: 1rem; margin-bottom: 15px;
 }

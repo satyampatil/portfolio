@@ -12,6 +12,9 @@
 
 ## Portfolio Sections
 
+- Founder of Rock & Blu Ltd: https://satyampatil.pro/rock-and-blu-founder.html
+- Seven client projects: https://satyampatil.pro/client-work.html
+- Anaplan and data-systems experience: https://satyampatil.pro/data-systems-experience.html
 - Profile: https://satyampatil.pro/#about
 - Experience: https://satyampatil.pro/#experience
 - Credentials: https://satyampatil.pro/#certificates
