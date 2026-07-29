@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://satyampatil.pro/sitemap.xml
+
+# Machine-readable profile summary: https://satyampatil.pro/llms.txt

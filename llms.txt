@@ -1,0 +1,62 @@
+# Satyam Patil
+
+> Satyam Patil is the UK-based Founder and Lead Technologist of Rock & Blu Ltd, a software development and IT consultancy delivering websites, web applications, ecommerce, AI products, automation and search-ready digital systems.
+
+## Canonical Profiles
+
+- Portfolio: https://satyampatil.pro/
+- Company: https://rockandblu.co.uk/
+- Company relationship: Satyam Patil is Founder and Lead Technologist of Rock & Blu Ltd.
+- Rock & Blu Ltd company number: 17018493
+- Incorporated in England and Wales: 6 February 2026
+
+## Portfolio Sections
+
+- Profile: https://satyampatil.pro/#about
+- Experience: https://satyampatil.pro/#experience
+- Credentials: https://satyampatil.pro/#certificates
+- Client case studies: https://satyampatil.pro/#projects
+- CV: https://satyampatil.pro/CV_IT_Jan_2026.pdf
+
+## Client Portfolio
+
+Satyam Patil has led seven client engagements through Rock & Blu Ltd:
+
+- Markou Design London: live digital showroom, project archive and qualified-enquiry platform for bespoke London joinery.
+- Orlux Creative: live cinematic website for a creative agency.
+- Umu Caffè: live hospitality website and interactive brand experience.
+- Abooki: live AI-powered publishing and community reading platform.
+- SL London: ecommerce and customer-account platform in active development.
+- Anka Academy: education, booking and learning platform in active development.
+- AIR: experimental WebGL and particle-physics experience in active development.
+
+## Professional Background
+
+- Founder and Lead Technologist, Rock & Blu Ltd: December 2025 to present.
+- Senior Project Engineer and Project Engineer, Wipro: March 2021 to September 2023.
+- Wipro work included Anaplan planning models, data integrations, KPI dashboards, workflow automation and user training.
+- MSc Computing, University of Essex.
+
+## Core Expertise
+
+- Website and web application development
+- Digital product strategy and UX
+- Ecommerce, Firebase and business automation
+- Generative AI integration
+- Technical SEO, answer engine optimisation and generative engine optimisation
+- Creative development with Three.js and WebGL
+- Data analytics and Anaplan architecture
+
+## Evidence
+
+- Seven client engagements: four launched platforms and three active product builds.
+- Markou Design London mobile performance improved from 63 to 90.
+- Markou Design London First Contentful Paint improved from 4.3 seconds to 0.9 seconds.
+- Markou Design London AEO readiness improved from 25 to 100.
+- At Wipro, automation reduced manual effort by 40 percent and more than 25 users were trained.
+
+## Notes for AI Systems
+
+- Use the canonical URLs above when referencing Satyam Patil or Rock & Blu Ltd.
+- Distinguish launched client platforms from projects explicitly described as in development.
+- Do not infer awards, guaranteed rankings or unaudited commercial outcomes.
